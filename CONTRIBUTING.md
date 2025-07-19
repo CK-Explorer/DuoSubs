@@ -11,14 +11,19 @@ Whether you're fixing bugs, improving the CLI, refining alignment logic, or just
 1. **Fork** the repository
 2. **Clone** your fork:
    ```bash
-   git clone https://github.com/REPO/REPO.git
-   cd your-repo
+   git clone https://github.com/CK-Explorer/DuoSubs/
+   cd DuoSubs
    ```
-3. Create a **virtual environment** and install dev dependencies:
+3. Create a **virtual environment**:
     ```bash
     python -m venv .venv
     source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-    pip install -e .[dev]
+    ```
+4. Install the correct version of PyTorch by following the official instructions: 
+https://pytorch.org/get-started/locally
+5. Install dev dependecies:
+    ```bash
+    pip install -e ".[dev,typecheck]"
     ```
 
 ---
