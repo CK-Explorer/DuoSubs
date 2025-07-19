@@ -1,0 +1,36 @@
+- tokens:
+    - "Text 1"
+    - "Text 2"
+    - "Text 3"
+    - "Text 4"
+    - "Text 5"
+    - "Text 6"
+    - "Text 7"
+    - "Text 8"
+    - "Text 9"
+    - "Text 10"
+  styles:
+    - "Style 1"
+    - "Style 2"
+    - "Style 3"
+    - "Style 4"
+    - "Style 5"
+    - "Style 6"
+    - "Style 7"
+    - "Style 8"
+    - "Style 9"
+    - "Style 10"
+  non_overlap_tokens_spans:
+    - [0, 2]
+    - [3, 5]
+    - [8, 11]
+  expected_tokens:
+    - "Text 3"
+    - "Text 6"
+    - "Text 7"
+    - "Text 8"
+  expected_styles:
+    - "Style 3"
+    - "Style 6"
+    - "Style 7"
+    - "Style 8"

@@ -1,0 +1,23 @@
+- text: "\\NHello"
+  expected: "Hello"
+
+- text: "Hello\\N"
+  expected: "Hello"
+
+- text: "\\NHello\\N"
+  expected: "Hello"
+
+- text: "\\N Hello\\N"
+  expected: "Hello"
+
+- text: "\\N \\NHello\\N\\N"
+  expected: "Hello"
+
+- text: "Hello \\N world"
+  expected: "Hello\\Nworld"
+
+- text: "Hello\\N   world"
+  expected: "Hello\\Nworld"
+
+- text: ""
+  expected: ""

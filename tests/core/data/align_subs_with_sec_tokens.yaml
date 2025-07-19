@@ -1,0 +1,55 @@
+- dtw_path:
+    - [0, 0]
+    - [0, 1]
+    - [1, 2]
+    - [2, 3]
+    - [3, 4]
+    - [4, 4]
+  primary_subs:
+    - start: 100
+      end: 1000
+      primary_text: "C'est"
+      primary_style: "Default_1"
+      primary_token_spans: [0, 1]
+    - start: 1300
+      end: 2500
+      primary_text: "un"
+      primary_style: "Default_2"
+      primary_token_spans: [1, 2]
+    - start: 3200
+      end: 6500
+      primary_text: "sous-titre de test."
+      primary_style: "Default_3"
+      primary_token_spans: [2, 5]
+  secondary_tokens: ["This", "is", "a", "test", "subtitle."]
+  secondary_styles_tokens: 
+    - "Default_sec_1"
+    - "Default_sec_2"
+    - "Default_sec_3"
+    - "Default_sec_4"
+    - "Default_sec_5"
+  expected_subs:
+    - start: 100
+      end: 1000
+      primary_text: "C'est"
+      secondary_text: "This is"
+      primary_token_spans: [0, 1]
+      secondary_token_spans: [0, 2]
+      primary_style: "Default_1"
+      secondary_style: "Default_sec_1"
+    - start: 1300
+      end: 2500
+      primary_text: "un"
+      secondary_text: "a"
+      primary_token_spans: [1, 2]
+      secondary_token_spans: [2, 3]
+      primary_style: "Default_2"
+      secondary_style: "Default_sec_3"
+    - start: 3200
+      end: 6500
+      primary_text: "sous-titre de test."
+      secondary_text: "test subtitle."
+      primary_token_spans: [2, 5]
+      secondary_token_spans: [3, 5]
+      primary_style: "Default_3"
+      secondary_style: "Default_sec_4"

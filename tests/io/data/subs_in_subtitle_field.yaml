@@ -1,0 +1,39 @@
+- subs:
+    - start: 23000
+      end: 24500
+      primary_text: "You're a jerk, Thom."
+      primary_token_spans: [0, 2]
+      primary_style: "English"
+    - start: 25000
+      end: 27000
+      primary_text: "Look Celia, we have to follow our passions;"
+      primary_token_spans: [2, 4]
+      primary_style: "English"
+    - start: 27000
+      end: 30500
+      primary_text: "...you have your robotics, and I\\Njust want to be awesome in space."
+      primary_token_spans: [4, 8]
+      primary_style: "English"
+    - start: 30800
+      end: 34000
+      primary_text: "Why don't you just admit that\\Nyou're freaked out by my robot hand?"
+      primary_token_spans: [8, 10]
+      primary_style: "English"
+    - start: 34500
+      end: 36000
+      primary_text: "I'm not freaked out by- it's..."
+      primary_token_spans: [10, 11]
+      primary_style: "English"
+  tokens:
+    - "You're a jerk," 
+    - "Thom."
+    - "Look Celia,"
+    - "we have to follow our passions;"
+    - "..."
+    - "you have your robotics,"
+    - "and I\\N"
+    - "just want to be awesome in space."
+    - "Why don't you just admit that\\N"
+    - "you're freaked out by my robot hand?"
+    - "I'm not freaked out by- it's..."
+  styles_tokens: "English"

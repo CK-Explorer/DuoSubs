@@ -1,0 +1,8 @@
+- text: "This is\\N a test\\N"
+  expected: "This is  a test "
+
+- text: "\\NHello\\N"
+  expected: " Hello "
+
+- text: "1\\N2"
+  expected: "1 2"

@@ -1,0 +1,41 @@
+- index: 5
+  total_index: 45
+  ratio: 0.3
+  previous_ratio: [0.1, 0.4]
+  expected: 54
+
+- index: 8
+  total_index: 9
+  ratio: 0.2
+  previous_ratio: [0.3]
+  expected: 50
+
+- index: 0
+  total_index: 10
+  ratio: 1
+  previous_ratio: []
+  expected: 10
+
+- index: 9
+  total_index: 10
+  ratio: 1
+  previous_ratio: []
+  expected: 100
+
+- index: 10
+  total_index: 10
+  ratio: 0
+  previous_ratio: [0.5]
+  expected: 50
+
+- index: 2
+  total_index: 4
+  ratio: 0.4
+  previous_ratio: []
+  expected: 30
+
+- index: 1
+  total_index: 3
+  ratio: 0.33333
+  previous_ratio: [0.33333]
+  expected: 55

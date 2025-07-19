@@ -1,0 +1,20 @@
+- input: ["-", "hello", "world"]
+  expected: ["- hello", "world"]
+
+- input: ["hello", "-", "world"]
+  expected: ["hello", "- world"]
+
+- input: ["-", "one", "-", "two"]
+  expected: ["- one", "- two"]
+
+- input: ["-", "-"]
+  expected: ["- -"]
+
+- input: ["a", "b", "c"]
+  expected: ["a", "b", "c"]
+
+- input: ["-"]
+  expected: ["-"]
+
+- input: []
+  expected: []

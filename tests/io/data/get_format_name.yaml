@@ -1,0 +1,14 @@
+- input: "video.mp4"
+  expected: "mp4"
+
+- input: "archive.TAR.GZ"
+  expected: "gz"
+
+- input: "subtitle.SRT"
+  expected: "srt"
+
+- input: "srt"
+  expected: "srt"
+
+- input: "test_path/sub.ASS"
+  expected: "ass"

@@ -1,0 +1,208 @@
+# -----------------------------
+# Japanese Test Cases (Space-separated sentences)
+# -----------------------------
+- text: "これはテストです。 次の行に移ります！ 大丈夫でしょうか？"
+  expected: ["これはテストです。", "次の行に移ります！", "大丈夫でしょうか？"]
+  language: "ja"
+
+- text: "え！？！？ 本当に…… 嘘でしょう！！"
+  expected: ["え！？！？", "本当に……", "嘘でしょう！！"]
+  language: "ja"
+
+- text: "こんにちは 世界。 これは 分かち書き の 練習 です。"
+  expected: ["こんにちは", "世界。", "これは", "分かち書き", "の", "練習", "です。"]
+  language: "ja"
+
+- text: "りんご、 バナナ・ オレンジ。"
+  expected: ["りんご、", "バナナ・", "オレンジ。"]
+  language: "ja"
+
+# -----------------------------
+# Chinese Test Cases (Space-separated sentences)
+# -----------------------------
+- text: "你好。 今天过得好吗？ 我很好！"
+  expected: ["你好。", "今天过得好吗？", "我很好！"]
+  language: "zh"
+
+- text: "第一行。 第二行。 第三行！"
+  expected: ["第一行。", "第二行。", "第三行！"]
+  language: "zh"
+
+- text: "今天天气不错 我们出去走走吧"
+  expected: ["今天天气不错", "我们出去走走吧"]
+  language: "zh"
+
+- text: "今天是星期五。 我很高兴这是最后一天"
+  expected: ["今天是星期五。", "我很高兴这是最后一天"]
+  language: "zh"
+
+- text: "一 二 三 四 五 六 ……"
+  expected: ["一", "二", "三", "四", "五", "六 ……"]
+  language: "zh"
+
+- text: "- 对话一 - 对话二！ - 对话三"
+  expected: ["- 对话一", "- 对话二！", "- 对话三"]
+  language: "zh"
+
+- text: "他想了想……然后说话了。"
+  expected: ["他想了想……", "然后说话了。"]
+  language: "zh"
+
+# -----------------------------
+# Thai Test Cases (Space-separated sentences)
+# -----------------------------
+- text: "สวัสดีครับ คุณชื่ออะไร? ผมชื่อจอห์น!"
+  expected: ["สวัสดีครับ", "คุณชื่ออะไร?", "ผมชื่อจอห์น!"]
+  language: "th"
+
+- text: "คุณไปไหนมา ฉันเป็นห่วงนะ"
+  expected: ["คุณไปไหนมา", "ฉันเป็นห่วงนะ"]
+  language: "th"
+
+- text: "วันนี้อากาศดีมาก ไปเที่ยวกันไหม?"
+  expected: ["วันนี้อากาศดีมาก", "ไปเที่ยวกันไหม?"]
+  language: "th"
+
+- text: "หยุด! อย่าทำแบบนั้น"
+  expected: ["หยุด!", "อย่าทำแบบนั้น"]
+  language: "th"
+
+- text: "ลองคิดดูสิ ถ้าเราไม่เริ่มตอนนี้ จะเริ่มเมื่อไร?"
+  expected: ["ลองคิดดูสิ", "ถ้าเราไม่เริ่มตอนนี้", "จะเริ่มเมื่อไร?"]
+  language: "th"
+
+# -----------------------------
+# Burmese Test Cases (Space-separated sentences)
+# -----------------------------
+
+- text: "မင်္ဂလာပါ။ ကျေးဇူးတင်ပါတယ်။ ကျွန်တော်အိမ်ပြန်ချင်ပါတယ်။"
+  expected: ["မင်္ဂလာပါ။", "ကျေးဇူးတင်ပါတယ်။", "ကျွန်တော်အိမ်ပြန်ချင်ပါတယ်။"]
+  language: null
+
+- text: "ကျွန်မနာမည်ကအေးချမ်းပါ။ နေကောင်းလား။"
+  expected: ["ကျွန်မနာမည်ကအေးချမ်းပါ။", "နေကောင်းလား။"]
+  language: null
+
+- text: "ဟုတ်ကဲ့၊ ကျွန်တော်သွားမယ်။"
+  expected: ["ဟုတ်ကဲ့၊", "ကျွန်တော်သွားမယ်။"]
+  language: null
+
+- text: "ဒီဟာကလွယ်ပါတယ်။ စမ်းကြည့်ပါ။"
+  expected: ["ဒီဟာကလွယ်ပါတယ်။", "စမ်းကြည့်ပါ။"]
+  language: null
+
+- text: "မနေ့က မိုးရွာတယ်၊ ဒီနေ့ မရွာဘူး။"
+  expected: ["မနေ့က", "မိုးရွာတယ်၊", "ဒီနေ့", "မရွာဘူး။"]
+  language: null
+
+- text: "မိုးရွာနေတယ်။\nအိမ်မှာနေတာအကောင်းဆုံး။"
+  expected: ["မိုးရွာနေတယ်။\\N", "အိမ်မှာနေတာအကောင်းဆုံး။"]
+  language: null
+
+- text: "သတိထား။ မေးခွန်းများရှိပါက ဆရာကိုမေးပါ။"
+  expected: ["သတိထား။", "မေးခွန်းများရှိပါက", "ဆရာကိုမေးပါ။"]
+  language: null
+
+# -----------------------------
+# English Test Cases
+# -----------------------------
+- text: " - Hello, how are you? - I'm fine. Thanks!"
+  expected: ["- Hello,", "how are you?", "- I'm fine.", "Thanks!"]
+  language: "en"
+
+- text: "He said: 'Run!' Then, he ran."
+  expected: ["He said:", "'Run!", "' Then,", "he ran."]
+  language: "en"
+
+- text: "Line one.\nLine two.\rLine three!"
+  expected: ["Line one.\\N", "Line two.", "Line three!"]
+  language: "en"
+
+- text: "? This is a lyric ?"
+  expected: ["?", "This is a lyric ?"]
+  language: "en"
+
+# -----------------------------
+# French Test Cases
+# -----------------------------
+- text: "Bonjour ! Comment ça va ? Très bien, merci."
+  expected: ["Bonjour !", "Comment ça va ?", "Très bien,", "merci."]
+  language: "fr"
+
+# -----------------------------
+# Spanish Test Cases
+# -----------------------------
+- text: "¡Hola! ¿Cómo estás? Estoy bien."
+  expected: ["¡Hola!", "¿Cómo estás?", "Estoy bien."]
+  language: "es"
+
+- text: "¿Qué hora es? ¡Es mediodía!"
+  expected: ["¿Qué hora es?", "¡Es mediodía!"]
+  language: "es"
+
+- text: "¡No lo sé! ¿Por qué preguntas eso?"
+  expected: ["¡No lo sé!", "¿Por qué preguntas eso?"]
+  language: "es"
+
+- text: "¿Estás listo?\n¡Vamos!"
+  expected: ["¿Estás listo?\\N", "¡Vamos!"]
+  language: "es"
+
+# -----------------------------
+# Arabic Test Cases
+# -----------------------------
+- text: "مرحبًا، كيف حالك؟ أنا بخير، شكرًا لك."
+  expected: ["مرحبًا،", "كيف حالك؟", "أنا بخير،", "شكرًا لك."]
+  language: "ar"
+
+- text: "أين تذهب؟ إلى السوق!"
+  expected: ["أين تذهب؟", "إلى السوق!"]
+  language: "ar"
+
+- text: "هل تحب القهوة؟ نعم، كثيرًا."
+  expected: ["هل تحب القهوة؟", "نعم،", "كثيرًا."]
+  language: "ar"
+
+- text: "ما اسمك؟ اسمي أحمد. تشرفت بلقائك."
+  expected: ["ما اسمك؟", "اسمي أحمد.", "تشرفت بلقائك."]
+  language: "ar"
+
+- text: "انظر! سيارة جديدة."
+  expected: ["انظر!", "سيارة جديدة."]
+  language: "ar"
+
+- text: "انتبه الطريق خطر! لا تعبر الآن."
+  expected: ["انتبه الطريق خطر!", "لا تعبر الآن."]
+  language: "ar"
+
+- text: "هل أنت جائع؟ هل نأكل الآن؟"
+  expected: ["هل أنت جائع؟", "هل نأكل الآن؟"]
+  language: "ar"
+
+- text: "الحمد لله.\nكل شيء بخير."
+  expected: ["الحمد لله.\\N", "كل شيء بخير."]
+  language: "ar"
+
+- text: "لا تقلق، كل شيء سيكون على ما يرام."
+  expected: ["لا تقلق،", "كل شيء سيكون على ما يرام."]
+  language: "ar"
+
+- text: "من فضلك! اجلس هنا."
+  expected: ["من فضلك!", "اجلس هنا."]
+  language: "ar"
+
+- text: "ما هذا؟ إنه كتاب جديد!"
+  expected: ["ما هذا؟", "إنه كتاب جديد!"]
+  language: "ar"
+
+- text: "أريد السفر إلى مصر، ثم إلى لبنان."
+  expected: ["أريد السفر إلى مصر،", "ثم إلى لبنان."]
+  language: "ar"
+
+# -----------------------------
+# Hindi Test Cases
+# -----------------------------
+- text: "आज बारिश हो रही है। मुझे स्कूल नहीं जाना है।"
+  expected: ["आज बारिश हो रही है।", "मुझे स्कूल नहीं जाना है।"]
+  language: "hi"
+

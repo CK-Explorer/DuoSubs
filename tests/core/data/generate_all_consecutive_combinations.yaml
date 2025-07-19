@@ -1,0 +1,30 @@
+- tokens: ["a", "b", "c"]
+  start: 1
+  end: 5
+  expected_combos: ["b", "b c", "c"]
+  expected_indices: [[1, 2], [1, 3], [2, 3]]
+
+- tokens: ["hello", "world"]
+  start: 0
+  end: 2
+  expected_combos: ["hello", "hello world", "world"]
+  expected_indices: [[0, 1], [0, 2], [1, 2]]
+
+- tokens: ["only"]
+  start: 0
+  end: 1
+  expected_combos: ["only"]
+  expected_indices: [[0, 1]]
+
+- tokens: []
+  start: 0
+  end: 0
+  expected_combos: []
+  expected_indices: []
+
+- tokens: ["a", "b", "\\Nc"]
+  start: 1
+  end: 3
+  expected_combos: ["b", "b c", "c"]
+  expected_indices: [[1, 2], [1, 3], [2, 3]]
+        

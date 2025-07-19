@@ -1,0 +1,72 @@
+- name: basic non-overlap
+  input_subs:
+    - start: 1000
+      end: 2000
+      primary_text: "This is a test"
+      primary_token_spans: [3, 4]
+      primary_style: "English"
+  ref_subs:
+    - { start: 0, end: 900, primary_token_spans: [0, 5] }
+  expected_token_spans:
+    - [3, 4]
+  expected_primary:
+    - { start: 1000, end: 2000, primary_text: "This is a test", primary_style: "English" }
+  expected_secondary:
+    - { start: 1000, end: 2000, secondary_text: "This is a test", secondary_style: "English" }
+  expected_input_subs: []
+
+- name: full overlap
+  input_subs:
+    - start: 1000
+      end: 2000
+      primary_text: "This is a test"
+      primary_token_spans: [1, 2]
+      primary_style: "English"
+  ref_subs:
+    - { start: 1500, end: 1800, primary_token_spans: [4, 9] }
+  expected_token_spans: []
+  expected_primary: []
+  expected_secondary: []
+  expected_input_subs:
+    - start: 1000
+      end: 2000
+      primary_text: "This is a test"
+      primary_token_spans: [1, 2]
+      primary_style: "English"
+
+- name: partial overlap, skip
+  input_subs:
+    - start: 1000
+      end: 2000
+      primary_text: "This is a test"
+      primary_token_spans: [2, 4]
+      primary_style: "English"
+  ref_subs:
+    - { start: 900, end: 1100, primary_token_spans: [3, 4] }
+  expected_token_spans: []
+  expected_primary: []
+  expected_secondary: []
+  expected_input_subs:
+    - start: 1000
+      end: 2000
+      primary_text: "This is a test"
+      primary_token_spans: [2, 4]
+      primary_style: "English"
+
+- name: multiple non-overlapping
+  input_subs: 
+    - start: 1000
+      end: 2000
+      primary_text: "This is a test"
+      primary_token_spans: [2, 4]
+      primary_style: "English"
+  ref_subs:
+    - { start: 0, end: 500, primary_token_spans: [0, 2] }
+    - { start: 600, end: 800, primary_token_spans: [2, 4] }
+  expected_token_spans: 
+    - [2, 4]
+  expected_primary:
+    - { start: 1000, end: 2000, primary_text: "This is a test", primary_style: "English" }
+  expected_secondary:
+    - { start: 1000, end: 2000, secondary_text: "This is a test", secondary_style: "English" }
+  expected_input_subs: []

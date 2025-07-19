@@ -1,0 +1,8 @@
+- subs:
+    - start: 23000
+      end: 24500
+      primary_text: "You're a jerk, Thom."
+      secondary_text: "你真是爛透了， 湯姆"
+      score: 0.8406842350
+      primary_style: "Default"
+      secondary_style: "Default"

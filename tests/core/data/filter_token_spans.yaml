@@ -1,0 +1,19 @@
+- name: Non-overlapping token span
+  input:
+    - [4, 5]
+    - [8, 12]
+    - [12, 14]
+  expected:
+    - [0, 1]
+    - [1, 5]
+    - [5, 7]
+
+- name: Overlapping token span
+  input:
+    - [4, 5]
+    - [4, 9]
+    - [6, 12]
+  expected:
+    - [0, 1]
+    - [1, 6]
+    - [6, 12]

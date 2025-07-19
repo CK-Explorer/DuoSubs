@@ -1,0 +1,35 @@
+- input: [NONE]
+  expected: [True, True, True, True]
+
+- input: [NONE, COMBINED]
+  expected: [True, True, True, True]
+
+- input: [NONE, COMBINED, PRIMARY]
+  expected: [True, True, True, True]
+
+- input: [NONE, COMBINED, SECONDARY]
+  expected: [True, True, True, True]
+
+- input: [NONE, COMBINED, SECONDARY, EDIT]
+  expected: [True, True, True, True]
+
+- input: [COMBINED]
+  expected: [False, True, True, True]
+
+- input: [PRIMARY]
+  expected: [True, False, True, True]
+
+- input: [SECONDARY]
+  expected: [True, True, False, True]
+
+- input: [EDIT]
+  expected: [True, True, True, False]
+
+- input: [COMBINED, SECONDARY]
+  expected: [False, True, False, True]
+
+- input: [COMBINED, PRIMARY, SECONDARY]
+  expected: [False, False, False, True]
+
+- input: [COMBINED, PRIMARY, SECONDARY, EDIT]
+  expected: [False, False, False, False]

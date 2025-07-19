@@ -1,0 +1,39 @@
+- input: "srt"
+  time_based: true
+  error: false
+
+- input: "vtt"
+  time_based: true
+  error: false
+
+- input: "ttml"
+  time_based: true
+  error: false
+
+- input: "mpl2"
+  time_based: true
+  error: false
+
+#- input: "tmp"
+#  time_based: true
+#  error: false
+
+- input: "ass"
+  time_based: false
+  error: false
+
+- input: "ssa"
+  time_based: false
+  error: false
+
+- input: "mp4"
+  time_based: false
+  error: true
+
+- input: "mpeg2"
+  time_based: false
+  error: true
+
+- input: "abc"
+  time_based: false
+  error: true

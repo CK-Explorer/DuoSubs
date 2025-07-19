@@ -1,0 +1,89 @@
+- name: Basic test
+  subtitle_window_size: 2
+  subs:
+    - primary_text: "C'est"
+      secondary_text: "This is a"
+      secondary_token_spans: [0, 3]
+      secondary_style: "Default_1"
+    - primary_text: "un"
+      secondary_text: ""
+      secondary_token_spans: [3, 3]
+    - primary_text: "sous-titre de test."
+      secondary_text: "test subtitle."
+      secondary_style: "Default_4"
+      secondary_token_spans: [3, 5]
+  secondary_tokens: ["This", "is", "a", "test", "subtitle."]
+  secondary_styles_tokens: 
+    - "Default_1"
+    - "Default_2"
+    - "Default_3"
+    - "Default_4"
+    - "Default_5"
+  scores:
+    - left: [[0.1, 0.3, 0.4, 0.27]]
+      right: [[0.03, 0.35, 0.56, 0.21]]
+    - left: [[0.1, 0.83, 0.23, 0.1]]
+      right: [[0.03, 0.25, 0.16, 0.21]]
+    - left: [[0.4, 0.3, 0.91]]
+      right: [[]]
+  expected_subs:
+    - primary_text: "C'est"
+      secondary_text: "This is"
+      secondary_style: "Default_1"
+      secondary_token_spans: [0, 2]
+      score: 0.4
+    - primary_text: "un"
+      secondary_text: "a"
+      secondary_style: "Default_3"
+      secondary_token_spans: [2, 3]
+      score: 0.83
+    - primary_text: "sous-titre de test."
+      secondary_text: "test subtitle."
+      secondary_style: "Default_4"
+      secondary_token_spans: [3, 5]
+      score: 0.91
+
+- name: subtitle_window_size >= len(subs), Smaller window size
+  subtitle_window_size: 5
+  subs:
+    - primary_text: "C'est"
+      secondary_text: "This is a"
+      secondary_style: "Default_1"
+      secondary_token_spans: [0, 3]
+    - primary_text: "un"
+      secondary_text: ""
+      secondary_token_spans: [3, 3]
+    - primary_text: "sous-titre de test."
+      secondary_text: "test subtitle."
+      secondary_style: "Default_4"
+      secondary_token_spans: [3, 5]
+  secondary_tokens: ["This", "is", "a", "test", "subtitle."]
+  secondary_styles_tokens: 
+    - "Default_1"
+    - "Default_2"
+    - "Default_3"
+    - "Default_4"
+    - "Default_5"
+  scores:
+    - left: [[0.1, 0.3, 0.4, 0.27, 0.22, 0.10]]
+      right: [[0.03, 0.35, 0.56, 0.21, 0.19, 0.34]]
+    - left: [[0.1, 0.83, 0.23, 0.1]]
+      right: [[0.03, 0.25, 0.16, 0.21]]
+    - left: [[0.4, 0.3, 0.91]]
+      right: [[]]
+  expected_subs:
+    - primary_text: "C'est"
+      secondary_text: "This is"
+      secondary_style: "Default_1"
+      secondary_token_spans: [0, 2]
+      score: 0.4
+    - primary_text: "un"
+      secondary_text: "a"
+      secondary_style: "Default_3"
+      secondary_token_spans: [2, 3]
+      score: 0.83
+    - primary_text: "sous-titre de test."
+      secondary_text: "test subtitle."
+      secondary_style: "Default_4"
+      secondary_token_spans: [3, 5]
+      score: 0.91

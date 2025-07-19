@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "DuoSubs"
+version = "0.1.0"
+authors = [{ name = "CK-Explorer " }]
+description = "Semantic subtitle aligner and merger for bilingual subtitle syncing"
+readme = "README.md"
+license = { text = "Apache-2.0 license" }
+keywords = [
+    "subtitles",
+    "alignment",
+    "merging",
+    "sentence-transformers",
+    "bilingual",
+    "nlp"
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache-2.0 License",
+  "Operating System :: OS Independent",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "charset_normalizer>=3.3.2,<4.0",
+    "fastdtw==0.3.4,<1.0",
+    "lingua-language-detector==2.1.1,<3.0",
+    "pysubs2==1.8.0,<2.0",
+    "scipy==1.15.3,<2.0",
+    "sentence_transformers==4.1.0,<5.0",
+    "tqdm==4.67.1,<5.0",
+    "typer==0.16.0,<1.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/CK-Explorer/DuoSubs"
+Repository = "https://github.com/CK-Explorer/DuoSubs"
+Documentation = "https://github.com/CK-Explorer/DuoSubs"
+
+[project.scripts]
+duosubs = "duosubs.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest",
+    "coverage"
+]
+typecheck = [
+    "mypy", 
+    "types-PyYAML",
+    "scipy-stubs",
+    "types-tqdm"
+]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.4.0"
+tag_format = "v$version"
+version_files = [
+  "pyproject.toml",
+  "duosubs/__init__.py"
+]
+
+[tool.pytest.ini_options]
+addopts = "-m 'not slow'"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')"
+]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "RUF"]
+
+[tool.mypy]
+strict = true
