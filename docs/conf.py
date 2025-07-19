@@ -34,3 +34,14 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_rtd_theme"
+
+html_theme_options = {
+    "display_version": True,
+    "navigation_depth": 4,
+    "collapse_navigation": False,
+    "style_external_links": True,
+    "repository_url": "https://github.com/CK-Explorer/DuoSubs",
+    "repository_branch": "main",       # or 'master'
+    "path_to_docs": "docs",            # where conf.py is located
+    "use_repository_button": True
+}
