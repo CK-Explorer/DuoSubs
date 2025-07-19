@@ -1,0 +1,6 @@
+/docs/_build
+/duosubs/__pycache__
+/duosubs/common/__pycache__
+/duosubs/core/__pycache__
+/duosubs/io/__pycache__
+/duosubs/subtitle/__pycache__
