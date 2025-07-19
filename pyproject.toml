@@ -40,7 +40,7 @@ Repository = "https://github.com/CK-Explorer/DuoSubs"
 Documentation = "https://duosubs.readthedocs.io/en/latest/"
 
 [project.scripts]
-duosubs = "duosubs.cli.main:merge"
+duosubs = "duosubs.cli.main:app"
 
 [project.optional-dependencies]
 dev = [
