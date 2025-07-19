@@ -3,7 +3,7 @@ requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "DuoSubs"
+name = "duosubs"
 version = "0.1.0"
 authors = [{ name = "CK-Explorer " }]
 description = "Semantic subtitle aligner and merger for bilingual subtitle syncing"
@@ -37,10 +37,10 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/CK-Explorer/DuoSubs"
 Repository = "https://github.com/CK-Explorer/DuoSubs"
-Documentation = "https://github.com/CK-Explorer/DuoSubs"
+Documentation = "https://duosubs.readthedocs.io/en/latest/"
 
 [project.scripts]
-duosubs = "duosubs.cli:main"
+duosubs = "duosubs.cli.main:merge"
 
 [project.optional-dependencies]
 dev = [
