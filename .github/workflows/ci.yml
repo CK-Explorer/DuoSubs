@@ -1,4 +1,4 @@
-name: DuoSubs
+name: CI - Lint, Type Check, Test
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   qa:
-    name: Run QA - Lint, Type Check, Test
+    name: Run QA
     runs-on: ubuntu-latest
     strategy:
       matrix:
