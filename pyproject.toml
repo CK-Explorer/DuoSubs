@@ -71,6 +71,9 @@ markers = [
 ]
 pythonpath = ["."]
 
+[tool.coverage.run]
+source = ["duosubs"]
+
 [tool.ruff]
 line-length = 88
 target-version = "py311"
