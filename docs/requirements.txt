@@ -3,4 +3,3 @@ sphinx_rtd_theme
 sphinx-copybutton
 sphinx_inline_tabs
 myst-parser
-torch
