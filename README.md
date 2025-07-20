@@ -50,7 +50,7 @@ Here are the simplest way to get started:
 - via command line
 
     ```bash
-    duosubs -p sub_lang_1.srt -s sub_lang_2.srt
+    duosubs -p primary_sub.srt -s secondary_sub.srt
     ```
 
 - via Python API
@@ -60,8 +60,8 @@ Here are the simplest way to get started:
 
     # Store all arguments
     args = MergeArgs(
-        primary="sub_lang_1.srt",
-        secondary="sub_lang_2.srt"
+        primary="primary_sub.srt",
+        secondary="secondary_sub.srt"
     )
 
     # Load, merge, and save subtitles.
@@ -78,13 +78,13 @@ or check out from the
 for top performing model.
 
 For example, if the model chosen is 
-[Qwen/Qwen3-Embedding-4B](https://huggingface.co/Qwen/Qwen3-Embedding-4B), 
+[Qwen/Qwen3-Embedding-0.6B](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B), 
 you can run:
 
 - via command line
 
     ```bash
-    duosubs -p sub_lang_1.srt -s sub_lang_2.srt --model Qwen/Qwen3-Embedding-4B
+    duosubs -p primary_sub.srt -s secondary_sub.srt --model Qwen/Qwen3-Embedding-0.6B
     ```
 
 - via Python API
@@ -94,9 +94,9 @@ you can run:
 
     # Store all arguments
     args = MergeArgs(
-        primary="sub_lang_1.srt",
-        secondary="sub_lang_2.srt",
-        model="Qwen/Qwen3-Embedding-4B"
+        primary="primary_sub.srt",
+        secondary="secondary_sub.srt",
+        model="Qwen/Qwen3-Embedding-0.6B"
     )
 
     # Load, merge, and save subtitles.
@@ -125,7 +125,8 @@ To learn more about this tool, please see the
 
 ## 🚫 Known Limitations
 
-- The **accuracy** of the merging process **varies** on the model selected.
+- The **accuracy** of the merging process **varies** on the 
+[model](https://huggingface.co/models?library=sentence-transformers) selected.
 - Some sentence **fragments** from secondary subtitles may be **misaligned** to the 
 primary subtitles line due to the tokenization algorithm used.
 - **Secondary** subtitles might **contain extra whitespace** as a result of token-level merging.
