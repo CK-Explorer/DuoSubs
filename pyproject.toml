@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "duosubs"
 version = "0.1.0"
 authors = [{ name = "CK-Explorer " }]
-description = "Semantic subtitle aligner and merger for bilingual subtitle syncing"
+description = "Semantic subtitle aligner and merger for bilingual subtitle syncing."
 readme = "README.md"
 license = { text = "Apache-2.0 license" }
 keywords = [
