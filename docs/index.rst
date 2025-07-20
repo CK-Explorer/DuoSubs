@@ -39,7 +39,6 @@ Documentation
 
 .. toctree::
    :maxdepth: 3
-   :caption: Documentation:
 
    getting_started
    design
