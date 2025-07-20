@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "duosubs"
-version = "0.1.0"
+version = "0.0.0"
 authors = [{ name = "CK-Explorer " }]
 description = "Semantic subtitle aligner and merger for bilingual subtitle syncing."
 readme = "README.md"
@@ -26,7 +26,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache-2.0 License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
 requires-python = ">=3.10"
@@ -64,7 +64,7 @@ typecheck = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.4.0"
+version = "0.0.0"
 tag_format = "v$version"
 version_files = [
   "pyproject.toml",
