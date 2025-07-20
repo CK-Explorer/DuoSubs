@@ -17,39 +17,39 @@ Here's the most **simplest** way of merging two subtitles using the merging pipe
     # Store all arguments
     args = MergeArgs(
         # Input Files (Required)
-        primary="sub_lang_1.srt",   # primary subtitle file path
-        secondary="sub_lang_2.ass", # secondary subtitle file path
+        primary="primary_sub.srt",      # primary subtitle file path
+        secondary="secondary_sub.srt",  # secondary subtitle file path
 
         # Model & Inference (Optional)
-        model="Qwen/Qwen3-Embedding-4B",    # SentenceTransformer model name
-        device=DeviceType.CUDA,     # Device to run the model on: AUTO, CPU, CUDA, or MPS
-        batch_size=128,             # batch size for model inference, any positive integer
-        model_precision=ModelPrecision.FLOAT16, # precision mode for model inference: FLOAT32, FLOAT16, or BFLOAT16
+        model="Qwen/Qwen3-Embedding-0.6B",    # SentenceTransformer model name, default: LaBSE
+        device=DeviceType.CPU,      # Device to run the model on: AUTO (default), CPU, CPU, or MPS
+        batch_size=128,             # batch size for model inference, any positive integer, default: 32
+        model_precision=ModelPrecision.FLOAT16, # precision mode for model inference: FLOAT32 (default), FLOAT16, or BFLOAT16
 
         # Alignment Behavior (Optional)
-        ignore_non_overlap_filter=False,    # whether to ignore non-overlapping subtitles filter: True or False
+        ignore_non_overlap_filter=False,    # whether to ignore non-overlapping subtitles filter: True or False (default)
         
         # Output Styling (Optional)
-        retain_newline=False,       # whether to retain "\\N" line breaks in output: True or False
-        secondary_above=False,      # whether to show secondary subtitle above primary: True or False
+        retain_newline=False,       # whether to retain "\N" line breaks in output: True (default) or False
+        secondary_above=False,      # whether to show secondary subtitle above primary: True (default) or False
 
         # Output Files (Optional)
         omit=[
-            # OmitFile.EDIT,        # omit edit file, if you want to keep it, remove this line
-            # OmitFile.PRIMARY,     # omit primary file, if you want to keep it, remove this line
-            # OmitFile.SECONDARY,   # omit secondary file, if you want to keep it, remove this line
-            # OmitFile.COMBINED,    # omit combined file, if you want to keep it, remove this line
+            # OmitFile.EDIT,        # omit edit file, if you want to omit it, uncomment this line
+            # OmitFile.PRIMARY,     # omit primary file, if you want to omit it, uncomment this line
+            # OmitFile.SECONDARY,   # omit secondary file, if you want to omit it, uncomment this line
+            # OmitFile.COMBINED,    # omit combined file, if you want to omit it, uncomment this line
             OmitFile.NONE           # do not omit any files, you can remove this line if you want to keep all files
-        ],
+        ],  # Default: [OmitFile.EDIT]
 
         # The following arguments accept SubtitleFormat enum values: SRT, VTT, MPL, TTML, ASS, SSA
-        format_all=SubtitleFormat.VTT,       # file format for all subtitle outputs, default is ASS
-        format_combined=None,                # file format for combined subtitle output, default is None
-        format_primary=None,                 # file format for primary subtitle output, default is None
-        format_secondary=SubtitleFormat.SSA, # file format for secondary subtitle output, default is None
+        format_all=SubtitleFormat.VTT,       # file format for all subtitle outputs, default: ASS
+        format_combined=None,                # file format for combined subtitle output, default: None
+        format_primary=None,                 # file format for primary subtitle output, default: None
+        format_secondary=SubtitleFormat.SSA, # file format for secondary subtitle output, default: None
 
-        output_name="processed_sub",        # base name for output files (without extension)
-        output_dir=None     # output directory for generated files, default is primary subtitle location
+        output_name="processed_sub",         # base name for output files (without extension), default: primary subtitle name
+        output_dir=None     # output directory for generated files, default: primary subtitle location
     )
 
     # Load, merge, and save subtitles, all inside the pipeline
@@ -86,15 +86,16 @@ The following code lets you to add extra steps like pre- or post-processing of s
     # Store all arguments
     args = MergeArgs(
         # Input Files (Required)
-        primary="sub_lang_1.srt",   # primary subtitle file path
-        secondary="sub_lang_2.ass", # secondary subtitle file path
+        primary="primary_sub.srt",      # primary subtitle file path
+        secondary="secondary_sub.srt",  # secondary subtitle file path
 
-        # For other options, please refer to the High-Level Subtitle Alignment (Two-Step Call).
+        # For other options, please refer to the High-Level Subtitle Alignment.
     )
 
     def make_progress_callback(progress_bar: Any) -> Callable[[float], None]:
         """ 
-        Creates a callback function to update the progress bar statically, instead of incrementally.
+        Creates a callback function to update the progress bar statically, instead 
+        of incrementally.
         """
         last_percent: list[float] = [0.0]
 
@@ -180,8 +181,8 @@ This allows you to implement your own logic around the merging process.
                         load_subtitles, save_subtitles_in_zip)
 
     args = MergeArgs(
-        primary="sub_lang_1.srt",
-        secondary="sub_lang_2.ass"
+        primary="primary_sub.srt",
+        secondary="secondary_sub.srt"
     )
 
     primary_subs_data, secondary_subs_data = load_subtitles(
@@ -300,7 +301,7 @@ It returns a :meth:`duosubs.SubtitleData` instance that includes:
 
     from duosubs import load_subs
 
-    subs_data = load_subs("sub_lang_1.srt")
+    subs_data = load_subs("primary_sub.srt")
 
 To **load an edit file** (with a ``.json.gz`` extension) generated by this tool for 
 **internal use**, use the :meth:`duosubs.load_file_edit` function.

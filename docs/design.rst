@@ -11,6 +11,8 @@ How It Works
 1.  | **Parse and Detect Language**
     | Subtitles are loaded, and the dominant language of each file is automatically identified.
 
+.. _tokenization:
+
 2.  | **Tokenization**
     | Each subtitle line is tokenized using:
     |   • **punctuations** as line breaks for **space** separated languages.
@@ -23,7 +25,7 @@ How It Works
     | For segments with overlapping timestamps, the pairing is estimated using Dynamic Time Warping (DTW), based on semantic similarity between tokenized texts.
 
 5.  | **Refine alignment using a sliding window approach**
-    | The initial alignment is adjusted using local neighborhood context in a sliding window to improve semantic continuity.
+    | The initial alignment is adjusted using local neighborhood context in a sliding window. This step is important because the DTW-based pairing may result in duplicate secondary subtitles.
 
 6.  | **Combine aligned and non-overlapping subtitles**
     | The aligned overlapping segments are merged with the filtered non-overlapping ones to produce a coherent bilingual subtitle track.
@@ -39,7 +41,7 @@ Known Limitations
 -   The **accuracy** of the merging process **varies** on the 
     `model <https://huggingface.co/models?library=sentence-transformers>`_ selected.
 -   Some sentence **fragments** from secondary subtitles may be **misaligned** to the primary 
-    subtitles line due to the tokenization algorithm used.
+    subtitles line due to the :ref:`tokenization algorithm <tokenization>` used.
 -   **Secondary** subtitles might **contain extra whitespace** as a result of token-level 
     merging.
 -   The algorithm may **not** work reliably if the **timestamps** of some matching lines 

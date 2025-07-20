@@ -22,20 +22,20 @@ Basic Usage
 Let's say you have two subtitle files — in any supported format like `SRT`, `VTT`, 
 `MPL2`, `TTML`, `ASS`, `SSA` — for example:
 
-  - `sub_lang_1.srt`
-  - `sub_lang_2.ass`
+  - `primary_sub.srt`
+  - `secondary_sub.srt`
 
-And you want to merge them using the timestamps from `sub_lang_1.srt`.
+And you want to merge them using the timestamps from `primary_sub.srt`.
 
-Here are the **simplest** ways to do it, either way:
+Here are the **simplest** ways to do it:
 
-  - via command line:
+.. tab:: Command Line
 
     .. code-block:: bash
 
-        duosubs -p sub_lang_1.srt -s sub_lang_2.ass
+        duosubs -p primary_sub.srt -s secondary_sub.srt
         
-  - via Python API:
+.. tab:: Python API
 
     .. code-block:: python
 
@@ -43,8 +43,8 @@ Here are the **simplest** ways to do it, either way:
 
         # Store all arguments
         args = MergeArgs(
-            primary="sub_lang_1.srt",
-            secondary="sub_lang_2.ass"
+            primary="primary_sub.srt",
+            secondary="secondary_sub.srt"
         )
 
         # Load, merge, and save subtitles.
@@ -62,26 +62,47 @@ otherwise it falls back to CPU.
     `leaderboard <https://huggingface.co/spaces/mteb/leaderboard>`_.
 
     For example, if the model chosen is 
-    `Qwen/Qwen3-Embedding-4B <https://huggingface.co/Qwen/Qwen3-Embedding-4B>`_, 
-    you can run the following command instead:
+    `Qwen/Qwen3-Embedding-0.6B <https://huggingface.co/Qwen/Qwen3-Embedding-0.6B>`_, 
+    you can run the followings instead:
 
-    .. code-block:: bash
+    .. tab:: Command Line
+    
+        .. code-block:: bash
 
-        duosubs -p sub_lang_1.srt -s sub_lang_2.ass --model Qwen/Qwen3-Embedding-4B
+            duosubs -p primary_sub.srt -s secondary_sub.srt --model Qwen/Qwen3-Embedding-0.6B
 
-It outputs `sub_lang_1.zip` in the **same directory** as `sub_lang_1.srt`, with the 
+    .. tab:: Python API
+
+        .. code-block:: python
+
+            from duosubs import MergeArgs, run_merge_pipeline
+
+            # Store all arguments
+            args = MergeArgs(
+                primary="primary_sub.srt",
+                secondary="secondary_sub.srt",
+                model="Qwen/Qwen3-Embedding-0.6B"
+            )
+
+            # Load, merge, and save subtitles.
+            run_merge_pipeline(args, print)
+
+    ⚠️ Note: Some models may require significant RAM or GPU (VRAM) to run, and might 
+    not be compatible with all devices — especially larger models.
+
+It outputs `primary_sub.zip` in the **same directory** as `primary_sub.srt`, with the 
 following structure:
 
 .. code-block:: bash
 
-    sub_lang_1.zip
-    ├── sub_lang_1_combined.ass   # Merged subtitles
-    ├── sub_lang_1_primary.ass    # Original primary subtitles
-    └── sub_lang_1_secondary.ass  # Time-shifted secondary subtitles
+    primary_sub.zip
+    ├── primary_sub_combined.ass   # Merged subtitles
+    ├── primary_sub_primary.ass    # Original primary subtitles
+    └── primary_sub_secondary.ass  # Time-shifted secondary subtitles
 
 All these subtitles are saved in **.ass** format by default.
 
-In the merged file (`sub_lang_1_combined.ass`), the displayed subtitles will have **primary**
+In the merged file (`primary_sub_combined.ass`), the displayed subtitles will have **primary**
 subtitles placed **above** the **secondary** subtitles, and **line breaks** are **removed** for 
 cleaner formatting.
 

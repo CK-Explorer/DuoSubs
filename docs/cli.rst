@@ -19,7 +19,7 @@ Input Files
 
 .. code-block:: bash
 
-    duosubs -p primary_sub.ass -s secondary_sub.srt
+    duosubs -p primary_sub.srt -s secondary_sub.srt
 
 Optional Options
 ----------------
@@ -38,13 +38,16 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --model Qwen/Qwen3-Embedding-4B
+        duosubs -p primary_sub.srt -s secondary_sub.srt --model Qwen/Qwen3-Embedding-0.6B
 
     .. tip::
         Pick one from 
         `🤗 Hugging Face <https://huggingface.co/models?library=sentence-transformers>`_  or 
         check out from `leaderboard <https://huggingface.co/spaces/mteb/leaderboard>`_ for 
         top performing model.
+
+        ⚠️ Note: Some models may require significant RAM or GPU (VRAM) to run, and might 
+        not be compatible with all devices — especially larger models.
 
 -   | ``--device <choice>``
     | Choose the **compute device** for running the model.
@@ -62,7 +65,7 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --device cpu
+        duosubs -p primary_sub.srt -s secondary_sub.srt --device cpu
 
     .. tip::
         Use ``cuda`` or ``mps`` for best performance.
@@ -76,7 +79,7 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --batch-size 128
+        duosubs -p primary_sub.srt -s secondary_sub.srt --batch-size 128
 
     .. tip::
         Larger values are faster but use more memory.
@@ -86,9 +89,9 @@ Model & Inference
 
     Available choices:
 
-        - ``float32`` — full precision (default; highest accuracy)
-        - ``float16`` — half precision
-        - ``bfloat16`` — half precision with the same range as float32
+    - ``float32`` — full precision (default; highest accuracy)
+    - ``float16`` — half precision
+    - ``bfloat16`` — half precision with the same range as float32
 
     *Default*: ``float32``
 
@@ -96,14 +99,14 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --precision int8
+        duosubs -p primary_sub.srt -s secondary_sub.srt --precision float16
 
     .. tip::
         Lower precision modes such as ``float16`` and ``bfloat16`` can significantly 
         **reduce memory** usage and **speed up** processing, especially on supported GPUs.
 
-            - ``float16`` is widely supported on modern GPUs, but may suffer from **overflow** or **instability** in some cases due to its limited numeric range.
-            - ``bfloat16`` offers **better** numerical **stability** by preserving the same dynamic range as ``float32``, but is only available on **newer hardware** like Ampere GPUs and TPUs.
+          - ``float16`` is widely supported on modern GPUs, but may suffer from **overflow** or **instability** in some cases due to its limited numeric range.
+          - ``bfloat16`` offers **better** numerical **stability** by preserving the same dynamic range as ``float32``, but is only available on **newer hardware** like Ampere GPUs and TPUs.
 
         ⚠️ These modes may lead to slightly **reduced semantic accuracy**, depending on the 
         model and content, especially in edge cases.
@@ -122,7 +125,7 @@ Alignment Behavior
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --ignore-non-overlap-filter
+        duosubs -p primary_sub.srt -s secondary_sub.srt --ignore-non-overlap-filter
 
     .. tip::
         This option is only **applicable** when **some** or **all**  of the matching lines from 
@@ -144,7 +147,7 @@ Output Styling
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --retain-newline
+        duosubs -p primary_sub.srt -s secondary_sub.srt --retain-newline
 
 -   | ``--secondary-above``
     | The **secondary** subtitle lines are placed **above** the **primary** subtitle lines, but the timing is based on the primary subtitles.
@@ -155,7 +158,7 @@ Output Styling
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --no-secondary-above
+        duosubs -p primary_sub.srt -s secondary_sub.srt --no-secondary-above
 
 Output Files
 ^^^^^^^^^^^^
@@ -177,7 +180,7 @@ Output Files
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --omit edit primary secondary
+        duosubs -p primary_sub.srt -s secondary_sub.srt --omit edit primary secondary
 
 -   | ``--format-all <choice>``
     | Sets the **format** for **all** generated subtitle files (affected by ``--omit`` options).
@@ -197,7 +200,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --format-all vtt
+        duosubs -p primary_sub.srt -s secondary_sub.srt --format-all vtt
 
 -   | ``--format-combined <choice>``
     | Sets the **format** for the generated **merged** subtitle file, **overriding** what's set in ``--format-all``.
@@ -217,7 +220,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --format-combined vtt
+        duosubs -p primary_sub.srt -s secondary_sub.srt --format-combined vtt
 
 -   | ``--format-primary <choice>``
     | Sets the **format** for the generated **primary** subtitle file, **overriding** what's set in ``--format-all``.
@@ -237,7 +240,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --format-primary vtt
+        duosubs -p primary_sub.srt -s secondary_sub.srt --format-primary vtt
 
 -   | ``--format-secondary <choice>``
     | Sets the **format** for the generated **secondary** subtitle file, **overriding** what's set in ``--format-all``.
@@ -257,7 +260,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --format-secondary vtt
+        duosubs -p primary_sub.srt -s secondary_sub.srt --format-secondary vtt
 
 -   | ``--output-name <name>``
     | Set the **base name** for output files (without extension).
@@ -268,7 +271,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --output-name processed_sub
+        duosubs -p primary_sub.srt -s secondary_sub.srt --output-name processed_sub
 
 -   | ``--output-dir``
     | Set the **output directory**.
@@ -279,7 +282,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.ass -s secondary_sub.srt --output-dir "D:\Users\Name\Document\Folder"
+        duosubs -p primary_sub.srt -s secondary_sub.srt --output-dir "D:\Users\Name\Document\Folder"
     
 Miscellaneous
 ^^^^^^^^^^^^^

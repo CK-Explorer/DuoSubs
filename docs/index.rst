@@ -1,6 +1,22 @@
 DuoSubs
 =======
 
+.. image:: https://img.shields.io/github/stars/CK-Explorer/DuoSubs?style=social
+   :target: https://github.com/CK-Explorer/DuoSubs
+   :alt: GitHub
+
+.. image:: https://img.shields.io/pypi/v/duosubs.svg
+   :target: https://pypi.org/project/duosubs/
+   :alt: PyPI
+
+.. image:: https://img.shields.io/pypi/pyversions/duosubs.svg
+   :target: https://pypi.org/project/duosubs/
+   :alt: Python Versions
+
+.. image:: https://img.shields.io/badge/license-Apache--2.0-blueviolet.svg
+   :target: https://github.com/CK-Explorer/DuoSubs/blob/main/LICENSE
+   :alt: License
+
 Merging subtitles using only the nearest timestamp often leads to incorrect pairings
 — lines may end up out of sync, duplicated, or mismatched.
 
@@ -30,7 +46,7 @@ Documentation
    cli
    api_usage
    api_references
-   changelog
+   release_notes
 
 License
 --------
