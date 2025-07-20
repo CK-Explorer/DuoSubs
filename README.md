@@ -1,6 +1,13 @@
 # 🎬 DuoSubs
 
+[![CI](https://github.com/CK-Explorer/DuoSubs/actions/workflows/ci.yml/badge.svg)](https://github.com/CK-Explorer/DuoSubs/actions/workflows/ci.yml)
+[![PyPI version](https://img.shields.io/pypi/v/duosubs.svg)](https://pypi.org/project/duosubs/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/duosubs.svg)](https://pypi.org/project/duosubs/)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blueviolet.svg)](LICENSE)
+[![Type Checked: Mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](http://mypy-lang.org/)
+[![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-blue?logo=python&labelColor=gray)](https://github.com/astral-sh/ruff)
 [![codecov](https://codecov.io/gh/CK-Explorer/DuoSubs/branch/main/graph/badge.svg)](https://codecov.io/gh/CK-Explorer/DuoSubs)
+[![Documentation Status](https://readthedocs.org/projects/duosubs/badge/?version=latest)](https://duosubs.readthedocs.io/en/latest/?badge=latest)
 
 Merging subtitles using only the nearest timestamp often leads to incorrect pairings
 — lines may end up out of sync, duplicated, or mismatched.
@@ -43,7 +50,7 @@ Here are the simplest way to get started:
 - via command line
 
     ```bash
-    duosubs -p primary_file.srt --s secondary_file.srt
+    duosubs -p sub_lang_1.srt -s sub_lang_2.srt
     ```
 
 - via Python API
@@ -54,7 +61,7 @@ Here are the simplest way to get started:
     # Store all arguments
     args = MergeArgs(
         primary="sub_lang_1.srt",
-        secondary="sub_lang_2.ass"
+        secondary="sub_lang_2.srt"
     )
 
     # Load, merge, and save subtitles.
@@ -77,7 +84,7 @@ you can run:
 - via command line
 
     ```bash
-    duosubs -p primary_file.srt -s secondary_file.srt --model Qwen/Qwen3-Embedding-4B
+    duosubs -p sub_lang_1.srt -s sub_lang_2.srt --model Qwen/Qwen3-Embedding-4B
     ```
 
 - via Python API
@@ -88,7 +95,7 @@ you can run:
     # Store all arguments
     args = MergeArgs(
         primary="sub_lang_1.srt",
-        secondary="sub_lang_2.ass",
+        secondary="sub_lang_2.srt",
         model="Qwen/Qwen3-Embedding-4B"
     )
 
@@ -96,7 +103,11 @@ you can run:
     run_merge_pipeline(args, print)
     ```
 
-To learn more about this tool, please see the [documentation]().
+⚠️ Note: Some models may require significant RAM or GPU (VRAM) to run, and might 
+not be compatible with all devices — especially larger models.
+
+To learn more about this tool, please see the 
+[documentation](https://duosubs.readthedocs.io/en/latest/).
 
 ---
 
@@ -150,13 +161,13 @@ embedding backbone
 - [Hugging Face](https://huggingface.co/) — for hosting models and making them easy to use
 - [PyTorch](https://pytorch.org/) — for providing the deep learning framework
 - [fastdtw](https://github.com/slaypni/fastdtw) — for aligning the subtitles
-- [lingua](https://github.com/pemistahl/lingua-py) — for detecting the subtitles' language codes
+- [lingua-py](https://github.com/pemistahl/lingua-py) — for detecting the subtitles' language codes
 - [pysubs2](https://github.com/tkarabela/pysubs2) — for subtitle file I/O utilities
 - [charset_normalizer](https://github.com/jawah/charset_normalizer) — for identifying the file 
 encoding
 - [typer](https://github.com/fastapi/typer) — for CLI application
 - [tqdm](https://github.com/tqdm/tqdm) — for displaying progress bar
-- [Tears of Steel](https://mango.blender.org/) — subtitles used for testing and development 
+- [Tears of Steel](https://mango.blender.org/) — subtitles used for demo, testing and development 
 purposes
 
 ---
