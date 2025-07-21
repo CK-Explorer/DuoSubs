@@ -33,6 +33,8 @@ This Python tool uses **semantic similarity**
 
 ## 🛠️ Installation
 
+**⚠️ Requires Python 3.10+**
+
 1. Install the correct version of PyTorch for system by following the official 
 instructions: https://pytorch.org/get-started/locally
 2. Install this repo via pip:
