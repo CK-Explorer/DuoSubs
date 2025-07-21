@@ -62,7 +62,7 @@ typecheck = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["duosubs"]
+include = ["duosubs*"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
