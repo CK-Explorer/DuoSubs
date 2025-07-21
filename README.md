@@ -45,12 +45,12 @@ pip install duosubs
 
 ## 🚀 Usage
 
-Here are the simplest way to get started:
+With the [demo files](demo/) provided, here are the simplest way to get started:
 
 - via command line
 
     ```bash
-    duosubs -p primary_sub.srt -s secondary_sub.srt
+    duosubs -p demo/primary_sub.srt -s demo/secondary_sub.srt
     ```
 
 - via Python API
@@ -60,13 +60,22 @@ Here are the simplest way to get started:
 
     # Store all arguments
     args = MergeArgs(
-        primary="primary_sub.srt",
-        secondary="secondary_sub.srt"
+        primary="demo/primary_sub.srt",
+        secondary="demo/secondary_sub.srt"
     )
 
     # Load, merge, and save subtitles.
     run_merge_pipeline(args, print)
     ```
+
+These codes will produce a [zip file](demo/primary_sub.zip), with the following structure:
+
+```text
+primary_sub.zip
+├── primary_sub_combined.ass   # Merged subtitles
+├── primary_sub_primary.ass    # Original primary subtitles
+└── primary_sub_secondary.ass  # Time-shifted secondary subtitles
+```
 
 By default, the Sentence Transformer model used is 
 [LaBSE](https://huggingface.co/sentence-transformers/LaBSE).
@@ -84,7 +93,7 @@ you can run:
 - via command line
 
     ```bash
-    duosubs -p primary_sub.srt -s secondary_sub.srt --model Qwen/Qwen3-Embedding-0.6B
+    duosubs -p demo/primary_sub.srt -s demo/secondary_sub.srt --model Qwen/Qwen3-Embedding-0.6B
     ```
 
 - via Python API
@@ -94,8 +103,8 @@ you can run:
 
     # Store all arguments
     args = MergeArgs(
-        primary="primary_sub.srt",
-        secondary="secondary_sub.srt",
+        primary="demo/primary_sub.srt",
+        secondary="demo/secondary_sub.srt",
         model="Qwen/Qwen3-Embedding-0.6B"
     )
 
@@ -103,8 +112,9 @@ you can run:
     run_merge_pipeline(args, print)
     ```
 
-⚠️ Note: Some models may require significant RAM or GPU (VRAM) to run, and might 
-not be compatible with all devices — especially larger models.
+> ⚠️ **Warning**  
+> - Some models may require significant RAM or GPU (VRAM) to run, and might not be compatible with all devices — especially larger models. 
+> - Also, please ensure the selected model supports your desired language for reliable results.
 
 To learn more about this tool, please see the 
 [documentation](https://duosubs.readthedocs.io/en/latest/).
@@ -127,6 +137,7 @@ To learn more about this tool, please see the
 
 - The **accuracy** of the merging process **varies** on the 
 [model](https://huggingface.co/models?library=sentence-transformers) selected.
+- Some models may produce **unreliable results** for **unsupported** or low-resource **languages**.
 - Some sentence **fragments** from secondary subtitles may be **misaligned** to the 
 primary subtitles line due to the tokenization algorithm used.
 - **Secondary** subtitles might **contain extra whitespace** as a result of token-level merging.
@@ -169,7 +180,9 @@ encoding
 - [typer](https://github.com/fastapi/typer) — for CLI application
 - [tqdm](https://github.com/tqdm/tqdm) — for displaying progress bar
 - [Tears of Steel](https://mango.blender.org/) — subtitles used for demo, testing and development 
-purposes
+purposes. Created by the 
+[Blender Foundation](https://mango.blender.org/), licensed under 
+[CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
 
 ---
 
