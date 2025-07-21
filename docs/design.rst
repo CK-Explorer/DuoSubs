@@ -40,6 +40,7 @@ Known Limitations
 
 -   The **accuracy** of the merging process **varies** on the 
     `model <https://huggingface.co/models?library=sentence-transformers>`_ selected.
+-   Some models may produce **unreliable results** for **unsupported** or low-resource **languages**.
 -   Some sentence **fragments** from secondary subtitles may be **misaligned** to the primary 
     subtitles line due to the :ref:`tokenization algorithm <tokenization>` used.
 -   **Secondary** subtitles might **contain extra whitespace** as a result of token-level 

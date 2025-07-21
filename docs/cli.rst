@@ -46,8 +46,13 @@ Model & Inference
         check out from `leaderboard <https://huggingface.co/spaces/mteb/leaderboard>`_ for 
         top performing model.
 
-        ⚠️ Note: Some models may require significant RAM or GPU (VRAM) to run, and might 
-        not be compatible with all devices — especially larger models.
+        .. warning::
+
+            Some models may require significant RAM or GPU (VRAM) to run and might not
+            be compatible with all devices — especially larger models. 
+            
+            Please ensure the selected model supports your desired language for reliable 
+            results.
 
 -   | ``--device <choice>``
     | Choose the **compute device** for running the model.
