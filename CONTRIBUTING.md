@@ -25,7 +25,6 @@ https://pytorch.org/get-started/locally
     ```bash
     pip install -e ".[dev,typecheck]"
     ```
-
 ---
 
 ## 🛠️ Making a Change
@@ -53,15 +52,36 @@ https://pytorch.org/get-started/locally
 
 ---
 
+## 🧾 Updating the Documentation
+
+Before making any changes to the Sphinx documentation located in the [docs/](docs/), 
+ensure you have the required dependencies installed:
+
+```bash
+pip install -r docs/requirements.txt
+```
+
+After making changes, run the following commands to build the HTML documentation:
+
+```bash
+cd docs/
+make html
+```
+
+The generated HTML files will be located in ``docs/_build/html``. You can open 
+``index.html`` in your browser to preview the result.
+
+---
+
 ## 🧹 Code Quality
 
 Run this before submitting a pull request:
 
-    ```bash
-    ruff check . --fix     # Lint + format (like black)
-    mypy .                 # Type checks
-    pytest                 # Run tests
-    ```
+```bash
+ruff check . --fix     # Lint + format (like black)
+mypy .                 # Type checks
+pytest                 # Run tests
+```
 
 ---
 
