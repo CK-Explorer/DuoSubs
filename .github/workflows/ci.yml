@@ -26,7 +26,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
           
       - name: Install dependencies
-        run: pip install -e ".[dev,typecheck]"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,typecheck]"
 
       - name: Run Ruff
         run: ruff check .
