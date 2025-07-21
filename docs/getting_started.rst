@@ -89,11 +89,10 @@ otherwise it falls back to CPU.
 
     .. warning::
 
-        Some models may require significant RAM or GPU (VRAM) to run and might not
-        be compatible with all devices — especially larger models. 
-        
-        Please ensure the selected model supports your desired language for reliable 
-        results.
+        -   Some models may require significant RAM or GPU (VRAM) to run and might not
+            be compatible with all devices — especially larger models. 
+        -   Please ensure the selected model supports your desired language for reliable 
+            results.
 
 It outputs `primary_sub.zip` in the **same directory** as `primary_sub.srt`, with the 
 following structure:
