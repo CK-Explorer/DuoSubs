@@ -4,3 +4,13 @@
 /duosubs/core/__pycache__
 /duosubs/io/__pycache__
 /duosubs/subtitle/__pycache__
+/.vscode
+/duosubs/cli/__pycache__
+/duosubs.egg-info
+/tests/__pycache__
+/tests/cli/__pycache__
+/tests/common_utils/__pycache__
+/tests/io/__pycache__
+/tests/subtitle/__pycache__
+/tests/core/__pycache__
+/dist
