@@ -26,7 +26,6 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
 requires-python = ">=3.10"
@@ -61,6 +60,9 @@ typecheck = [
     "scipy-stubs",
     "types-tqdm"
 ]
+
+[tool.setuptools.packages.find]
+include = ["duosubs"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
