@@ -2,4 +2,4 @@
 
 ### Feat
 
-- trigger version bump
+- Initial release
