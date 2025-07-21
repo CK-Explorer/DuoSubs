@@ -103,17 +103,18 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --precision float16
+        duosubs -p primary_sub.srt -s secondary_sub.srt --model-precision float16
 
     .. tip::
         Lower precision modes such as ``float16`` and ``bfloat16`` can significantly 
-        **reduce memory** usage and **speed up** processing, especially on supported GPUs.
+        **reduce memory** usage and **speed up** processing, especially on supported GPUs:
 
           - ``float16`` is widely supported on modern GPUs, but may suffer from **overflow** or **instability** in some cases due to its limited numeric range.
           - ``bfloat16`` offers **better** numerical **stability** by preserving the same dynamic range as ``float32``, but is only available on **newer hardware** like Ampere GPUs and TPUs.
 
-        ⚠️ These modes may lead to slightly **reduced semantic accuracy**, depending on the 
-        model and content, especially in edge cases.
+        .. warning::
+                These modes may lead to slightly **reduced semantic accuracy**, depending on the 
+                model and content, especially in edge cases.
 
 Alignment Behavior
 ^^^^^^^^^^^^^^^^^^
@@ -162,7 +163,7 @@ Output Styling
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --no-secondary-above
+        duosubs -p primary_sub.srt -s secondary_sub.srt --secondary-above
 
 Output Files
 ^^^^^^^^^^^^
@@ -184,7 +185,17 @@ Output Files
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --omit edit primary secondary
+        duosubs -p primary_sub.srt -s secondary_sub.srt --omit edit --omit primary --omit secondary
+
+    .. note::
+
+        If you are **not** using limited shells like Windows **CMD** or **Powershell**, 
+        use the following shorter code instead:
+
+        .. code-block:: bash
+
+            duosubs -p primary_sub.srt -s secondary_sub.srt --omit edit primary secondary
+
 
 -   | ``--format-all <choice>``
     | Sets the **format** for **all** generated subtitle files (affected by ``--omit`` options).
@@ -280,7 +291,7 @@ Output Files
 -   | ``--output-dir``
     | Set the **output directory**.
 
-    *Default*: Primary subtitle's location
+    *Default*: Primary subtitle's location (can be absolute or relative path)
 
     *Example*:
     
