@@ -1,7 +1,6 @@
 name: Release & Deploy
 
 on:
-  workflow_dispatch:
   push:
     tags:
       - "v*.*.*"
