@@ -33,13 +33,12 @@ This Python tool uses **semantic similarity**
 
 ## 🛠️ Installation
 
-First, install the correct version of PyTorch by following the official instructions: 
-https://pytorch.org/get-started/locally
-
-Then, install this repo via pip:
-```bash
-pip install duosubs
-```
+1. Install the correct version of PyTorch for system by following the official 
+instructions: https://pytorch.org/get-started/locally
+2. Install this repo via pip:
+    ```bash
+    pip install duosubs
+    ```
 
 ---
 
