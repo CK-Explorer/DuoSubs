@@ -46,7 +46,7 @@ from duosubs.io.writer import (
 from duosubs.subtitle.data import SubtitleData
 from duosubs.subtitle.field import SubtitleField
 
-__version__ = "0.0.0"
+__version__ = "0.1.0"
 
 __all__ = [
     "DeviceType",
