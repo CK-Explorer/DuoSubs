@@ -34,6 +34,12 @@ Features
 - 💻 **Command-line interface** with customizable options
 - 📄 Flexible format support — works with **SRT**, **VTT**, **MPL2**, **TTML**, **ASS**, **SSA** files
 
+License
+--------
+
+This tool is licensed under 
+`Apache-2.0 license <https://github.com/CK-Explorer/DuoSubs/blob/main/LICENSE>`_.
+
 Documentation
 -------------
 
@@ -47,8 +53,3 @@ Documentation
    api_references
    release_notes
 
-License
---------
-
-This tool is licensed under 
-`Apache-2.0 license <https://github.com/CK-Explorer/DuoSubs/blob/main/LICENSE>`_.
