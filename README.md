@@ -68,7 +68,7 @@ With the [demo files](demo/) provided, here are the simplest way to get started:
     run_merge_pipeline(args, print)
     ```
 
-These codes will produce a [zip file](demo/primary_sub.zip), with the following structure:
+These codes will produce [primary_sub.zip](demo/primary_sub.zip), with the following structure:
 
 ```text
 primary_sub.zip
