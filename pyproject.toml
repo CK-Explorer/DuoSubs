@@ -8,7 +8,7 @@ version = "0.0.0"
 authors = [{ name = "CK-Explorer " }]
 description = "Semantic subtitle aligner and merger for bilingual subtitle syncing."
 readme = "README.md"
-license = { text = "Apache-2.0 license" }
+license = "Apache-2.0"
 keywords = [
     "subtitles",
     "alignment",
