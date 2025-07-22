@@ -4,7 +4,11 @@ Getting Started
 Requirements
 --------------
 
-- Python **3.10+**
+-   Python with the following versions:
+
+    .. image:: https://img.shields.io/pypi/pyversions/duosubs.svg
+        :target: https://pypi.org/project/duosubs/
+        :alt: Python Versions
 
 Installation
 ------------
