@@ -155,12 +155,16 @@ For the last known limitation, if both subtitle files are **known** to be
 * **matching dialogue contents**
 * **no extra lines** like scene annotations or bonus Director’s Cut stuff.
 
-Then, just **enable** the `--ignore-non-overlap-filter` CLI option to skip the overlap check — the 
-merge should go smoothly from there.
+Then, just **enable** the `ignore-non-overlap-filter` option in either: 
+
+* CLI (`--ignore-non-overlap-filter`)
+* Python API (see [documentation](https://duosubs.readthedocs.io/en/latest/))
+
+to skip the overlap check — the merge should go smoothly from there.
 
 ⚠️ If the subtitle **timings** are **off** and the two subtitle files 
 **don’t fully match in content**, the algorithm likely **won’t** produce great results. Still, 
-you can try running it with `--ignore-non-overlap-filter` **enabled**.
+you can try running it with `ignore-non-overlap-filter` **enabled**.
 
 ---
 
