@@ -44,7 +44,7 @@ instructions: https://pytorch.org/get-started/locally
 
 ## 🚀 Usage
 
-With the [demo files](demo/) provided, here are the simplest way to get started:
+With the [demo files](/demo/) provided, here are the simplest way to get started:
 
 - via command line
 
@@ -67,7 +67,7 @@ With the [demo files](demo/) provided, here are the simplest way to get started:
     run_merge_pipeline(args, print)
     ```
 
-These codes will produce [primary_sub.zip](demo/primary_sub.zip), with the following structure:
+These codes will produce [primary_sub.zip](/demo/primary_sub.zip), with the following structure:
 
 ```text
 primary_sub.zip
@@ -192,10 +192,10 @@ purposes. Created by the
 ## 🤝 Contributing
 
 Contributions are welcome! If you'd like to submit a pull request, please check out the
- [contributing guidelines](CONTRIBUTING.md).
+ [contributing guidelines](/CONTRIBUTING.md).
 
 ---
 
 ## 🔑 License
 
-Apache-2.0 license - see the [LICENSE](LICENSE) file for details.
+Apache-2.0 license - see the [LICENSE](/LICENSE) file for details.

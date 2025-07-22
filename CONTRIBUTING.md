@@ -54,7 +54,7 @@ https://pytorch.org/get-started/locally
 
 ## 🧾 Updating the Documentation
 
-Before making any changes to the Sphinx documentation located in the [docs/](docs/), 
+Before making any changes to the Sphinx documentation located in the [docs/](/docs/), 
 ensure you have the required dependencies installed:
 
 ```bash
