@@ -316,9 +316,11 @@ class Merger:
             )
             score_idx = int(best_match_idx.item())
             subs[sub_idx].score = left_score[0][score_idx].item()
-            subs[sub_idx].secondary_style = self._secondary_styles_tokens[
-                token_start_idx
-            ]
+            subs[sub_idx].secondary_style = (
+                self._secondary_styles_tokens[token_start_idx]
+                if token_start_idx < len(self._secondary_styles_tokens)
+                else subs[sub_idx].secondary_style
+            )
             token_start_idx = token_end_idx
 
             if progress_callback:
