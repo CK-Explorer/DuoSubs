@@ -262,63 +262,77 @@ class Merger:
             if stop_bit[0]:
                 break
 
-            filtered_subs = subs[sub_idx:sub_idx+subtitle_window_size]
+            if sub_idx < len(subs)-1:
+                filtered_subs = subs[sub_idx:sub_idx+subtitle_window_size]
 
-            token_spans_indices = [
-                span for sub in filtered_subs for span in sub.secondary_token_spans[:2]
-            ]
-            token_end_idx = max(token_spans_indices)
+                token_spans_indices = [
+                    span for sub in filtered_subs 
+                    for span in sub.secondary_token_spans[:2]
+                ]
 
-            primary_text_left = [filtered_subs[0].primary_text.replace("\\N", " ")]
-            primary_text_right = [" ".join(
-                [sub.primary_text.replace("\\N", " ") for sub in filtered_subs[1:]]
-            )]
+                token_end_idx = max(token_spans_indices)
 
-            token_left = [
-                self._secondary_tokens[token_start_idx:i]
-                for i in range(token_start_idx, token_end_idx+1)
-            ]
-            token_right = [
-                self._secondary_tokens[i:token_end_idx]
-                for i in range(token_start_idx, token_end_idx+1)
-            ]
+                primary_text_left = [filtered_subs[0].primary_text.replace("\\N", " ")]
+                primary_text_right = [" ".join(
+                    [sub.primary_text.replace("\\N", " ") for sub in filtered_subs[1:]]
+                )]
 
-            secondary_text_left = [
-                " ".join(text_lists).replace("\\N", "") for text_lists in token_left
-            ]
-            secondary_text_right = [
-                " ".join(text_lists).replace("\\N", "") for text_lists in token_right
-            ]
+                token_left = [
+                    self._secondary_tokens[token_start_idx:i]
+                    for i in range(token_start_idx, token_end_idx+1)
+                ]
+                token_right = [
+                    self._secondary_tokens[i:token_end_idx]
+                    for i in range(token_start_idx, token_end_idx+1)
+                ]
 
-            left_score = Merger._compute_score(
-                primary_text_left,
-                secondary_text_left,
-                model,
-                batch_size
-            )
-            right_score = (
-                Merger._compute_score(
+                secondary_text_left = [
+                    " ".join(text_lists).replace("\\N", "")
+                    for text_lists in token_left
+                ]
+                secondary_text_right = [
+                    " ".join(text_lists).replace("\\N", "")
+                    for text_lists in token_right
+                ]
+
+                left_score = Merger._compute_score(
+                    primary_text_left,
+                    secondary_text_left,
+                    model,
+                    batch_size
+                )
+                right_score = Merger._compute_score(
                     primary_text_right,
                     secondary_text_right,
                     model,
                     batch_size
                 )
-                if sub_idx != len(subs)-1
-                else torch.zeros(left_score.shape, device=left_score.device)
-            )
 
-            total_scores = left_score + right_score * (len(filtered_subs)-1)
-            _, best_match_idx = torch.max(total_scores, dim=1)
-            token_end_idx = token_start_idx + int(best_match_idx.item())
+                total_scores = left_score + right_score * (len(filtered_subs)-1)
+                _, best_match_idx = torch.max(total_scores, dim=1)
+                score_idx = int(best_match_idx.item())
+                subs[sub_idx].score = left_score[0][score_idx].item()
+                token_end_idx = token_start_idx + int(best_match_idx.item())
+            else:
+                token_end_idx = len(self._secondary_tokens)
+                subs[sub_idx].score = Merger._compute_score(
+                    subs[sub_idx].primary_text,
+                    " ".join(
+                        self._secondary_tokens[token_start_idx:token_end_idx]
+                    ).replace("\\N", ""),
+                    model,
+                    batch_size
+                ).item()
+
             subs[sub_idx].secondary_token_spans = (token_start_idx, token_end_idx)
             subs[sub_idx].secondary_text = " ".join(
                 self._secondary_tokens[token_start_idx:token_end_idx]
             )
-            score_idx = int(best_match_idx.item())
-            subs[sub_idx].score = left_score[0][score_idx].item()
-            subs[sub_idx].secondary_style = self._secondary_styles_tokens[
-                token_start_idx
-            ]
+            subs[sub_idx].secondary_style = (
+                self._secondary_styles_tokens[token_start_idx]
+                if token_start_idx < len(self._secondary_styles_tokens)
+                else subs[sub_idx].secondary_style
+            )
             token_start_idx = token_end_idx
 
             if progress_callback:

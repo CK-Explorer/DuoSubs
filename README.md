@@ -33,8 +33,6 @@ This Python tool uses **semantic similarity**
 
 ## 🛠️ Installation
 
-**⚠️ Requires Python 3.10+**
-
 1. Install the correct version of PyTorch for your system by following the official 
 instructions: https://pytorch.org/get-started/locally
 2. Install this repo via pip:
@@ -46,7 +44,7 @@ instructions: https://pytorch.org/get-started/locally
 
 ## 🚀 Usage
 
-With the [demo files](demo/) provided, here are the simplest way to get started:
+With the [demo files](/demo/) provided, here are the simplest way to get started:
 
 - via command line
 
@@ -69,7 +67,7 @@ With the [demo files](demo/) provided, here are the simplest way to get started:
     run_merge_pipeline(args, print)
     ```
 
-These codes will produce [primary_sub.zip](demo/primary_sub.zip), with the following structure:
+These codes will produce [primary_sub.zip](/demo/primary_sub.zip), with the following structure:
 
 ```text
 primary_sub.zip
@@ -155,12 +153,16 @@ For the last known limitation, if both subtitle files are **known** to be
 * **matching dialogue contents**
 * **no extra lines** like scene annotations or bonus Director’s Cut stuff.
 
-Then, just **enable** the `--ignore-non-overlap-filter` CLI option to skip the overlap check — the 
-merge should go smoothly from there.
+Then, just **enable** the `ignore-non-overlap-filter` option in either: 
+
+* CLI (`--ignore-non-overlap-filter`)
+* Python API (see [documentation](https://duosubs.readthedocs.io/en/latest/))
+
+to skip the overlap check — the merge should go smoothly from there.
 
 ⚠️ If the subtitle **timings** are **off** and the two subtitle files 
 **don’t fully match in content**, the algorithm likely **won’t** produce great results. Still, 
-you can try running it with `--ignore-non-overlap-filter` **enabled**.
+you can try running it with `ignore-non-overlap-filter` **enabled**.
 
 ---
 
@@ -190,10 +192,10 @@ purposes. Created by the
 ## 🤝 Contributing
 
 Contributions are welcome! If you'd like to submit a pull request, please check out the
- [contributing guidelines](CONTRIBUTING.md).
+ [contributing guidelines](/CONTRIBUTING.md).
 
 ---
 
 ## 🔑 License
 
-Apache-2.0 license - see the [LICENSE](LICENSE) file for details.
+Apache-2.0 license - see the [LICENSE](/LICENSE) file for details.
