@@ -7,7 +7,6 @@ Requirements
 -   Python with the following versions:
 
     .. image:: https://img.shields.io/pypi/pyversions/duosubs.svg
-        :target: https://pypi.org/project/duosubs/
         :alt: Python Versions
 
 Installation
