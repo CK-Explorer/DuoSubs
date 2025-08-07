@@ -230,7 +230,7 @@ def launch_webui(
 ) -> None:
     duosubs_server = create_main_gr_blocks_ui(cache_delete_freq, cache_delete_age)
     duosubs_server.queue(default_concurrency_limit=None)
-    if host=="127.0.0.1" and port==7860 and share==False:
+    if host=="127.0.0.1" and port==7860 and not share:
         duosubs_server.launch()
     else:
         duosubs_server.launch(server_name=host, server_port=port, share=share)
