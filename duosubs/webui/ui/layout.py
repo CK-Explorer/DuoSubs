@@ -58,11 +58,13 @@ def create_main_gr_blocks_ui(
     Returns:
         gradio.Blocks: The constructed Gradio UI.
     """
-    with gr.Blocks(
+    main_block = gr.Blocks(
         title="DuoSubs",
         theme=gr.themes.Ocean(),
         delete_cache=(cache_delete_frequency, cache_delete_age)
-    ) as ui: # type: gr.Blocks
+    )
+    ui: gr.Blocks
+    with main_block as ui:
         global device_list
         global gpu_list
         global model_pool
