@@ -203,6 +203,13 @@ def launch_webui(
             "Must be an integer between 1 and 65535."
         ),
     ),
+    share: bool = typer.Option(
+        False,
+        help=(
+            "Whether to create a publicly shareable link for the gradio app. "
+            "Creates an SSH tunnel to make your UI accessible from anywhere."
+        )
+    ),
     cache_delete_freq: int = typer.Option(
         14400,
         min=1,
@@ -223,10 +230,10 @@ def launch_webui(
 ) -> None:
     duosubs_server = create_main_gr_blocks_ui(cache_delete_freq, cache_delete_age)
     duosubs_server.queue(default_concurrency_limit=None)
-    if host=="127.0.0.1" and port==7860:
+    if host=="127.0.0.1" and port==7860 and share==False:
         duosubs_server.launch()
     else:
-        duosubs_server.launch(server_name=host, server_port=port)
+        duosubs_server.launch(server_name=host, server_port=port, share=share)
 
 def _fail(msg: str, code_value: int) -> NoReturn:
     """
