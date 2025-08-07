@@ -40,19 +40,16 @@ def test_get_memory_status_table(
         vram (tuple[str, float, int, int]): GPU VRAM stats as (name, percent, used, 
             total).
     """
-    class Dummy(LiveMemoryMonitor):
-        _has_cuda = True
-        _gpu_count = 1
+    LiveMemoryMonitor._instance = None  # Reset singleton
 
-        def _get_memory_status_table(self) -> pd.DataFrame:
-            return LiveMemoryMonitor._get_memory_status_table(self)
-
-    dummy = Dummy()
-
-    with patch("psutil.virtual_memory") as mock_virtual_memory, \
+    with patch("duosubs.webui.monitor.memory_monitor.torch.cuda.is_available", return_value=True), \
+        patch("duosubs.webui.monitor.memory_monitor.pynvml.nvmlDeviceGetCount", return_value=1), \
+        patch("psutil.virtual_memory") as mock_virtual_memory, \
         patch("pynvml.nvmlDeviceGetHandleByIndex") as mock_get_handle, \
         patch("pynvml.nvmlDeviceGetName") as mock_get_name, \
         patch("pynvml.nvmlDeviceGetMemoryInfo") as mock_get_mem_info:
+
+        monitor = LiveMemoryMonitor()
 
         mock_virtual_memory.return_value = MagicMock(
             percent=ram[0],
@@ -68,7 +65,7 @@ def test_get_memory_status_table(
             total=vram[3]
         )
 
-        df = dummy._get_memory_status_table()
+        df = monitor._get_memory_status_table()
 
         assert isinstance(df, pd.DataFrame)
         assert df.shape[0] == 2
