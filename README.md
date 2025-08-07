@@ -3,7 +3,7 @@
 [![CI](https://github.com/CK-Explorer/DuoSubs/actions/workflows/ci.yml/badge.svg)](https://github.com/CK-Explorer/DuoSubs/actions/workflows/ci.yml)
 [![PyPI version](https://img.shields.io/pypi/v/duosubs.svg)](https://pypi.org/project/duosubs/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/duosubs.svg)](https://pypi.org/project/duosubs/)
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blueviolet.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blueviolet.svg)](/LICENSE)
 [![Type Checked: Mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](http://mypy-lang.org/)
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-blue?logo=python&labelColor=gray)](https://github.com/astral-sh/ruff)
 [![codecov](https://codecov.io/gh/CK-Explorer/DuoSubs/branch/main/graph/badge.svg)](https://codecov.io/gh/CK-Explorer/DuoSubs)
