@@ -26,3 +26,4 @@
 /tests/webui/common_utils/__pycache__
 /tests/webui/cli/__pycache__
 /duosubs/webui/monitor/__pycache__
+/.venv
