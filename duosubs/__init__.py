@@ -2,9 +2,12 @@
 duosubs package: Subtitle merging and alignment utilities.
 
 This package provides the main API for semantic subtitle merging, including 
-model/device selection, file loading, merging, saving, and error handling. It 
-exposes core types, exceptions, and pipeline functions for both CLI and programmatic 
-use.
+model/device selection, file loading, merging, saving, and error handling. 
+
+It exposes core types, exceptions, and pipeline functions for both CLI and 
+programmatic use. 
+
+Also, it includes a web UI built with Gradio for interactive subtitle management.
 
 Exports:
     - Enums: SubtitleFormat, OmitFile, DeviceType, ModelPrecision
@@ -16,6 +19,7 @@ Exports:
     - IO: load_subs, load_file_edit, save_file_edit, save_memory_edit, 
         save_file_combined, save_memory_combined, save_file_separate, 
         save_memory_separate
+    - webui: duosubs_gr_blocks
 """
 
 from duosubs.common.enums import DeviceType, ModelPrecision, OmitFile, SubtitleFormat
@@ -45,6 +49,7 @@ from duosubs.io.writer import (
 )
 from duosubs.subtitle.data import SubtitleData
 from duosubs.subtitle.field import SubtitleField
+from duosubs.webui.ui.layout import create_main_gr_blocks_ui as duosubs_gr_blocks
 
 __version__ = "0.2.0"
 
@@ -61,6 +66,7 @@ __all__ = [
     "SubtitleData",
     "SubtitleField",
     "SubtitleFormat",
+    "duosubs_gr_blocks",
     "load_file_edit",
     "load_sentence_transformer_model",
     "load_subs",
