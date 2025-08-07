@@ -14,3 +14,15 @@
 /tests/subtitle/__pycache__
 /tests/core/__pycache__
 /dist
+/.gradio
+/__pycache__
+/duosubs/webui/__pycache__
+/duosubs/webui/cli/__pycache__
+/duosubs/webui/manager/__pycache__
+/duosubs/webui/ui/__pycache__
+/tests/webui/ui/__pycache__
+/tests/webui/monitor/__pycache__
+/tests/webui/manager/__pycache__
+/tests/webui/common_utils/__pycache__
+/tests/webui/cli/__pycache__
+/duosubs/webui/monitor/__pycache__
