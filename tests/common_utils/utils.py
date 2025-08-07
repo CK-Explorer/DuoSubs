@@ -7,6 +7,7 @@ This module provides:
     - TypedDict definitions for structured test data, such as subtitle fields.
 """
 
+import re
 from pathlib import Path
 from typing import Any, TypedDict
 
@@ -29,6 +30,19 @@ def load_test_cases(path: Path) -> Any:
     """
     with path.open(encoding="utf-8") as f:
         return yaml.safe_load(f)
+    
+def strip_ansi(text: str) -> str:
+    """
+    Remove ANSI color and formatting codes, such as those used in terminal
+    output for colored text.
+
+    Args:
+        text (str): The input string that may contain ANSI escape codes.
+
+    Returns:
+        str: The input string with ANSI codes removed.
+    """
+    return re.sub(r"\x1B\[[0-?]*[ -/]*[@-~]", "", text)
 
 # ----------------------------
 # TypedDict Definitions for Tests
