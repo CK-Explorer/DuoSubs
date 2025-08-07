@@ -75,6 +75,9 @@ typecheck = [
 [tool.setuptools.packages.find]
 include = ["duosubs*"]
 
+[tool.setuptools.package-data]
+"duosubs.webui.assets" = ["*.html"]
+
 [tool.commitizen]
 name = "cz_conventional_commits"
 version = "0.2.0"
