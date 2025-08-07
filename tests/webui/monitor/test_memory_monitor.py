@@ -40,10 +40,16 @@ def test_get_memory_status_table(
         vram (tuple[str, float, int, int]): GPU VRAM stats as (name, percent, used, 
             total).
     """
-    LiveMemoryMonitor._instance = None  # Reset singleton
+    LiveMemoryMonitor._instance = None
 
-    with patch("duosubs.webui.monitor.memory_monitor.torch.cuda.is_available", return_value=True), \
-        patch("duosubs.webui.monitor.memory_monitor.pynvml.nvmlDeviceGetCount", return_value=1), \
+    with patch(
+            "duosubs.webui.monitor.memory_monitor.torch.cuda.is_available",
+            return_value=True
+        ), \
+        patch(
+            "duosubs.webui.monitor.memory_monitor.pynvml.nvmlDeviceGetCount",
+            return_value=1
+        ), \
         patch("psutil.virtual_memory") as mock_virtual_memory, \
         patch("pynvml.nvmlDeviceGetHandleByIndex") as mock_get_handle, \
         patch("pynvml.nvmlDeviceGetName") as mock_get_name, \
