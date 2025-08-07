@@ -25,6 +25,11 @@ https://pytorch.org/get-started/locally
     ```bash
     pip install -e ".[dev,typecheck]"
     ```
+6. Install the browser binaries for testing the webui:
+    ```bash
+    playwright install
+    ```
+
 ---
 
 ## 🛠️ Making a Change
