@@ -1,10 +1,10 @@
 """
-CLI integration and validation tests for the duosubs subtitle merging tool.
+CLI integration and validation tests for the `merge` command of duosubs subtitle 
+merging tool.
 
 This module tests the Typer CLI app for argument validation, file handling, error 
 propagation, logger output, and functional smoke tests.
 """
-import re
 from pathlib import Path
 from typing import Any, Callable
 
@@ -13,6 +13,7 @@ from typer.testing import CliRunner
 
 from duosubs.cli.main import app
 from duosubs.common.exceptions import LoadModelError
+from tests.common_utils.utils import strip_ansi
 
 # Test subtitle paths
 SUB_PATH = Path(__file__).parent / "data"
@@ -40,7 +41,9 @@ def test_nonexistent_primary_file() -> None:
     Test error when the primary subtitle file does not exist.
     """
     result = runner.invoke(app, [
-        "--primary", "nonexistent.srt", "--secondary", str(SUB_PATH / "secondary.srt")
+        "merge",
+        "--primary", "nonexistent.srt",
+        "--secondary", str(SUB_PATH / "secondary.srt")
     ])
     assert result.exit_code == 1
     assert "Error in loading subtitles" in strip_ansi(result.output)
@@ -50,6 +53,7 @@ def test_invalid_primary_file_format() -> None:
     Test error when the primary subtitle file format is invalid.
     """
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.txt"),
         "--secondary", str(SUB_PATH / "secondary.srt")
     ])
@@ -62,6 +66,7 @@ def test_empty_primary_file() -> None:
     """
     primary_subs = str(SUB_PATH / "primary.ass")
     result = runner.invoke(app, [
+        "merge",
         "--primary", primary_subs,
         "--secondary", str(SUB_PATH / "secondary.srt")
     ])
@@ -87,6 +92,7 @@ def test_invalid_model(monkeypatch: pytest.MonkeyPatch) -> None:
     )
 
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.srt"),
         "--secondary", str(SUB_PATH / "secondary.srt")
     ])
@@ -102,6 +108,7 @@ def test_invalid_device() -> None:
     Test error for invalid device argument value.
     """
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.srt"),
         "--secondary", str(SUB_PATH / "secondary.srt"),
         "--device", "amd"
@@ -114,6 +121,7 @@ def test_invalid_batch_size() -> None:
     Test error for batch size below minimum allowed value.
     """
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.srt"),
         "--secondary", str(SUB_PATH / "secondary.srt"),
         "--batch-size", "-1"
@@ -126,6 +134,7 @@ def test_invalid_precision() -> None:
     Test error for invalid precision argument.
     """
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.srt"),
         "--secondary", str(SUB_PATH / "secondary.srt"),
         "--model-precision", "float"
@@ -138,6 +147,7 @@ def test_invalid_omit() -> None:
     Test error for invalid omit file type argument.
     """
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.srt"),
         "--secondary", str(SUB_PATH / "secondary.srt"),
         "--omit", "nothing"
@@ -159,6 +169,7 @@ def test_invalid_format(case: str) -> None:
         case (str): The CLI argument for subtitle format.
     """
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.srt"),
         "--secondary", str(SUB_PATH / "secondary.srt"),
         case, "txt"
@@ -174,7 +185,7 @@ def test_merge_help() -> None:
     """
     Test that the CLI help message is printed and contains key options.
     """
-    result = runner.invoke(app, ["--help"])
+    result = runner.invoke(app, ["merge","--help"])
     assert result.exit_code == 0
     assert "--primary" in strip_ansi(result.output)
     assert "--secondary" in strip_ansi(result.output)
@@ -183,7 +194,6 @@ def test_merge_help() -> None:
 # Functional Smoke Tests
 # ------------------------
 
-@pytest.mark.slow
 def test_successful_merge(tmp_path: Path) -> None:
     """
     Test a successful merge run and output zip file creation.
@@ -192,9 +202,11 @@ def test_successful_merge(tmp_path: Path) -> None:
         tmp_path (Path): Temporary directory for output files.
     """
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.srt"),
         "--secondary", str(SUB_PATH / "secondary.srt"),
-        "--output-dir", str(tmp_path)
+        "--output-dir", str(tmp_path),
+        "--model", "sentence-transformers/all-MiniLM-L6-v2"
     ])
 
     assert result.exit_code == 0
@@ -219,24 +231,9 @@ def test_stage_logger_output(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("duosubs.cli.main.run_merge_pipeline", mock_run_pipeline)
 
     result = runner.invoke(app, [
+        "merge",
         "--primary", str(SUB_PATH / "primary.srt"),
         "--secondary", str(SUB_PATH / "secondary.srt")
     ])
     assert "Stage 1 log" in strip_ansi(result.output)
     assert "Stage 2 log" in strip_ansi(result.output)
-
-# ----------------------------
-# Helper functions
-# ----------------------------
-def strip_ansi(text: str) -> str:
-    """
-    Remove ANSI color and formatting codes, such as those used in terminal
-    output for colored text.
-
-    Args:
-        text (str): The input string that may contain ANSI escape codes.
-
-    Returns:
-        str
-    """
-    return re.sub(r"\x1B\[[0-?]*[ -/]*[@-~]", "", text)
