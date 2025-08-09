@@ -205,35 +205,42 @@ def launch_webui(
     ),
     share: bool = typer.Option(
         False,
+        help="Create a publicly shareable link for DuoSubs gradio app."
+    ),
+    inbrowser: bool = typer.Option(
+        True,
         help=(
-            "Whether to create a publicly shareable link for the gradio app. "
-            "Creates an SSH tunnel to make your UI accessible from anywhere."
+            "Automatically launch the gradio app in a new tab "
+            "on the default browser"
         )
     ),
     cache_delete_freq: int = typer.Option(
-        14400,
+        3600,
         min=1,
         help=(
             "Interval in seconds to scan and clean up expired cache entries."
         ),
     ),
     cache_delete_age: int = typer.Option(
-        14400,
+        7200,
         min=1,
         help=(
-            (
-                "Files older than this duration (in seconds) will be removed "
-                "from the cache."
-            )
+            "Files older than this duration (in seconds) will be removed "
+            "from the cache."
         ),
     ),
 ) -> None:
     duosubs_server = create_main_gr_blocks_ui(cache_delete_freq, cache_delete_age)
     duosubs_server.queue(default_concurrency_limit=None)
-    if host=="127.0.0.1" and port==7860 and not share:
-        duosubs_server.launch()
+    if host=="127.0.0.1" and port==7860:
+        duosubs_server.launch(share=share, inbrowser=inbrowser)
     else:
-        duosubs_server.launch(server_name=host, server_port=port, share=share)
+        duosubs_server.launch(
+            server_name=host,
+            server_port=port,
+            share=share,
+            inbrowser=inbrowser
+        )
 
 def _fail(msg: str, code_value: int) -> NoReturn:
     """
