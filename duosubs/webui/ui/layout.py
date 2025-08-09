@@ -7,16 +7,25 @@ and merging process. It includes device selection, model configuration, and subt
 file handling.
 """
 
-from pathlib import Path
 
 import gradio as gr
 import torch
 
-from duosubs.common.enums import ModelPrecision, SubtitleFormat
 from duosubs.webui.manager.model_manager import ModelPool
 from duosubs.webui.monitor import live_memory_monitor
 
 from .common import auto_filter_device, auto_list_gpu_name, open_html
+from .constants import (
+    DEFAULT_MODEL,
+    DEFAULT_PRECISION,
+    DEFAULT_SUB_EXT,
+    LEADERBOARD_URL,
+    PRECISION_LIST,
+    SENTENCE_TRANSFORMER_URL,
+    SUB_EXT_LIST,
+    SUB_EXT_LIST_WITH_DOT,
+    TITLE_HTML,
+)
 from .events import (
     cancel_merging,
     start_merging,
@@ -24,20 +33,6 @@ from .events import (
     states_during_merging,
     toggle_gpu_dropdown,
     validate_excluded_subtitle_file,
-)
-
-TITLE_HTML = Path(__file__).parent.parent / "assets" / "title.html"
-SUB_EXT_LIST: list[str] = [f.value for f in SubtitleFormat]
-SUB_EXT_LIST_WITH_DOT: list[str] = [f".{ext}" for ext in SUB_EXT_LIST]
-PRECISION_LIST: list[str] = [f.value for f in ModelPrecision]
-DEFAULT_MODEL = "sentence-transformers/LaBSE"
-DEFAULT_PRECISION = ModelPrecision.FLOAT32.value
-DEFAULT_SUB_EXT = SubtitleFormat.ASS.value
-SENTENCE_TRANSFORMER_URL = (
-    "https://huggingface.co/models?library=sentence-transformers"
-)
-LEADERBOARD_URL = (
-    "https://huggingface.co/spaces/mteb/leaderboard"
 )
 
 model_pool = ModelPool()
