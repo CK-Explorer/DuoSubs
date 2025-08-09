@@ -12,7 +12,7 @@ from pathlib import Path
 
 import torch
 
-from duosubs import DeviceType
+from duosubs.common.enums import DeviceType
 
 
 def open_html(file: str | Path) -> str:
