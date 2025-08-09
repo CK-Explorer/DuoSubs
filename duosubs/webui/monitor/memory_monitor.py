@@ -76,12 +76,13 @@ class LiveMemoryMonitor:
             pd.DataFrame: Table with columns [Name, Usage, Used, Total].
         """
         mem = psutil.virtual_memory()
+        gib = 1024 ** 3
         ram_percent = mem.percent
         ram_row = [
             "💻 System RAM",
             f"{bar(ram_percent)}  {format_number(ram_percent)}%",
-            f"{format_number(mem.used / 1e9)} GB",
-            f"{format_number(mem.total / 1e9)} GB",
+            f"{format_number(mem.used / gib)} GB",
+            f"{format_number(mem.total / gib)} GB",
         ]
 
         rows = [ram_row]
@@ -97,8 +98,8 @@ class LiveMemoryMonitor:
                     rows.append([
                         f"🚀 {name}",
                         f"{bar(vram_percent)}  {format_number(vram_percent)}%",
-                        f"{format_number(mem_info.used / 1e9)} GB",
-                        f"{format_number(mem_info.total / 1e9)} GB"
+                        f"{format_number(mem_info.used / gib)} GB",
+                        f"{format_number(mem_info.total / gib)} GB"
                     ])
                 except Exception as e:
                     rows.append(["N/A", "Not available", "N/A", "N/A"])

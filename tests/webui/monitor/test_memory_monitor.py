@@ -72,16 +72,17 @@ def test_get_memory_status_table(
         )
 
         df = monitor._get_memory_status_table()
+        gib = 1024**3
 
         assert isinstance(df, pd.DataFrame)
         assert df.shape[0] == 2
 
         assert df.iloc[0]["Name"] == "💻 System RAM"
         assert df.iloc[0]["Usage"] == f"{bar(ram[0])}  {format_number(ram[0])}%"
-        assert df.iloc[0]["Used"] ==  f"{format_number(ram[1] / 1e9)} GB"
-        assert df.iloc[0]["Total"] == f"{format_number(ram[2] / 1e9)} GB"
+        assert df.iloc[0]["Used"] ==  f"{format_number(ram[1] / gib)} GB"
+        assert df.iloc[0]["Total"] == f"{format_number(ram[2] / gib)} GB"
 
         assert df.iloc[1]["Name"] == f"🚀 {vram[0]}"
         assert df.iloc[1]["Usage"] == f"{bar(vram[1])}  {format_number(vram[1])}%"
-        assert df.iloc[1]["Used"] ==  f"{format_number(vram[2] / 1e9)} GB"
-        assert df.iloc[1]["Total"] == f"{format_number(vram[3] / 1e9)} GB"
+        assert df.iloc[1]["Used"] ==  f"{format_number(vram[2] / gib)} GB"
+        assert df.iloc[1]["Total"] == f"{format_number(vram[3] / gib)} GB"
