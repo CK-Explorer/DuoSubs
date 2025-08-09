@@ -75,7 +75,7 @@ def run_merge_pipeline(
     if logger:
         with tqdm(
             total=100,
-            desc= "Stage 3 -> Merging subtitles",
+            desc= "Stage 3 → Merging subtitles",
             bar_format="{l_bar}{bar}| [{elapsed}<{remaining}, {rate_fmt}{postfix}]"
         ) as pbar:
             callback = make_progress_callback(pbar)
@@ -405,19 +405,19 @@ def _progress_logger(
         return (None, None, None, None, None)
 
     def stage_1_logger() -> None:
-        logger("Stage 1 -> Loading subtitles")
+        logger("Stage 1 → Loading subtitles")
 
     def stage_2_logger(model_name: str, device: str) -> None:
-        logger(f"Stage 2 -> Loading {model_name} into {device}")
+        logger(f"Stage 2 → Loading {model_name} into {device}")
 
     def stage_3_logger() -> None:
-        logger("Stage 3 -> Merging subtitles")
+        logger("Stage 3 → Merging subtitles")
 
     def stage_4_logger(output_name: str) -> None:
-        logger(f"Stage 4 -> Saving files to {output_name}.zip")
+        logger(f"Stage 4 → Saving files to {output_name}.zip")
 
     def stage_5_logger() -> None:
-        logger("Status  -> Subtitles merged and saved successfully.")
+        logger("Status  → Subtitles merged and saved successfully.")
 
     return (
         stage_1_logger,
