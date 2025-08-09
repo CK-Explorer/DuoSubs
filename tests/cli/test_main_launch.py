@@ -86,4 +86,4 @@ def run_gradio_web_ui(port: int) -> None:
     """
     Run the Gradio web UI app on the specified port.
     """
-    app(args=["launch-webui", "--port", str(port)])
+    app(args=["launch-webui", "--port", str(port), "--no-inbrowser",])
