@@ -89,7 +89,7 @@ def create_main_gr_blocks_ui(
                         headers=["Type", "Usage", "Used", "Total"],
                         interactive=False
                     )
-                with gr.Accordion(label="🔧 Configurations"):
+                with gr.Accordion(label="⚙️ Basic Configurations"):
                     with gr.Tab("Model & Device"):
                         (
                             model_name,
@@ -101,8 +101,6 @@ def create_main_gr_blocks_ui(
                             device_list,
                             gpu_list
                         )
-                    with gr.Tab("Alignment Behavior"):
-                        ignore_non_overlap = _create_alignment_behaviour_block()
                     with gr.Tab("Output Styling"):
                         (
                             retain_newline,
@@ -115,6 +113,9 @@ def create_main_gr_blocks_ui(
                             primary_format,
                             secondary_format
                         ) = _create_file_exports_block()
+                with gr.Accordion("🛠️ Advanced Configurations", open=False):
+                    with gr.Tab("Alignment Behavior"):
+                        ignore_non_overlap = _create_alignment_behaviour_block()
 
         ui.load(fn=live_memory_monitor.auto_refresh, outputs=memory_table)
 
