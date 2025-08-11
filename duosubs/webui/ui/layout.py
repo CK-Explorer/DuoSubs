@@ -40,7 +40,7 @@ device_list = auto_filter_device()
 gpu_list = auto_list_gpu_name()
 
 def create_main_gr_blocks_ui(
-        cache_delete_frequency: int = 14400,
+        cache_delete_frequency: int = 3600,
         cache_delete_age: int = 14400
     ) -> gr.Blocks:
     """
