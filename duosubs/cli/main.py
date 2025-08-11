@@ -198,19 +198,16 @@ def launch_webui(
         7860,
         min=1024,
         max=65535,
-        help=(
-            "Port to run the server on. "
-            "Must be an integer between 1 and 65535."
-        ),
+        help="Port to run the server on.",
     ),
     share: bool = typer.Option(
         False,
-        help="Create a publicly shareable link for DuoSubs gradio app."
+        help="Create a publicly shareable link for DuoSubs Web UI."
     ),
     inbrowser: bool = typer.Option(
         True,
         help=(
-            "Automatically launch the gradio app in a new tab "
+            "Automatically launch the DuoSubs Web UI in a new tab "
             "on the default browser"
         )
     ),
@@ -222,7 +219,7 @@ def launch_webui(
         ),
     ),
     cache_delete_age: int = typer.Option(
-        7200,
+        14400,
         min=1,
         help=(
             "Files older than this duration (in seconds) will be removed "
