@@ -181,7 +181,7 @@ def start_merging(
             def update_progress(current: int) -> None:
                 progress(
                     progress=current/100,
-                    desc= "Stage 3 → Merging subtitles",
+                    desc= f"Stage 3 → Merging subtitles using {model_name}",
                     total=100
                 )
             if model is None:
