@@ -42,7 +42,8 @@ def run_merge_pipeline(
     Run the full subtitle merging pipeline: load, merge, and save subtitles.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires all args 
+            attributes.
         logger (Callable[[str], None], optional): Optional logger for progress messages.
     
     Raises:
@@ -114,7 +115,8 @@ def load_subtitles(
     Load primary and secondary subtitles, styles, and tokens.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires only
+            args.primary, args.secondary.
         stage_logger (Callable[[], None], optional): Optional logger for this stage.
 
     Returns:
@@ -149,7 +151,8 @@ def load_sentence_transformer_model(
     Load a SentenceTransformer model on the specified device.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires only
+            args.device, args.model, args.model_precision.
         stage_logger (Callable[[str, str], None], optional): Optional logger for this 
             stage.
 
@@ -191,7 +194,8 @@ def merge_subtitles(
     Merge primary and secondary subtitles using the provided model and configuration.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires only
+            args.ignore_non_overlap_filter, args.batch_size.
         model (SentenceTransformer): Loaded sentence transformer model.
         primary_subs_data (SubtitleData): Primary subtitles data, containing subtitles, 
             styles, tokens, and styles for each token.
@@ -235,7 +239,10 @@ def save_subtitles_in_zip(
     Save merged subtitles with their styles in a zip archive.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires only
+            args.format_all, args.format_combined, args.format_primary,
+            args.format_secondary, args.omit, args.primary, args.output_name,
+            args.output_dir, args.secondary_above, args.retain_newline
         subs (list[SubtitleField]): List of merged subtitle fields.
         primary_styles (pysubs2.SSAFile): Primary subtitle styles.
         secondary_styles (pysubs2.SSAFile): Secondary subtitle styles.
