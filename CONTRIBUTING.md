@@ -83,9 +83,9 @@ The generated HTML files will be located in ``docs/_build/html``. You can open
 Run this before submitting a pull request:
 
 ```bash
-ruff check . --fix     # Lint + format (like black)
-mypy .                 # Type checks
-pytest                 # Run tests
+ruff check --fix    # Lint + format (like black)
+mypy                # Type checks
+pytest              # Run tests
 ```
 
 ---
