@@ -102,3 +102,4 @@ select = ["E", "F", "B", "I", "RUF"]
 
 [tool.mypy]
 strict = true
+files = ["duosubs", "tests"]
