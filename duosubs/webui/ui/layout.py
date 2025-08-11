@@ -56,7 +56,8 @@ def create_main_gr_blocks_ui(
     main_block = gr.Blocks(
         title="DuoSubs",
         theme=gr.themes.Ocean(),
-        delete_cache=(cache_delete_frequency, cache_delete_age)
+        delete_cache=(cache_delete_frequency, cache_delete_age),
+        analytics_enabled=False
     )
     ui: gr.Blocks
     with main_block as ui:
