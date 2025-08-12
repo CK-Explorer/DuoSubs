@@ -415,7 +415,7 @@ def _progress_logger(
         logger("Stage 1 → Loading subtitles")
 
     def stage_2_logger(model_name: str, device: str) -> None:
-        logger(f"Stage 2 → Loading {model_name} into {device}")
+        logger(f"Stage 2 → Loading {model_name} on {device}")
 
     def stage_3_logger() -> None:
         logger("Stage 3 → Merging subtitles")

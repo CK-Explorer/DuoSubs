@@ -151,7 +151,7 @@ def start_merging(
             progress(
                 progress=0,
                 desc= (
-                    f"Stage 2 → Loading {model_name} into {device_name}"
+                    f"Stage 2 → Loading {model_name} on {device_name}"
                 ),
                 total=1
             )
@@ -172,7 +172,7 @@ def start_merging(
             progress(
                 progress=1,
                 desc= (
-                    f"Stage 2 → Loading {model_name} into {device_name}"
+                    f"Stage 2 → Loading {model_name} on {device_name}"
                 ),
                 total=1
             )
