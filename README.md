@@ -44,7 +44,7 @@ You can launch the Web UI instantly without installing anything locally by runni
 - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/CK-Explorer/DuoSubs/blob/notebook/DuoSubs-webui.ipynb)
 - [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange)](https://huggingface.co/spaces/CK-Explorer/DuoSubs)
 
-> ℹ️ Note
+> [!NOTE]
 > - Google Colab has a limited runtime allocation, especially when using the free instance.
 > - On Hugging Face Spaces, only a few models are preloaded, and inference can be slower because it runs on CPU.
 
@@ -112,11 +112,9 @@ If you want to launch it in other url (e.g. 0.0.0.0) and port (e.g 8000), you ca
     )
     ```
 
-> ⚠️ **Warning**  
-> - The Web UI caches files during processing, and clears files older than 2 hours every 1 hour. 
-Cached data may remain if the server stops unexpectedly.
-> - Sometimes, older model may fail to be released after switching or closing sessions. 
-If you run out of RAM or VRAM, simply restart the script.
+> [!WARNING]
+> - The Web UI caches files during processing, and clears files older than 2 hours every 1 hour. Cached data may remain if the server stops unexpectedly.
+> - Sometimes, older model may fail to be released after switching or closing sessions. If you run out of RAM or VRAM, simply restart the script.
 
 To learn more about the launching options, please see the 
 [documentation](https://duosubs.readthedocs.io/en/latest/).
@@ -190,7 +188,7 @@ you can run:
     run_merge_pipeline(args, print)
     ```
 
-> ⚠️ **Warning**  
+> [!WARNING]
 > - Some models may require significant RAM or GPU (VRAM) to run, and might not be compatible with all devices — especially larger models. 
 > - Also, please ensure the selected model supports your desired language for reliable results.
 
@@ -240,9 +238,8 @@ Then, just **enable** the `ignore-non-overlap-filter` option in either:
 
 to skip the overlap check — the merge should go smoothly from there.
 
-⚠️ If the subtitle **timings** are **off** and the two subtitle files 
-**don’t fully match in content**, the algorithm likely **won’t** produce great results. Still, 
-you can try running it with `ignore-non-overlap-filter` **enabled**.
+> [!TIP]
+> If the subtitle **timings** are **off** and the two subtitle files **don’t fully match in content**, the algorithm likely **won’t** produce great results. Still, you can try running it with `ignore-non-overlap-filter` **enabled**.
 
 ---
 
