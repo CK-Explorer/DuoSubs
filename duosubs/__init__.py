@@ -49,7 +49,7 @@ from duosubs.io.writer import (
 )
 from duosubs.subtitle.data import SubtitleData
 from duosubs.subtitle.field import SubtitleField
-from duosubs.webui.ui.layout import create_main_gr_blocks_ui as duosubs_gr_blocks
+from duosubs.webui.ui.layout import create_main_gr_blocks_ui as create_duosubs_gr_blocks
 
 __version__ = "0.2.0"
 
@@ -66,7 +66,7 @@ __all__ = [
     "SubtitleData",
     "SubtitleField",
     "SubtitleFormat",
-    "duosubs_gr_blocks",
+    "create_duosubs_gr_blocks",
     "load_file_edit",
     "load_sentence_transformer_model",
     "load_subs",
