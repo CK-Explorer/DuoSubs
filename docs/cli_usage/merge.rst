@@ -1,13 +1,15 @@
-CLI Usage
-==========
+Merge Command
+==============
+
+The ``merge`` command merges two subtitle files by aligning them based on semantic meaning.
 
 Required Options
 ----------------
 
-These are the **minimal** required configurations to use ``DuoSubs`` CLI effectively.
+These are the **minimum required options** to successfully run the ``merge`` command:
 
 Input Files
-^^^^^^^^^^^
+^^^^^^^^^^^^
 
 -   | ``-p``, ``--primary <file>``  
     | Path to the **primary** subtitle file.
@@ -19,15 +21,15 @@ Input Files
 
 .. code-block:: bash
 
-    duosubs -p primary_sub.srt -s secondary_sub.srt
+    duosubs merge -p primary_sub.srt -s secondary_sub.srt
 
 Optional Options
-----------------
+-----------------
 
 Feel free to adjust these options based on your preferences.
 
 Model & Inference
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 -   | ``--model <name>``
     | **Model name** for computing subtitle similarity.
@@ -38,7 +40,7 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --model Qwen/Qwen3-Embedding-0.6B
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --model Qwen/Qwen3-Embedding-0.6B
 
     .. tip::
         Pick one from 
@@ -69,7 +71,7 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --device cpu
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --device cpu
 
     .. tip::
         Use ``cuda`` or ``mps`` for best performance.
@@ -83,7 +85,7 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --batch-size 128
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --batch-size 128
 
     .. tip::
         Larger values are faster but use more memory.
@@ -103,7 +105,7 @@ Model & Inference
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --model-precision float16
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --model-precision float16
 
     .. tip::
         Lower precision modes such as ``float16`` and ``bfloat16`` can significantly 
@@ -117,7 +119,7 @@ Model & Inference
                 model and content, especially in edge cases.
 
 Alignment Behavior
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 
 .. _ignore-non-overlap-filter:
 
@@ -130,7 +132,7 @@ Alignment Behavior
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --ignore-non-overlap-filter
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --ignore-non-overlap-filter
 
     .. tip::
         This option is only **applicable** when **some** or **all**  of the matching lines from 
@@ -141,7 +143,7 @@ Alignment Behavior
         See :ref:`known limitations <known-limitations>` for more details.
 
 Output Styling
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 -   | ``--retain-newline``
     | **Retain "\\N"** line breaks from the original subtitles.
@@ -152,7 +154,7 @@ Output Styling
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --retain-newline
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --retain-newline
 
 -   | ``--secondary-above``
     | The **secondary** subtitle lines are placed **above** the **primary** subtitle lines, but the timing is based on the primary subtitles.
@@ -163,10 +165,10 @@ Output Styling
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --secondary-above
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --secondary-above
 
 Output Files
-^^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 -   | ``--omit <choice...>``
     | **List of files** to **omit** from the output zip.
@@ -185,7 +187,7 @@ Output Files
 
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --omit edit --omit primary --omit secondary
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --omit edit --omit primary --omit secondary
 
     .. note::
 
@@ -194,7 +196,7 @@ Output Files
 
         .. code-block:: bash
 
-            duosubs -p primary_sub.srt -s secondary_sub.srt --omit edit primary secondary
+            duosubs merge -p primary_sub.srt -s secondary_sub.srt --omit edit primary secondary
 
 
 -   | ``--format-all <choice>``
@@ -215,7 +217,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --format-all vtt
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --format-all vtt
 
 -   | ``--format-combined <choice>``
     | Sets the **format** for the generated **merged** subtitle file, **overriding** what's set in ``--format-all``.
@@ -235,7 +237,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --format-combined vtt
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --format-combined vtt
 
 -   | ``--format-primary <choice>``
     | Sets the **format** for the generated **primary** subtitle file, **overriding** what's set in ``--format-all``.
@@ -255,7 +257,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --format-primary vtt
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --format-primary vtt
 
 -   | ``--format-secondary <choice>``
     | Sets the **format** for the generated **secondary** subtitle file, **overriding** what's set in ``--format-all``.
@@ -275,7 +277,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --format-secondary vtt
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --format-secondary vtt
 
 -   | ``--output-name <name>``
     | Set the **base name** for output files (without extension).
@@ -286,7 +288,7 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --output-name processed_sub
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --output-name processed_sub
 
 -   | ``--output-dir``
     | Set the **output directory**.
@@ -297,45 +299,16 @@ Output Files
     
     .. code-block:: bash
 
-        duosubs -p primary_sub.srt -s secondary_sub.srt --output-dir "D:\Users\Name\Document\Folder"
-    
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --output-dir "D:\Users\Name\Documents\Folder"
+
 Miscellaneous
-^^^^^^^^^^^^^
-
--   | ``--install-completion``
-    | **Install** shell **tab-completion** support for this CLI tool.
-
-    After running, restart your shell to activate it.
-
-    Optional Add-on (specify shell):
-
-    - ``bash``
-    - ``zsh``
-    - ``fish``
-    - ``powershell``
-
-    *Example*:
-    
-    .. code-block:: bash
-
-        duosubs --install-completion`bash
-
--   | ``--show-completion``
-    | **Show shell completion** script for the current shell (without installing).
-    
-    Useful for manual integration or debugging.
-
-    *Example*:
-    
-    .. code-block:: bash
-        
-        duosubs --show-completion
+^^^^^^^^^^^^^^
 
 -   | ``--help``
-    | Show **help message** and exit
+    | Show **help message** of the ``merge`` command and exit.
 
     *Example*:
-
+    
     .. code-block:: bash
 
-        duosubs --help
+        duosubs merge --help

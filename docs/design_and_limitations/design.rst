@@ -1,10 +1,5 @@
-Design & Limitations
-=======================
-
-This section explains how ``DuoSubs`` works behind the scenes and outlines known limitations.
-
-How It Works
-------------
+Behind the Scenes
+==================
 
 ``DuoSubs`` aligns two subtitle files using the following steps:
 
@@ -36,7 +31,7 @@ How It Works
 .. _known-limitations:
 
 Known Limitations
------------------
+==================
 
 -   The **accuracy** of the merging process **varies** on the 
     `model <https://huggingface.co/models?library=sentence-transformers>`_ selected.
@@ -61,6 +56,7 @@ Known Limitations
           - :ref:`command-line interface <ignore-non-overlap-filter>`
           - :meth:`duosubs.MergeArgs`
           - :meth:`duosubs.Merger.merge_subtitle`
+          - Web UI ( ``Advanced Configurations`` → ``Alignment Behavior`` )
 
         to skip the overlap check — the merge should go smoothly from there.
 

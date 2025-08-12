@@ -1,5 +1,5 @@
-API Usage
-=========
+Core Subtitle Merging
+======================
 
 This section provides examples of how to use the ``DuoSubs`` API for merging subtitles 
 programmatically.
@@ -358,7 +358,7 @@ Below is an example of **saving** subtitles to **disk**. Each function can also 
     primary_styles = pysubs2.SSAFile()      # Suppose this contains the primary style
     secondary_styles = pysubs2.SSAFile()    # Suppose this contains the secondary style
 
-    path = Path("D:/Users/Name/Document/Folder")
+    path = Path("D:/Users/Name/Documents/Folder")
 
     # Saves both merged subtitles into a single file
     save_file_combined(

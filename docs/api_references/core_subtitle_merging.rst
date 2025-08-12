@@ -1,7 +1,7 @@
-API References
-===============
+Core Subtitle Merging
+======================
 
-This section documents the **public API** exposed by the `duosubs` package.
+This section documents the **public API** for **performing subtitle merges** programmatically.
 
 Subtitle Data Structures
 ------------------------
