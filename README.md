@@ -218,7 +218,7 @@ To learn more about this tool, please see the
 primary subtitles line due to the tokenization algorithm used.
 - **Secondary** subtitles might **contain extra whitespace** as a result of token-level merging.
 - The algorithm may **not** work reliably if the **timestamps** of some matching lines
-**don’t overlap** at all. See [special case](#-special-case).
+**don’t overlap** at all.
 
 > [!TIP]
 > For the final known limitation, there are three possible ways to address it:
