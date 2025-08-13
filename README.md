@@ -220,26 +220,32 @@ primary subtitles line due to the tokenization algorithm used.
 - The algorithm may **not** work reliably if the **timestamps** of some matching lines
 **don’t overlap** at all. See [special case](#-special-case).
 
----
-
-## 🧩 Special Case
-
-For the last known limitation, if both subtitle files are **known** to be 
-**perfectly semantically aligned**, meaning:
-
-* **matching dialogue contents**
-* **no extra lines** like scene annotations or bonus Director’s Cut stuff.
-
-Then, just **enable** the `ignore-non-overlap-filter` option in either: 
-
-* Web UI (`Advanced Configurations` → `Alignment Behavior`)
-* CLI (`--ignore-non-overlap-filter`)
-* Python API (see [documentation](https://duosubs.readthedocs.io/en/latest/))
-
-to skip the overlap check — the merge should go smoothly from there.
-
 > [!TIP]
-> If the subtitle **timings** are **off** and the two subtitle files **don’t fully match in content**, the algorithm likely **won’t** produce great results. Still, you can try running it with `ignore-non-overlap-filter` **enabled**.
+> For the final known limitation, there are three possible ways to address it:
+> 1. If **all** subtitle lines are completely **out of sync**, consider using another subtitle syncing tool first to align them, e.g.
+>
+>    - [smacke/ffsubsync](https://github.com/smacke/ffsubsync)
+>    - [sc0ty/subsync](https://github.com/sc0ty/subsync)
+>    - [kaegi/alass](https://github.com/kaegi/alass)
+>
+>    before using this tool with `ignore-non-overlap-filter` disabled.
+>
+>    Alternatively, see points 2 and 3.
+>
+> 2. If both subtitle files are **known** to be **perfectly semantically aligned**, meaning:
+>
+>    - **matching dialogue contents**
+>    - **no extra lines** like scene annotations or bonus Director’s Cut stuff.
+>
+>    Then, just **enable** the `ignore-non-overlap-filter` option in either: 
+>
+>    - Web UI (`Advanced Configurations` → `Alignment Behavior`)
+>    - CLI (`--ignore-non-overlap-filter`)
+>    - Python API (see [documentation](https://duosubs.readthedocs.io/en/latest/))
+>
+>    to skip the overlap check — the merge should go smoothly from there.
+>
+> 3. If the subtitle **timings** are **off** and the two subtitle files **don’t fully match in content**, the algorithm likely **won’t** produce great results. Still, you can try running it with `ignore-non-overlap-filter` **enabled**.
 
 ---
 
