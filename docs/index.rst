@@ -40,7 +40,7 @@ Features
 - 🌐 **Web UI** — run **locally** or in the **cloud** via |Colab| or |HF_Spaces|
 
 .. |Colab| image:: https://colab.research.google.com/assets/colab-badge.svg
-     :target: https://colab.research.google.com/CK-Explorer/DuoSubs/blob/notebook/DuoSubs-webui.ipynb
+     :target: https://colab.research.google.com/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb
      :alt: Colab
 
 .. |HF_Spaces| image:: https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange
