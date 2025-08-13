@@ -94,6 +94,12 @@ pythonpath = ["."]
 
 [tool.coverage.run]
 source = ["duosubs"]
+omit = [
+    "duosubs/webui/ui/*",
+    "duosubs/webui/monitor/memory_monitor.py",
+    "duosubs/webui/manager/model_manager.py",
+    "duosubs/cli/main.py",
+]
 
 [tool.ruff]
 line-length = 88
