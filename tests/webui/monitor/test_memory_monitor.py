@@ -50,10 +50,18 @@ def test_get_memory_status_table(
             "duosubs.webui.monitor.memory_monitor.pynvml.nvmlDeviceGetCount",
             return_value=1
         ), \
-        patch("psutil.virtual_memory") as mock_virtual_memory, \
-        patch("pynvml.nvmlDeviceGetHandleByIndex") as mock_get_handle, \
-        patch("pynvml.nvmlDeviceGetName") as mock_get_name, \
-        patch("pynvml.nvmlDeviceGetMemoryInfo") as mock_get_mem_info:
+        patch(
+            "duosubs.webui.monitor.memory_monitor.psutil.virtual_memory"
+        ) as mock_virtual_memory, \
+        patch(
+            "duosubs.webui.monitor.memory_monitor.pynvml.nvmlDeviceGetHandleByIndex"
+        ) as mock_get_handle, \
+        patch(
+            "duosubs.webui.monitor.memory_monitor.pynvml.nvmlDeviceGetName"
+        ) as mock_get_name, \
+        patch(
+            "duosubs.webui.monitor.memory_monitor.pynvml.nvmlDeviceGetMemoryInfo"
+        ) as mock_get_mem_info:
 
         monitor = LiveMemoryMonitor()
 
