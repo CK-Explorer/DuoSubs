@@ -31,10 +31,10 @@ jobs:
           pip install -e ".[dev,typecheck]"
 
       - name: Run Ruff
-        run: ruff check .
+        run: ruff check
 
       - name: Run Mypy
-        run: mypy .
+        run: mypy
 
       - name: Run tests with coverage
         run: coverage run -m pytest
