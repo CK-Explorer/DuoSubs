@@ -42,7 +42,8 @@ def run_merge_pipeline(
     Run the full subtitle merging pipeline: load, merge, and save subtitles.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires all args 
+            attributes.
         logger (Callable[[str], None], optional): Optional logger for progress messages.
     
     Raises:
@@ -75,7 +76,7 @@ def run_merge_pipeline(
     if logger:
         with tqdm(
             total=100,
-            desc= "Stage 3 -> Merging subtitles",
+            desc= "Stage 3 → Merging subtitles",
             bar_format="{l_bar}{bar}| [{elapsed}<{remaining}, {rate_fmt}{postfix}]"
         ) as pbar:
             callback = make_progress_callback(pbar)
@@ -114,7 +115,8 @@ def load_subtitles(
     Load primary and secondary subtitles, styles, and tokens.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires only
+            args.primary, args.secondary.
         stage_logger (Callable[[], None], optional): Optional logger for this stage.
 
     Returns:
@@ -149,7 +151,8 @@ def load_sentence_transformer_model(
     Load a SentenceTransformer model on the specified device.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires only
+            args.device, args.model, args.model_precision.
         stage_logger (Callable[[str, str], None], optional): Optional logger for this 
             stage.
 
@@ -191,7 +194,8 @@ def merge_subtitles(
     Merge primary and secondary subtitles using the provided model and configuration.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires only
+            args.ignore_non_overlap_filter, args.batch_size.
         model (SentenceTransformer): Loaded sentence transformer model.
         primary_subs_data (SubtitleData): Primary subtitles data, containing subtitles, 
             styles, tokens, and styles for each token.
@@ -235,7 +239,10 @@ def save_subtitles_in_zip(
     Save merged subtitles with their styles in a zip archive.
 
     Args:
-        args (MergeArgs): Arguments for subtitle merging workflow.
+        args (MergeArgs): Arguments for subtitle merging workflow, requires only
+            args.format_all, args.format_combined, args.format_primary,
+            args.format_secondary, args.omit, args.primary, args.output_name,
+            args.output_dir, args.secondary_above, args.retain_newline
         subs (list[SubtitleField]): List of merged subtitle fields.
         primary_styles (pysubs2.SSAFile): Primary subtitle styles.
         secondary_styles (pysubs2.SSAFile): Secondary subtitle styles.
@@ -405,19 +412,19 @@ def _progress_logger(
         return (None, None, None, None, None)
 
     def stage_1_logger() -> None:
-        logger("Stage 1 -> Loading subtitles")
+        logger("Stage 1 → Loading subtitles")
 
     def stage_2_logger(model_name: str, device: str) -> None:
-        logger(f"Stage 2 -> Loading {model_name} into {device}")
+        logger(f"Stage 2 → Loading {model_name} on {device.upper()}")
 
     def stage_3_logger() -> None:
-        logger("Stage 3 -> Merging subtitles")
+        logger("Stage 3 → Merging subtitles")
 
     def stage_4_logger(output_name: str) -> None:
-        logger(f"Stage 4 -> Saving files to {output_name}.zip")
+        logger(f"Stage 4 → Saving files to {output_name}.zip")
 
     def stage_5_logger() -> None:
-        logger("Status  -> Subtitles merged and saved successfully.")
+        logger("Status  → Subtitles merged and saved successfully.")
 
     return (
         stage_1_logger,

@@ -1,0 +1,9 @@
+.code-like {
+    font-family: var(--font-family-monospace);
+    background-color: #f6f8fa;
+    padding: 0.65em 0.8em;
+    border-radius: 4px;
+    margin: 0 0 1em 0; /* no top gap, bottom gap like code blocks */
+    overflow-x: auto; /* for horizontal scroll if needed */
+    white-space: pre-wrap;
+}

@@ -1,10 +1,5 @@
-Design & Limitations
-=======================
-
-This section explains how ``DuoSubs`` works behind the scenes and outlines known limitations.
-
-How It Works
-------------
+Behind the Scenes
+==================
 
 ``DuoSubs`` aligns two subtitle files using the following steps:
 
@@ -36,7 +31,7 @@ How It Works
 .. _known-limitations:
 
 Known Limitations
------------------
+==================
 
 -   The **accuracy** of the merging process **varies** on the 
     `model <https://huggingface.co/models?library=sentence-transformers>`_ selected.
@@ -50,20 +45,30 @@ Known Limitations
 
     .. tip::
 
-        If both subtitle files are **known** to be **perfectly semantically aligned**,
-        meaning:
+        There are three possible ways to address it:
 
-          - **matching dialogue contents**
-          - **no extra lines** like scene annotations or bonus Director's Cut stuff.
+        1. If **all** subtitle lines are completely **out of sync**, consider using another subtitle syncing tool first to align them, e.g.
 
-        Then, by **enabling** the ``ignore-non-overlap-filter`` option in either case:
+            - `smacke/ffsubsync <https://github.com/smacke/ffsubsync>`_
+            - `sc0ty/subsync <https://github.com/sc0ty/subsync>`_
+            - `kaegi/alass <https://github.com/kaegi/alass>`_
+            
+           before using this tool with ``ignore-non-overlap-filter`` **disabled**.
 
-          - :ref:`command-line interface <ignore-non-overlap-filter>`
-          - :meth:`duosubs.MergeArgs`
-          - :meth:`duosubs.Merger.merge_subtitle`
+           Alternatively, see points 2 and 3.
 
-        to skip the overlap check — the merge should go smoothly from there.
+        2. If both subtitle files are **known** to be **perfectly semantically aligned**, meaning:
 
-        ⚠️ If the subtitle **timings** are **off** and the two subtitle files 
-        **don't fully match in content**, the algorithm likely **won't** produce great results. 
-        Still, you can try merging them with ``ignore-non-overlap-filter`` **enabled**.
+            - **matching dialogue contents**
+            - **no extra lines** like scene annotations or bonus Director's Cut stuff.
+
+           Then, by **enabling** the ``ignore-non-overlap-filter`` option in either case:
+
+            - :ref:`command-line interface <ignore-non-overlap-filter>`
+            - :meth:`duosubs.MergeArgs`
+            - :meth:`duosubs.Merger.merge_subtitle`
+            - Web UI ( ``Advanced Configurations`` → ``Alignment Behavior`` )
+
+           to skip the overlap check — the merge should go smoothly from there.
+
+        3. If the subtitle **timings** are **off** and the two subtitle files **don't fully match in content**, the algorithm likely **won't** produce great results. Still, you can try merging them with ``ignore-non-overlap-filter`` **enabled**.

@@ -1,5 +1,5 @@
-API Usage
-=========
+Core Subtitle Merging
+======================
 
 This section provides examples of how to use the ``DuoSubs`` API for merging subtitles 
 programmatically.
@@ -118,7 +118,7 @@ The following code lets you to add extra steps like pre- or post-processing of s
         model = load_sentence_transformer_model(
             args,
             lambda model_name, device:
-            print(f"Stage 2 -> Loading {model_name} into {device}") # Status logger
+            print(f"Stage 2 -> Loading {model_name} on {device.upper()}") # Status logger
         )
 
         # 3. You can prepocess the subtitles here, like further filtering the subtitles.
@@ -193,7 +193,7 @@ This allows you to implement your own logic around the merging process.
     model = load_sentence_transformer_model(
         args,
         lambda model_name, device:
-        print(f"Stage 2 -> Loading {model_name} into {device}")
+        print(f"Stage 2 -> Loading {model_name} on {device.upper()}")
     )
 
     def make_progress_callback(progress_bar: Any) -> Callable[[float], None]:
@@ -358,7 +358,7 @@ Below is an example of **saving** subtitles to **disk**. Each function can also 
     primary_styles = pysubs2.SSAFile()      # Suppose this contains the primary style
     secondary_styles = pysubs2.SSAFile()    # Suppose this contains the secondary style
 
-    path = Path("D:/Users/Name/Document/Folder")
+    path = Path("D:/Users/Name/Documents/Folder")
 
     # Saves both merged subtitles into a single file
     save_file_combined(

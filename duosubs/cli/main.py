@@ -1,11 +1,13 @@
 """
-CLI entry point for the duosubs subtitle merging tool.
+CLI entry points for DuoSubs: a subtitle merging and alignment tool.
 
-This module provides the Typer-based command-line interface for merging subtitle files 
-using semantic alignment.
+This module provides Typer-based command-line interfaces for two main functionalities:
+- Semantic merging of subtitle files using language models.
+- Launching the DuoSubs web UI server.
 
-It supports model/device selection, output formatting, and error handling. See the 
-'merge' command for details.
+Users can configure model selection, device usage, output formatting, and error handling
+via the `merge` command. The `launch-webui` command allows specifying server host, 
+port, and cache settings.
 """
 
 import sys
@@ -24,6 +26,7 @@ from duosubs.common.exceptions import (
 )
 from duosubs.common.types import MergeArgs
 from duosubs.core.merge_pipeline import run_merge_pipeline
+from duosubs.webui.ui.layout import create_main_gr_blocks_ui
 
 DEFAULT_SAVED_SUB_EXT: SubtitleFormat = SubtitleFormat.ASS
 DEFAULT_OVERLAP_TIME: int = 500 # in ms
@@ -43,8 +46,8 @@ Supported format:\n
 {DEFAULT_SUPPORTED_SUBS_STR}\n\n
 
 Usage example:\n
-duosubs -p en.srt -s es.srt --model LaBSE\n
-duosubs -p en.srt -s es.srt --format-all srt --output-dir output/\n
+duosubs merge -p en.srt -s es.srt --model LaBSE\n
+duosubs merge -p en.srt -s es.srt --format-all srt --output-dir output/\n
 """)
 def merge(
     # Input Subtitles
@@ -173,6 +176,68 @@ def merge(
         _fail(str(e3), 3)
     except SaveSubsError as e4:
         _fail(str(e4), 4)
+
+@app.command(help="""
+Launch the DuoSubs web server with limited customisable settings.\n
+
+Usage example:\n
+duosubs launch-webui\n
+duosubs launch-webui --host 0.0.0.0 --port 8831\n
+duosubs launch-webui --cache-delete-freq 10000 --cache-delete-age 2000\n
+""")
+def launch_webui(
+    host: str = typer.Option(
+        "127.0.0.1",
+        help=(
+            'Host to bind the server (e.g., "localhost", "0.0.0.0"). '
+            '"localhost" for local dev; "0.0.0.0" to allow external access.'
+        ),
+        case_sensitive=False
+    ),
+    port: int = typer.Option(
+        7860,
+        min=1024,
+        max=65535,
+        help="Port to run the server on.",
+    ),
+    share: bool = typer.Option(
+        False,
+        help="Create a publicly shareable link for DuoSubs Web UI."
+    ),
+    inbrowser: bool = typer.Option(
+        True,
+        help=(
+            "Automatically launch the DuoSubs Web UI in a new tab "
+            "on the default browser"
+        )
+    ),
+    cache_delete_freq: int = typer.Option(
+        3600,
+        min=1,
+        help=(
+            "Interval in seconds to scan and clean up expired cache entries."
+        ),
+    ),
+    cache_delete_age: int = typer.Option(
+        14400,
+        min=1,
+        help=(
+            "Files older than this duration (in seconds) will be removed "
+            "from the cache."
+        ),
+    ),
+) -> None:
+    duosubs_server = create_main_gr_blocks_ui(cache_delete_freq, cache_delete_age)
+    duosubs_server.queue(default_concurrency_limit=None)
+    if host=="127.0.0.1" and port==7860:
+        duosubs_server.launch(share=share, inbrowser=inbrowser)
+    else:
+        duosubs_server.launch(
+            server_name=host,
+            server_port=port,
+            share=share,
+            inbrowser=inbrowser
+        )
 
 def _fail(msg: str, code_value: int) -> NoReturn:
     """
