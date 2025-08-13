@@ -66,7 +66,8 @@ dev = [
 typecheck = [
     "mypy>=1.16.1,<2.0", 
     "types-PyYAML>=6.0.12.20250516,<7.0",
-    "scipy-stubs>=1.16.0.2,<2.0",
+    'scipy-stubs>=1.16.0.2,<2.0; python_version >= "3.11"',
+    'scipy-stubs==1.15.3.0; python_version < "3.11"',
     "types-tqdm>=4.67.0.20250516,<5.0",
     "pandas-stubs>=2.3.0.250703,<3.0",
     "types-psutil>=7.0.0.20250601,<8.0",
