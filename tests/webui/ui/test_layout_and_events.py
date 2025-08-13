@@ -41,6 +41,12 @@ def gradio_server() -> Generator[str, None, None]:
         str: The base URL of the running Gradio server.
     """
     port = get_free_port()
+    
+    try:
+        multiprocessing.set_start_method("spawn", force=True)
+    except RuntimeError:
+        pass
+
     proc = multiprocessing.Process(target=run_gradio_web_ui, args=(port,), daemon=True)
     proc.start()
     try:
