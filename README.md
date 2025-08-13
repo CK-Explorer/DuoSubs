@@ -228,7 +228,7 @@ primary subtitles line due to the tokenization algorithm used.
 >    - [sc0ty/subsync](https://github.com/sc0ty/subsync)
 >    - [kaegi/alass](https://github.com/kaegi/alass)
 >
->    before using this tool with `ignore-non-overlap-filter` disabled.
+>    before using this tool with `ignore-non-overlap-filter` **disabled**.
 >
 >    Alternatively, see points 2 and 3.
 >
