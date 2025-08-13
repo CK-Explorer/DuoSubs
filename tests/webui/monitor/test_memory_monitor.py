@@ -47,6 +47,10 @@ def test_get_memory_status_table(
             return_value=True
         ), \
         patch(
+            "duosubs.webui.monitor.memory_monitor.pynvml.nvmlInit",
+            return_value=None
+        ), \
+        patch(
             "duosubs.webui.monitor.memory_monitor.pynvml.nvmlDeviceGetCount",
             return_value=1
         ), \
@@ -71,8 +75,7 @@ def test_get_memory_status_table(
             total=ram[2]
         )
 
-        mock_handle = MagicMock()
-        mock_get_handle.return_value = mock_handle
+        mock_get_handle.return_value = MagicMock()
         mock_get_name.return_value = vram[0]
         mock_get_mem_info.return_value = MagicMock(
             used=vram[2],
