@@ -62,12 +62,11 @@ Known Limitations
             - **matching dialogue contents**
             - **no extra lines** like scene annotations or bonus Director's Cut stuff.
 
-           Then, by **enabling** the ``ignore-non-overlap-filter`` option in either case:
+           Then, by **enabling** the ``ignore-non-overlap-filter`` option in either case,
 
-            - :ref:`command-line interface <ignore-non-overlap-filter>`
-            - :meth:`duosubs.MergeArgs`
-            - :meth:`duosubs.Merger.merge_subtitle`
-            - Web UI ( ``Advanced Configurations`` → ``Alignment Behavior`` )
+            - Web UI: ``Advanced Configurations`` → ``Alignment Behavior`` → ``Ignore Non-Overlap Filter``
+            - CLI: :ref:`ignore-non-overlap-filter <ignore-non-overlap-filter>`
+            - Python API: :meth:`duosubs.MergeArgs`, :meth:`duosubs.Merger.merge_subtitle`
 
            to skip the overlap check — the merge should go smoothly from there.
 

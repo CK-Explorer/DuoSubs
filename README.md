@@ -8,7 +8,7 @@
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-blue?logo=python&labelColor=gray)](https://github.com/astral-sh/ruff)
 [![codecov](https://codecov.io/gh/CK-Explorer/DuoSubs/branch/main/graph/badge.svg)](https://codecov.io/gh/CK-Explorer/DuoSubs)
 [![Documentation Status](https://readthedocs.org/projects/duosubs/badge/?version=latest)](https://duosubs.readthedocs.io/en/latest/?badge=latest)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange)](https://huggingface.co/spaces/CK-Explorer/DuoSubs)
 
 Merging subtitles using only the nearest timestamp often leads to incorrect pairings
@@ -31,7 +31,7 @@ This Python tool uses **semantic similarity**
 - 🧩 Easy-to-use **Python API** for integration
 - 💻 **Command-line interface** with customizable options
 - 🌐 **Web UI** — run locally or in the cloud via 
-[Google Colab](https://colab.research.google.com/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
+[Google Colab](https://colab.research.google.com/github/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
 or 
 [Hugging Face Spaces](https://huggingface.co/spaces/CK-Explorer/DuoSubs)
 
@@ -41,7 +41,7 @@ or
 
 You can launch the Web UI instantly without installing anything locally by running it in the cloud.
 
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
 - [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange)](https://huggingface.co/spaces/CK-Explorer/DuoSubs)
 
 > [!NOTE]
@@ -116,8 +116,10 @@ If you want to launch it in other url (e.g. 0.0.0.0) and port (e.g 8000), you ca
 > - The Web UI caches files during processing, and clears files older than 2 hours every 1 hour. Cached data may remain if the server stops unexpectedly.
 > - Sometimes, older model may fail to be released after switching or closing sessions. If you run out of RAM or VRAM, simply restart the script.
 
-To learn more about the launching options, please see the 
-[documentation](https://duosubs.readthedocs.io/en/latest/).
+To learn more about the launching options, please see the sections of 
+[Launch Web UI Command](https://duosubs.readthedocs.io/en/latest/cli_usage/launch_webui.html)
+and [Web UI Launching](https://duosubs.readthedocs.io/en/latest/api_usage/web_ui_launching.html)
+in the [documentation](https://duosubs.readthedocs.io/en/latest/).
 
 #### 💻 Merge Subtitles
 
@@ -192,8 +194,10 @@ you can run:
 > - Some models may require significant RAM or GPU (VRAM) to run, and might not be compatible with all devices — especially larger models. 
 > - Also, please ensure the selected model supports your desired language for reliable results.
 
-To learn more about this tool, please see the 
-[documentation](https://duosubs.readthedocs.io/en/latest/).
+To learn more about merging options, please see the sections of
+[Merge Command](https://duosubs.readthedocs.io/en/latest/cli_usage/merge.html)
+and [Core Subtitle Merging](https://duosubs.readthedocs.io/en/latest/api_usage/core_subtitle_merging.html)
+in the [documentation](https://duosubs.readthedocs.io/en/latest/).
 
 ---
 
@@ -237,11 +241,15 @@ primary subtitles line due to the tokenization algorithm used.
 >    - **matching dialogue contents**
 >    - **no extra lines** like scene annotations or bonus Director’s Cut stuff.
 >
->    Then, just **enable** the `ignore-non-overlap-filter` option in either: 
+>    Then, just **enable** the `ignore-non-overlap-filter` option in either
 >
->    - Web UI (`Advanced Configurations` → `Alignment Behavior`)
->    - CLI (`--ignore-non-overlap-filter`)
->    - Python API (see [documentation](https://duosubs.readthedocs.io/en/latest/))
+>    - Web UI :
+>       - `Advanced Configurations` → `Alignment Behavior` → `Ignore Non-Overlap Filter`
+>    - CLI : 
+>       - [`--ignore-non-overlap-filter`](https://duosubs.readthedocs.io/en/latest/cli_usage/merge.html#ignore-non-overlap-filter)
+>    - Python API :
+>       - [`duosubs.MergeArgs()`](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.MergeArgs)
+>       - [`duosubs.Merger.merge_subtitle()`](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.Merger.merge_subtitle)
 >
 >    to skip the overlap check — the merge should go smoothly from there.
 >

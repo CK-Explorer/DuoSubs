@@ -9,9 +9,9 @@ The general ``DuoSubs`` CLI usage format is:
 
 where:
 
-- **COMMAND** → The main action to perform (e.g., ``merge``, ``launch-webui``)  
-- **OPTIONS** → Optional flags or parameters (e.g., ``--help``)  
-- **ARGUMENTS** → Positional inputs required by the command  
+- **COMMAND** — the main action to perform (e.g., ``merge``, ``launch-webui``)  
+- **OPTIONS** — optional flags or parameters (e.g., ``--help``)  
+- **ARGUMENTS** — positional inputs required by the command  
 
 Main Commands & Options
 =======================

@@ -4,7 +4,7 @@ Cloud Deployment
 Please choose either of the services to run in the cloud:
 
 * .. image:: https://colab.research.google.com/assets/colab-badge.svg
-     :target: https://colab.research.google.com/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb
+     :target: https://colab.research.google.com/github/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb
      :alt: Colab
 
 * .. image:: https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange

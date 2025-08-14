@@ -69,6 +69,12 @@ jobs:
       - pypi-publish
 
     steps:
+      - name: Download release distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: release-dists
+          path: dist/
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
