@@ -116,8 +116,10 @@ If you want to launch it in other url (e.g. 0.0.0.0) and port (e.g 8000), you ca
 > - The Web UI caches files during processing, and clears files older than 2 hours every 1 hour. Cached data may remain if the server stops unexpectedly.
 > - Sometimes, older model may fail to be released after switching or closing sessions. If you run out of RAM or VRAM, simply restart the script.
 
-To learn more about the launching options, please see the 
-[documentation](https://duosubs.readthedocs.io/en/latest/).
+To learn more about the launching options, please see the sections of 
+[Launch Web UI Command](https://duosubs.readthedocs.io/en/latest/cli_usage/launch_webui.html)
+and [Web UI Launching](https://duosubs.readthedocs.io/en/latest/api_usage/web_ui_launching.html)
+in the [documentation](https://duosubs.readthedocs.io/en/latest/).
 
 #### 💻 Merge Subtitles
 
@@ -192,8 +194,10 @@ you can run:
 > - Some models may require significant RAM or GPU (VRAM) to run, and might not be compatible with all devices — especially larger models. 
 > - Also, please ensure the selected model supports your desired language for reliable results.
 
-To learn more about this tool, please see the 
-[documentation](https://duosubs.readthedocs.io/en/latest/).
+To learn more about merging options, please see the sections of
+[Merge Command](https://duosubs.readthedocs.io/en/latest/cli_usage/merge.html)
+and [Core Subtitle Merging](https://duosubs.readthedocs.io/en/latest/api_usage/core_subtitle_merging.html)
+in the [documentation](https://duosubs.readthedocs.io/en/latest/).
 
 ---
 
@@ -237,11 +241,15 @@ primary subtitles line due to the tokenization algorithm used.
 >    - **matching dialogue contents**
 >    - **no extra lines** like scene annotations or bonus Director’s Cut stuff.
 >
->    Then, just **enable** the `ignore-non-overlap-filter` option in either: 
+>    Then, just **enable** the `ignore-non-overlap-filter` option in either
 >
->    - Web UI (`Advanced Configurations` → `Alignment Behavior`)
->    - CLI (`--ignore-non-overlap-filter`)
->    - Python API (see [documentation](https://duosubs.readthedocs.io/en/latest/))
+>    - Web UI :
+>       - (`Advanced Configurations` → `Alignment Behavior`)
+>    - CLI : 
+>       - (`--ignore-non-overlap-filter`)
+>    - Python API :
+>       - [``duosubs.MergeArgs()``](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.MergeArgs)
+>       - [``duosubs.Merger.merge_subtitle()``](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.Merger.merge_subtitle)
 >
 >    to skip the overlap check — the merge should go smoothly from there.
 >
