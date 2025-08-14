@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "duosubs"
-version = "1.0.0"
+version = "1.0.1"
 authors = [{ name = "CK-Explorer " }]
 description = "Semantic subtitle aligner and merger for bilingual subtitle syncing."
 readme = "README.md"
@@ -82,7 +82,7 @@ duosubs = ["py.typed"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.0.0"
+version = "1.0.1"
 tag_format = "v$version"
 version_files = [
   "pyproject.toml",

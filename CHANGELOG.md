@@ -1,3 +1,9 @@
+## v1.0.1 (2025-08-14)
+
+### Fix
+
+- correct the Google Colab link
+
 ## v1.0.0 (2025-08-13)
 
 ### Feat

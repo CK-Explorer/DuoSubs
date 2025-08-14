@@ -51,7 +51,7 @@ from duosubs.subtitle.data import SubtitleData
 from duosubs.subtitle.field import SubtitleField
 from duosubs.webui.ui.layout import create_main_gr_blocks_ui as create_duosubs_gr_blocks
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __all__ = [
     "DeviceType",
