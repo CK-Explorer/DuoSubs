@@ -8,7 +8,7 @@
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-blue?logo=python&labelColor=gray)](https://github.com/astral-sh/ruff)
 [![codecov](https://codecov.io/gh/CK-Explorer/DuoSubs/branch/main/graph/badge.svg)](https://codecov.io/gh/CK-Explorer/DuoSubs)
 [![Documentation Status](https://readthedocs.org/projects/duosubs/badge/?version=latest)](https://duosubs.readthedocs.io/en/latest/?badge=latest)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange)](https://huggingface.co/spaces/CK-Explorer/DuoSubs)
 
 Merging subtitles using only the nearest timestamp often leads to incorrect pairings
@@ -31,7 +31,7 @@ This Python tool uses **semantic similarity**
 - 🧩 Easy-to-use **Python API** for integration
 - 💻 **Command-line interface** with customizable options
 - 🌐 **Web UI** — run locally or in the cloud via 
-[Google Colab](https://colab.research.google.com/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
+[Google Colab](https://colab.research.google.com/github/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
 or 
 [Hugging Face Spaces](https://huggingface.co/spaces/CK-Explorer/DuoSubs)
 
@@ -41,7 +41,7 @@ or
 
 You can launch the Web UI instantly without installing anything locally by running it in the cloud.
 
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CK-Explorer/DuoSubs/blob/main/notebook/DuoSubs-webui.ipynb)
 - [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange)](https://huggingface.co/spaces/CK-Explorer/DuoSubs)
 
 > [!NOTE]
