@@ -244,12 +244,12 @@ primary subtitles line due to the tokenization algorithm used.
 >    Then, just **enable** the `ignore-non-overlap-filter` option in either
 >
 >    - Web UI :
->       - (`Advanced Configurations` → `Alignment Behavior`)
+>       - `Advanced Configurations` → `Alignment Behavior` → `Ignore Non-Overlap Filter`
 >    - CLI : 
->       - (`--ignore-non-overlap-filter`)
+>       - [`--ignore-non-overlap-filter`](https://duosubs.readthedocs.io/en/latest/cli_usage/merge.html#ignore-non-overlap-filter)
 >    - Python API :
->       - [``duosubs.MergeArgs()``](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.MergeArgs)
->       - [``duosubs.Merger.merge_subtitle()``](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.Merger.merge_subtitle)
+>       - [`duosubs.MergeArgs()`](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.MergeArgs)
+>       - [`duosubs.Merger.merge_subtitle()`](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.Merger.merge_subtitle)
 >
 >    to skip the overlap check — the merge should go smoothly from there.
 >
