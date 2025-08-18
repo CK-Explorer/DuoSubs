@@ -85,7 +85,7 @@ class Merger:
 
         Returns:
             list[SubtitleField]: List of merged and sorted subtitle fields after 
-                complete alignment.
+            complete alignment.
         """
         non_overlap_primary_subs: list[SubtitleField] = []
         non_overlap_secondary_subs: list[SubtitleField] = []
@@ -148,7 +148,7 @@ class Merger:
 
         Returns:
             list[SubtitleField]: List of merged and sorted subtitle fields after 
-                alignment.
+            alignment.
         """
         self._ratio_extract_non_overlapping_subs = 0
         processed_subs = self.align_subs_with_dtw(
