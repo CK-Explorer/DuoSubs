@@ -10,7 +10,7 @@ programmatic use.
 Also, it includes a web UI built with Gradio for interactive subtitle management.
 
 Exports:
-    - Enums: SubtitleFormat, OmitFile, DeviceType, ModelPrecision
+    - Enums: SubtitleFormat, OmitFile, DeviceType, ModelPrecision, MergingMode
     - Exceptions: LoadSubsError, LoadModelError, MergeSubsError, SaveSubsError
     - Types: MergeArgs, SubtitleData, SubtitleField
     - Pipeline: run_merge_pipeline, load_subtitles, load_sentence_transformer_model,
@@ -22,7 +22,13 @@ Exports:
     - webui: duosubs_gr_blocks
 """
 
-from duosubs.common.enums import DeviceType, ModelPrecision, OmitFile, SubtitleFormat
+from duosubs.common.enums import (
+                                  DeviceType,
+                                  MergingMode,
+                                  ModelPrecision,
+                                  OmitFile,
+                                  SubtitleFormat
+)
 from duosubs.common.exceptions import (
                                   LoadModelError,
                                   LoadSubsError,
@@ -55,6 +61,7 @@ __version__ = "1.0.1"
 
 __all__ = [
     "DeviceType",
+    "MergingMode",
     "LoadModelError",
     "LoadSubsError",
     "MergeArgs",
