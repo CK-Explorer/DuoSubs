@@ -7,11 +7,12 @@ ensures type safety when passing configuration between CLI, loading, merging, an
 saving routines.
 """
 
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Union
 
-from .enums import DeviceType, ModelPrecision, OmitFile, SubtitleFormat
+from .enums import DeviceType, MergingMode, ModelPrecision, OmitFile, SubtitleFormat
 
 
 @dataclass
@@ -58,7 +59,7 @@ class MergeArgs:
     device: DeviceType = DeviceType.AUTO
     batch_size: int = 32
     model_precision: ModelPrecision = ModelPrecision.FLOAT32
-    ignore_non_overlap_filter: bool = False
+    merging_mode: MergingMode = MergingMode.SYNCED
     retain_newline: bool = False
     secondary_above: bool = False
     omit: List[OmitFile] = field(default_factory=lambda: [OmitFile.EDIT])
@@ -68,3 +69,20 @@ class MergeArgs:
     format_secondary: Optional[SubtitleFormat] = None
     output_name: Optional[str] = None
     output_dir: Optional[Path]= None
+
+    # Deprecated Field
+    ignore_non_overlap_filter: bool | None = None
+
+    def __post_init__(self) -> None:
+        if self.ignore_non_overlap_filter is not None:
+            warnings.warn(
+                "MergeArgs.ignore_non_overlap_filter is deprecated "
+                "and will be removed in v2.0.0. "
+                "Use MergeArgs.merging_mode=<MergingMode> instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            if self.ignore_non_overlap_filter:
+                self.merging_mode = MergingMode.MIXED
+            else:
+                self.merging_mode = MergingMode.SYNCED

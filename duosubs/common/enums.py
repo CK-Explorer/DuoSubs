@@ -31,6 +31,11 @@ class SubtitleFormat(str, Enum):
     ASS = "ass"
     SSA = "ssa"
 
+class MergingMode(str, Enum):
+    SYNCED = "synced"
+    MIXED = "mixed"
+    CUTS = "cuts"
+
 class OmitFile(str, Enum):
     """
     Enum for file types that can be omitted from output packaging.
