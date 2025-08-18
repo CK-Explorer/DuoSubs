@@ -14,12 +14,18 @@ from typing import Any
 import gradio as gr
 from sentence_transformers import SentenceTransformer
 
-from duosubs.common.enums import DeviceType, ModelPrecision, OmitFile, SubtitleFormat
+from duosubs.common.enums import (
+    DeviceType,
+    MergingMode,
+    ModelPrecision,
+    OmitFile,
+    SubtitleFormat,
+)
 from duosubs.common.exceptions import (
-                                  LoadModelError,
-                                  LoadSubsError,
-                                  MergeSubsError,
-                                  SaveSubsError,
+    LoadModelError,
+    LoadSubsError,
+    MergeSubsError,
+    SaveSubsError,
 )
 from duosubs.common.types import MergeArgs
 from duosubs.core.merge_pipeline import (
@@ -39,7 +45,7 @@ def start_merging(
         device_index: int,
         batch_size: int,
         model_precision: str,
-        ignore_non_overlap: bool,
+        merging_mode: str,
         retain_newline: bool,
         secondary_above_primary: bool,
         omit_subtitles: list[str],
@@ -63,18 +69,23 @@ def start_merging(
         primary_subtitles (str): Path to primary subtitle file.
         secondary_subtitles (str): Path to secondary subtitle file.
         model_name (str): Name of the model to use.
-        device_type (str): Device type (e.g., 'cpu', 'cuda').
+        device_type (str): Device type (based on the value of DeviceType).
         device_index (int): Index of the selected GPU.
         batch_size (int): Batch size for inference.
-        model_precision (str): Precision mode for inference.
-        ignore_non_overlap (bool): Whether to ignore non-overlapping subtitles.
+        model_precision (str): Precision mode for inference (based on the value of 
+            ModelPrecision).
+        merging_mode (str): Subttitle merging mode (based on the value of MergingMode).
         retain_newline (bool): Whether to retain newlines in output.
         secondary_above_primary (bool): Whether to place secondary subtitle above 
             primary.
-        omit_subtitles (list[str]): List of subtitle types to omit from output.
-        combined_format (str): Format for combined subtitles.
-        primary_format (str): Format for primary subtitles.
-        secondary_format (str): Format for secondary subtitles.
+        omit_subtitles (list[str]): List of subtitle types to omit from output (based 
+            on the value of OmitFile).
+        combined_format (str): Format for combined subtitles (based on the value of 
+            SubtitleFormat).
+        primary_format (str): Format for primary subtitles (based on the value of 
+            SubtitleFormat).
+        secondary_format (str): Format for secondary subtitles (based on the value of 
+            SubtitleFormat).
         gpu_list (list[str]): List of available GPU names.
         loaded_model_device (list[str]): List tracking loaded model device.
         loaded_model_name (list[str]): List tracking loaded model name.
@@ -97,7 +108,7 @@ def start_merging(
         secondary=secondary_subtitles,
         model_precision=ModelPrecision(model_precision),
         batch_size=int(batch_size),
-        ignore_non_overlap_filter=ignore_non_overlap,
+        merging_mode=MergingMode(merging_mode.lower()),
         retain_newline=retain_newline,
         secondary_above=secondary_above_primary,
         omit=[OmitFile.EDIT],
@@ -181,7 +192,11 @@ def start_merging(
             def update_progress(current: int) -> None:
                 progress(
                     progress=current/100,
-                    desc= f"Stage 3 → Merging subtitles using {model_name}",
+                    desc= (
+                        f"Stage 3 → Merging subtitles "
+                        f"({args.merging_mode.value.capitalize()} mode, "
+                        f"using {model_name})"
+                    ),
                     total=100
                 )
             if model is None:

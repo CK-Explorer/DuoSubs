@@ -14,12 +14,18 @@ import torch
 from duosubs.webui.manager.model_manager import ModelPool
 from duosubs.webui.monitor import live_memory_monitor
 
-from .common import auto_filter_device, auto_list_gpu_name, open_html
+from .common import (
+    auto_filter_device,
+    auto_list_gpu_name,
+    open_html,
+)
 from .constants import (
     DEFAULT_MODEL,
     DEFAULT_PRECISION,
     DEFAULT_SUB_EXT,
     LEADERBOARD_URL,
+    MERGING_MODE_INFO,
+    MERGING_MODE_LIST,
     PRECISION_LIST,
     SENTENCE_TRANSFORMER_URL,
     SUB_EXT_LIST,
@@ -90,7 +96,7 @@ def create_main_gr_blocks_ui(
                         headers=["Type", "Usage", "Used", "Total"],
                         interactive=False
                     )
-                with gr.Accordion(label="⚙️ Basic Configurations"):
+                with gr.Accordion(label="⚙️ Configurations"):
                     with gr.Tab("Model & Device"):
                         (
                             model_name,
@@ -102,6 +108,8 @@ def create_main_gr_blocks_ui(
                             device_list,
                             gpu_list
                         )
+                    with gr.Tab("Alignment Behavior"):
+                        merging_mode = _create_alignment_behaviour_block()
                     with gr.Tab("Output Styling"):
                         (
                             retain_newline,
@@ -114,9 +122,6 @@ def create_main_gr_blocks_ui(
                             primary_format,
                             secondary_format
                         ) = _create_file_exports_block()
-                with gr.Accordion("🛠️ Advanced Configurations", open=False):
-                    with gr.Tab("Alignment Behavior"):
-                        ignore_non_overlap = _create_alignment_behaviour_block()
 
         ui.load(fn=live_memory_monitor.auto_refresh, outputs=memory_table)
 
@@ -145,7 +150,7 @@ def create_main_gr_blocks_ui(
                 device_index,
                 batch_size,
                 model_precision,
-                ignore_non_overlap, 
+                merging_mode, 
                 retain_newline,
                 secondary_above_primary,
                 omit_subtitles,
@@ -281,26 +286,26 @@ def _create_model_configurations_block(
         )
     return model_name, device_type, device_index, batch_size, model_precision
 
-def _create_alignment_behaviour_block() -> gr.Checkbox:
+def _create_alignment_behaviour_block() -> gr.Radio:
     """
     Creates alignment behavior UI components.
 
-    This function sets up a checkbox for ignoring non-overlapping subtitles, in the 
-    merging process.
-
+    This function sets up a radio buttons for selecting the subtitles merging mode.
+    
     Returns:
-        gradio.Checkbox: Checkbox for alignment behavior.
+        gradio.Radio: Radio buttons for merging mode.
     """
+    mode_content = open_html(MERGING_MODE_INFO)
     with gr.Column():
-        ignore_non_overlap = gr.Checkbox(
-            label="Ignore Non-Overlap Filter",
-            value=False,
-            info=(
-                "💡 Use only if both subtitles are **semantically identical** "
-                "and contain **no added scenes or annotations**"
-            )
+        merging_mode = gr.Radio(
+            label="Merging Mode",
+            choices=MERGING_MODE_LIST,
+            value=MERGING_MODE_LIST[0],
+            info="Please refer to **ℹ️ Info** below for more information" # noqa: RUF001
         )
-    return ignore_non_overlap
+        with gr.Accordion("ℹ️ Info"): # noqa: RUF001
+            gr.HTML(mode_content)
+    return merging_mode
 
 def _create_output_styling_block() -> tuple[gr.Checkbox, gr.Checkbox]:
     """
@@ -386,7 +391,7 @@ def _wrapped_start_merging(
         device_index: int,
         batch_size: int,
         model_precision: str,
-        ignore_non_overlap: bool,
+        merging_mode: str,
         retain_newline: bool,
         secondary_above_primary: bool,
         omit_subtitles: list[str],
@@ -407,18 +412,23 @@ def _wrapped_start_merging(
         primary_subtitles (str): Path to primary subtitle file.
         secondary_subtitles (str): Path to secondary subtitle file.
         model_name (str): Name of the model to use.
-        device_type (str): Device type (e.g., 'cpu', 'cuda').
+        device_type (str): Device type (based on the value of DeviceType).
         device_index (int): Index of the selected GPU.
         batch_size (int): Batch size for inference.
-        model_precision (str): Precision mode for inference.
-        ignore_non_overlap (bool): Whether to ignore non-overlapping subtitles.
+        model_precision (str): Precision mode for inference (based on the value of 
+            ModelPrecision).
+        merging_mode (str): Subttitle merging mode (based on the value of MergingMode).
         retain_newline (bool): Whether to retain newlines in output.
         secondary_above_primary (bool): Whether to place secondary subtitle above 
             primary.
-        omit_subtitles (list[str]): List of subtitle types to omit from output.
-        combined_format (str): Format for combined subtitles.
-        primary_format (str): Format for primary subtitles.
-        secondary_format (str): Format for secondary subtitles.
+        omit_subtitles (list[str]): List of subtitle types to omit from output (based 
+            on the value of OmitFile).
+        combined_format (str): Format for combined subtitles (based on the value of 
+            SubtitleFormat).
+        primary_format (str): Format for primary subtitles (based on the value of 
+            SubtitleFormat).
+        secondary_format (str): Format for secondary subtitles (based on the value of 
+            SubtitleFormat).
         gpu_list (list[str]): List of available GPU names.
         loaded_model_device (list[str]): List tracking loaded model device.
         loaded_model_name (list[str]): List tracking loaded model name.
@@ -434,7 +444,7 @@ def _wrapped_start_merging(
         model_pool,
         primary_subtitles, secondary_subtitles,
         model_name, device_type, device_index, batch_size, model_precision,
-        ignore_non_overlap, retain_newline, secondary_above_primary,
+        merging_mode, retain_newline, secondary_above_primary,
         omit_subtitles, combined_format, primary_format, secondary_format,
         gpu_list,
         loaded_model_device, loaded_model_name, cancel_state,
