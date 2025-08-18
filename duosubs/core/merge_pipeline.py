@@ -76,7 +76,7 @@ def run_merge_pipeline(
     if logger:
         with tqdm(
             total=100,
-            desc= "Stage 3 → Merging subtitles",
+            desc= f"Stage 3 → Merging subtitles ({args.merging_mode.value} mode)",
             bar_format="{l_bar}{bar}| [{elapsed}<{remaining}, {rate_fmt}{postfix}]"
         ) as pbar:
             callback = make_progress_callback(pbar)
