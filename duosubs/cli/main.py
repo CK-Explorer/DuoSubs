@@ -169,7 +169,7 @@ def merge(
         typer.secho(
             (   
                 "[notice] "
-                "--ignore-non-overlap-filter is deprecated "
+                "--ignore-non-overlap-filter is deprecated since v1.1.0"
                 "and will be removed in v2.0.0. \n"
                 "[notice] Use --mode instead."
             ),

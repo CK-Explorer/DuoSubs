@@ -61,7 +61,7 @@ class MergeArgs:
         output_dir (Optional[Path]): Output directory for generated files. Defaults to 
             None.
         ignore_non_overlap_filter (bool | None):
-            .. deprecated:: 1.2.0
+            .. deprecated:: 1.1.0
 
             Whether to ignore non-overlapping filter when merging subtitles.
 
