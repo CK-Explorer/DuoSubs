@@ -142,6 +142,20 @@ def test_invalid_precision() -> None:
     assert result.exit_code != 0
     assert "Invalid value for '--model-precision'" in strip_ansi(result.output)
 
+def test_invalid_mode() -> None:
+    """
+    Test error for invalid merging mode argument.
+    """
+    result = runner.invoke(app, [
+        "merge",
+        "--primary", str(SUB_PATH / "primary.srt"),
+        "--secondary", str(SUB_PATH / "secondary.srt"),
+        "--mode", "normal"
+    ])
+    assert result.exit_code != 0
+    assert "Invalid value for '--mode'" in strip_ansi(result.output)
+
+
 def test_invalid_omit() -> None:
     """
     Test error for invalid omit file type argument.
@@ -207,6 +221,30 @@ def test_successful_merge(tmp_path: Path) -> None:
         "--secondary", str(SUB_PATH / "secondary.srt"),
         "--output-dir", str(tmp_path),
         "--model", "sentence-transformers/all-MiniLM-L6-v2"
+    ])
+
+    assert result.exit_code == 0
+    assert any(p.suffix == ".zip" for p in tmp_path.iterdir())
+
+@pytest.mark.parametrize(
+        "mode",
+        ["synced", "mixed", "cuts"]
+)
+def test_successful_merge_with_merging_mode(mode: str, tmp_path: Path) -> None:
+    """
+    Test a successful merge run with different merging mode and output zip file 
+    creation.
+
+    Args:
+        tmp_path (Path): Temporary directory for output files.
+    """
+    result = runner.invoke(app, [
+        "merge",
+        "--primary", str(SUB_PATH / "primary.srt"),
+        "--secondary", str(SUB_PATH / "secondary.srt"),
+        "--output-dir", str(tmp_path),
+        "--model", "sentence-transformers/all-MiniLM-L6-v2",
+        "--mode", mode,
     ])
 
     assert result.exit_code == 0
