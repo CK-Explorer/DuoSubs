@@ -11,11 +11,15 @@ Dependencies:
     sentence_transformers: For sentence embedding models and utilities.
 """
 
+import math
 import re
 from typing import Callable, Optional, cast
 
+import numpy as np
+import numpy.typing as npt
 import torch
 from fastdtw import fastdtw  # type: ignore
+from hmmlearn import hmm  # type: ignore
 from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer, util
 
@@ -51,6 +55,7 @@ class Merger:
         self._secondary_styles_tokens = secondary_subs_data.styles_tokens
 
         self._ratio_extract_non_overlapping_subs: float = 0.02
+        self._ratio_filter_and_extract_extended_version: float = 0
         self._ratio_align_subs_with_dtw: float = 0.07
         self._ratio_refined_merge: list[float] = [0.45, 0.45]
         self._ratio_eliminate_newline: float = 0.01
@@ -112,6 +117,80 @@ class Merger:
 
         processed_subs.extend(non_overlap_primary_subs)
         processed_subs.extend(non_overlap_secondary_subs)
+        processed_subs.sort()
+
+        processed_subs = self.eliminate_unnecessary_newline(
+            processed_subs,
+            stop_bit,
+            progress_callback
+        )
+
+        return processed_subs
+
+    def merge_subtitle_extended_cut(
+            self,
+            model: SentenceTransformer,
+            stop_bit: list[bool],
+            batch_size: int = 32,
+            progress_callback: Optional[Callable[[int], None]] = None
+        ) -> list[SubtitleField]:
+        """
+        Merges subtitles if the primary subtitle is an extended cut version, skipping 
+        non-overlapping extraction and applying additional filtering of extended cuts 
+        and refinement steps.
+
+        Args:
+            model (SentenceTransformer): The sentence embedding model.
+            stop_bit (list[bool]): A flag to allow early stopping.
+            batch_size (int, optional): Batch size for model inference. Default is 32.
+            progress_callback (Callable[[int], None], optional): Callback for progress 
+                updates.
+
+        Returns:
+            list[SubtitleField]: List of merged and sorted subtitle fields after 
+                alignment.
+        """
+        self._ratio_extract_non_overlapping_subs = 0
+        processed_subs = self.align_subs_with_dtw(
+            model,
+            stop_bit,
+            batch_size,
+            progress_callback
+        )
+
+        stage_number = 0
+        processed_subs, stage_number = self.align_subs_using_neighbours(
+            processed_subs,
+            3,
+            model,
+            stage_number,
+            stop_bit,
+            batch_size,
+            progress_callback
+        )
+
+        self._ratio_filter_and_extract_extended_version = 0.02
+        (
+            processed_subs,
+            non_overlap_primary_subs
+        ) = self.filter_and_extract_extended_version(
+            processed_subs,
+            model,
+            stop_bit,
+            batch_size,
+            progress_callback
+        )
+
+        processed_subs, stage_number = self.align_subs_using_neighbours(
+            processed_subs,
+            2,
+            model,
+            stage_number,
+            stop_bit,
+            batch_size,
+            progress_callback
+        )
+        processed_subs.extend(non_overlap_primary_subs)
         processed_subs.sort()
 
         processed_subs = self.eliminate_unnecessary_newline(
@@ -340,6 +419,7 @@ class Merger:
                         sub_idx,
                         len(subs),
                         self._ratio_refined_merge[stage_number],
+                        self._ratio_filter_and_extract_extended_version,
                         self._ratio_extract_non_overlapping_subs,
                         self._ratio_align_subs_with_dtw,
                         *self._ratio_refined_merge[:stage_number]
@@ -349,6 +429,113 @@ class Merger:
         stage_number += 1
         subs.sort()
         return subs, stage_number
+    
+    def filter_and_extract_extended_version(
+            self,
+            subs: list[SubtitleField],
+            model: SentenceTransformer,
+            stop_bit: list[bool],
+            batch_size: int = 32,
+            progress_callback: Optional[Callable[[int], None]] = None
+        ) -> tuple[list[SubtitleField], list[SubtitleField]]:
+        """
+        Filters and extracts extended segments from merged subtitles.
+
+        First, detects possible extended segments from binary list, with 1 indicating 
+        presence of secondary text, and 0 otherwise, which are further denoised by HMM.
+
+        Then, filters out the extended segments based on the best sentence similarity, 
+        by progressively deleting the extended subtitle line, starting from the middle 
+        of the extended segments.
+
+        Args:
+            subs (list[SubtitleField]): List of merged subtitles to filter.
+            model (SentenceTransformer): The sentence embedding model.
+            stop_bit (list[bool]): A flag to allow early stopping.
+            batch_size (int, optional): Batch size for model inference. Default is 32.
+            progress_callback (Callable[[int], None], optional): Callback for progress 
+                updates.
+
+        Returns:
+            tuple[list[SubtitleField], list[SubtitleField]]:
+            - Filtered list of merged subtitles.
+            - List of subtitles representing extended cuts.
+        """
+        binary_mask = Merger._make_secondary_text_presence_mask(subs)
+        clusters, _ = Merger._denoising_binary_mask_with_hmm(binary_mask)
+        extended_cut_idx_spans = []
+
+        for idx, cluster in enumerate(clusters):
+            if stop_bit[0]:
+                return [],[]
+            
+            start, end = cluster
+            if end - start <= 1:
+                continue
+
+            padding = min(10, int(end - start))
+
+            first_sub_idx = (
+                max(0, start - padding)
+                if idx-1 < 0
+                else max(start - padding, clusters[idx-1][1])
+            ) # inclusive
+            last_sub_idx = (
+                min(end + padding, clusters[idx+1][0])
+                if idx+1 < len(clusters)
+                else min(end + padding, len(subs))
+            ) # exclusive
+
+            sequence = Merger._get_sequence_list(start, end)
+            filter_list = Merger._get_filter_list(sequence)
+
+            subs_text_after_filtered = []
+            for filter_span in filter_list:
+                filtered_subs = (
+                    subs[first_sub_idx:filter_span[0]] +
+                    subs[filter_span[1]:last_sub_idx]
+                )
+                primary_text = " ".join(
+                    [sub.primary_text.replace("\\N", " ") for sub in filtered_subs]
+                )
+                subs_text_after_filtered.append(primary_text)
+
+            secondary_text = " ".join(
+                self._secondary_tokens[
+                    subs[first_sub_idx].secondary_token_spans[0]:
+                    subs[last_sub_idx-1].secondary_token_spans[1]
+                ]
+            ).replace("\\N", "")
+
+            score = Merger._compute_score(
+                secondary_text,
+                subs_text_after_filtered,
+                model,
+                batch_size
+            )
+
+            _, best_match_idx = torch.max(score, dim=1)
+            score_idx = int(best_match_idx.item())
+            extended_cut_idx_spans.append(filter_list[score_idx])
+
+            if progress_callback:
+                progress_percent = Merger._get_progress_percentage(
+                    idx,
+                    len(clusters),
+                    self._ratio_filter_and_extract_extended_version,
+                    self._ratio_extract_non_overlapping_subs,
+                    self._ratio_align_subs_with_dtw,
+                    *self._ratio_refined_merge[:1]
+                )
+                progress_callback(progress_percent) # incremental update
+
+        subs, extended_cuts_subs = Merger._remove_extended_segments(
+            extended_cut_idx_spans,
+            subs,
+            self._secondary_tokens
+        )
+
+        return subs, extended_cuts_subs
 
     def eliminate_unnecessary_newline(
             self,
@@ -388,6 +575,7 @@ class Merger:
                     idx,
                     len(subs),
                     self._ratio_eliminate_newline,
+                    self._ratio_filter_and_extract_extended_version,
                     self._ratio_extract_non_overlapping_subs,
                     self._ratio_align_subs_with_dtw,
                     *self._ratio_refined_merge
@@ -596,40 +784,196 @@ class Merger:
         updated_tokens_styles.extend(tokens_styles[start_previous:len(tokens)])
 
         return updated_tokens, updated_tokens_styles
-
+    
     @staticmethod
-    def _generate_all_consecutive_combinations(
-            tokens: list[str],
-            start_index: int,
-            end_index: int
-        ) -> tuple[list[str],list[tuple[int,int]]]:
+    def _remove_extended_segments(
+            extended_cut_idx_spans: list[tuple[int,int]],
+            subs: list[SubtitleField],
+            secondary_tokens: list[str]
+        ) -> tuple[list[SubtitleField],list[SubtitleField]]:
         """
-        Generates all consecutive combinations of tokens within a specified range of 
-        region of interest.
+        Removes extended segments from the subtitle list and updates token spans and 
+        text.
 
         Args:
-            tokens (list[str]): List of tokens.
-            start_index (int): Start index of the specified range.
-            end_index (int): End index of the specified range.
+            extended_cut_idx_spans (list[tuple[int, int]]): List of index spans for 
+                extended cuts.
+            subs (list[SubtitleField]): List of merged subtitles.
+            secondary_tokens (list[str]): List of secondary subtitle tokens.
 
         Returns:
-            tuple[list[str],list[tuple[int,int]]]:
-            - List of combined token strings.
-            - Tuple containing the start and end indices of the combined tokens. 
+            tuple[list[SubtitleField], list[SubtitleField]]:
+            - Updated list of merged subtitles with extended segments removed.
+            - List of subtitles representing the extended cuts.
         """
-        combos = []
-        indices_combos = []
-        sliced_tokens = tokens[start_index:end_index]
-        max_size = len(sliced_tokens)
+        reversed_list = extended_cut_idx_spans[::-1]
+        extended_cuts_subs: list[SubtitleField] = []
 
-        for i in range(max_size):
-            for j in range(1, max_size + 1):
-                if i + j <= max_size:
-                    combined = " ".join(sliced_tokens[i:i + j]).replace("\\N","")
-                    combos.append(combined)
-                    indices_combos.append((start_index+i, start_index+i+j))
+        for idx_span in reversed_list:
+            start_idx, end_idx = idx_span
 
-        return combos, indices_combos
+            extended_cut_segments = subs[start_idx:end_idx]
+            subs = subs[:start_idx] + subs[end_idx:]
+
+            if start_idx > 0:
+                token_start = subs[start_idx-1].secondary_token_spans[0]
+                if start_idx != len(subs):
+                    token_end = subs[start_idx].secondary_token_spans[0]
+                else:
+                    token_end = extended_cut_segments[-1].secondary_token_spans[1]
+                subs[start_idx-1].secondary_token_spans = (token_start, token_end)
+                subs[start_idx-1].secondary_text = " ".join(
+                    secondary_tokens[token_start:token_end]
+                )
+            else:
+                token_end = 0
+                subs[start_idx].secondary_token_spans = (
+                    token_end,
+                    subs[start_idx].secondary_token_spans[1]
+                )
+                subs[start_idx].secondary_text = " ".join(
+                    secondary_tokens[
+                        token_end:subs[start_idx].secondary_token_spans[1]
+                    ]
+                )
+
+            for sub in extended_cut_segments:
+                sub.secondary_text = ""
+                sub.score = -1
+                sub.secondary_token_spans = (token_end, token_end)
+
+            extended_cuts_subs.extend(extended_cut_segments)
+
+        return subs, extended_cuts_subs
+    
+    @staticmethod
+    def _denoising_binary_mask_with_hmm(
+            binary_mask: list[int]
+        ) -> tuple[list[tuple[int, int]], float | None]:
+        """
+        Applies HMM-based denoising to a binary mask to identify clusters of zeros.
+
+        If the binary mask is too short (less than 5 items), it will not apply HMM-based
+        denoising and cluster the binary states directly.
+
+        Args:
+            binary_mask (list[int]): Binary list representing subtitle presence.
+
+        Returns:
+            tuple[list[tuple[int, int]], float]:
+            - List of clusters (start, end) where state is zero.
+            - Probability of the HMM sequence.
+        """
+        if len(binary_mask) >= 5:
+            binary_array = np.array(binary_mask).reshape(-1, 1)
+
+            model = hmm.CategoricalHMM(n_components=2, n_iter=20, init_params="")
+            model.startprob_ = np.array([0.5, 0.5])
+            model.transmat_  = np.array([[0.99, 0.01],
+                                        [0.01, 0.99]])
+            model.emissionprob_ = np.array([[0.95, 0.05],
+                                            [0.05, 0.95]])
+
+            model.fit(binary_array)
+            logprob, states = model.decode(binary_array, algorithm="viterbi")
+            probability = math.exp(logprob / len(binary_array))
+        else:
+            states = binary_mask
+            probability = None
+
+        clusters = Merger._cluster_binary_states(states)
+
+        return clusters, probability
+
+    @staticmethod
+    def _make_secondary_text_presence_mask(
+            processed_subs: list[SubtitleField]
+        ) -> list[int]:
+        """
+        Creates a binary list indicating the presence of secondary text in subtitles.
+
+        Args:
+            processed_subs (list[SubtitleField]): List of processed subtitles.
+
+        Returns:
+            list[int]: Binary list where 1 indicates presence of secondary text, 0 
+                otherwise.
+        """
+        binary_mask: list[int] = []
+        for sub in processed_subs:
+            if sub.secondary_text:
+                binary_mask.append(1)
+            else:
+                binary_mask.append(0)
+        return binary_mask
+
+    @staticmethod
+    def _get_filter_list(sequence_filter_list: list[int]) -> list[tuple[int,int]]:
+        """
+        Generates a list of filter spans from a sequence list.
+
+        Args:
+            sequence_filter_list (list[int]): Sequence of indices.
+
+        Returns:
+            list[tuple[int, int]]: List of (start, end) index spans.
+        """
+        filter_list = []
+        for idx, _ in enumerate(sequence_filter_list):
+            sublist = sequence_filter_list[:idx+1]
+            start = min(sublist)
+            end = max(sublist)+1
+            filter_list.append((start, end))
+        return filter_list
+
+    @staticmethod
+    def _get_sequence_list(start: int, end: int) -> list[int]:
+        """
+        Generates a sequence list for filtering based on start and end indices.
+
+        Args:
+            start (int): Start index.
+            end (int): End index.
+
+        Returns:
+            list[int]: Sequence of indices for filtering.
+        """
+        sequence_to_filter = []
+        idx = start + math.ceil((end - start)/2) - 1
+        for i in range(end-start):
+            if i%2==0:
+                idx-=i
+            else:
+                idx+=i
+            sequence_to_filter.append(idx)
+        return sequence_to_filter
+
+    @staticmethod
+    def _cluster_binary_states(
+            states: npt.NDArray[np.int_] | list[int]
+        ) -> list[tuple[int, int]]:
+        """
+        Clusters consecutive zeros in a binary state list.
+
+        Args:
+            states (npt.NDArray[np.int_] | list[int]): List or array of binary states.
+
+        Returns:
+            list[tuple[int, int]]: List of (start, end) index spans for clusters of 
+                zeros.
+        """
+        clusters = []
+        i = 0
+        while i < len(states):
+            if states[i] == 0:
+                j = i
+                while j < len(states) and states[j] == 0:
+                    j += 1
+                clusters.append((i, j))
+                i = j
+            else:
+                i += 1
+        return clusters
 
     @staticmethod
     def _compute_score(
