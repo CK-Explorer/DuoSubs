@@ -36,8 +36,8 @@ class MergingMode(str, Enum):
     Enum for subtitle merging modes.
 
     Attributes:
-        SYNCED (str): All timelines overlap and both subtitles are same cuts.
-        MIXED (str): Some timelines not overlap and both subtitles are same cuts.
+        SYNCED (str): All timestamps overlap and both subtitles are from same cut.
+        MIXED (str): Some timestamps not overlap and both subtitles are from same cut.
         CUTS (str): Both subtitles are different cuts, with primary subtitles being 
             the extended or longer versions.
     """

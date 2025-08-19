@@ -31,11 +31,11 @@ class MergeArgs:
         batch_size (int): Batch size for model inference. Defaults to 32.
         model_precision (ModelPrecision): Precision modes for model inference. Defaults 
             to ModelPrecision.FLOAT32.
-        merging_modes (MergingMode): Modes for merging subtitles. 
+        merging_mode (MergingMode): Mode for merging subtitles. 
 
             Options include
-             - MergingMode.SYNCED (all timelines synced and same cut)
-             - MergingMode.MIXED (some timelines synced and same cut) 
+             - MergingMode.SYNCED (all timestamps synced and from the same cut)
+             - MergingMode.MIXED (some timestamps synced and from the same cut) 
              - MergingMode.CUTS (different cuts with primary being extended version)
             
             Defaults to MergingMode.SYNCED.

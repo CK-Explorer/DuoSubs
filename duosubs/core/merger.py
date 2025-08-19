@@ -136,7 +136,7 @@ class Merger:
         ) -> list[SubtitleField]:
         """
         Merges subtitles if the primary subtitle is an extended cut version, skipping 
-        non-overlapping extraction and applying additional filtering of extended cuts 
+        non-overlapping extraction and applying additional filtering of extended cut 
         and refinement steps.
 
         Args:
@@ -441,7 +441,7 @@ class Merger:
         """
         Filters and extracts extended segments from merged subtitles.
 
-        First, detects possible extended segments from binary list, with 1 indicating 
+        First, detects possible extended segments from binary mask, with 1 indicating 
         presence of secondary text, and 0 otherwise, which are further denoised by HMM.
 
         Then, filters out the extended segments based on the best sentence similarity, 
@@ -459,7 +459,7 @@ class Merger:
         Returns:
             tuple[list[SubtitleField], list[SubtitleField]]:
             - Filtered list of merged subtitles.
-            - List of subtitles representing extended cuts.
+            - List of subtitles representing extended cut.
         """
         binary_mask = Merger._make_secondary_text_presence_mask(subs)
         clusters, _ = Merger._denoising_binary_mask_with_hmm(binary_mask)
@@ -529,13 +529,13 @@ class Merger:
                 )
                 progress_callback(progress_percent) # incremental update
 
-        subs, extended_cuts_subs = Merger._remove_extended_segments(
+        subs, extended_cut_subs = Merger._remove_extended_segments(
             extended_cut_idx_spans,
             subs,
             self._secondary_tokens
         )
 
-        return subs, extended_cuts_subs
+        return subs, extended_cut_subs
 
     def eliminate_unnecessary_newline(
             self,
@@ -797,17 +797,17 @@ class Merger:
 
         Args:
             extended_cut_idx_spans (list[tuple[int, int]]): List of index spans for 
-                extended cuts.
+                extended cut.
             subs (list[SubtitleField]): List of merged subtitles.
             secondary_tokens (list[str]): List of secondary subtitle tokens.
 
         Returns:
             tuple[list[SubtitleField], list[SubtitleField]]:
             - Updated list of merged subtitles with extended segments removed.
-            - List of subtitles representing the extended cuts.
+            - List of subtitles representing the extended cut.
         """
         reversed_list = extended_cut_idx_spans[::-1]
-        extended_cuts_subs: list[SubtitleField] = []
+        extended_cut_subs: list[SubtitleField] = []
 
         for idx_span in reversed_list:
             start_idx, end_idx = idx_span
@@ -842,9 +842,9 @@ class Merger:
                 sub.score = -1
                 sub.secondary_token_spans = (token_end, token_end)
 
-            extended_cuts_subs.extend(extended_cut_segments)
+            extended_cut_subs.extend(extended_cut_segments)
 
-        return subs, extended_cuts_subs
+        return subs, extended_cut_subs
     
     @staticmethod
     def _denoising_binary_mask_with_hmm(

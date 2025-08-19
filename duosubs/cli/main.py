@@ -52,10 +52,11 @@ Supported format:\n
 {DEFAULT_SUPPORTED_SUBS_STR}\n\n
 
 Merging Modes (--mode):\n
-  synced - all timelines overlap (same cut)\n
-  mixed  - some timelines overlap, some or all don't (same cut)\n
+  synced - all timestamps overlap (same cut)\n
+  mixed  - some timestamps overlap, some or all don't (same cut)\n
   cuts   - different cuts (with primary being extended or longer version)\n
-* Note that in mixed and cuts modes, subtitles should not contain scene annotations.\n\n
+* Note: If possible, subtitles in Mixed and Cuts modes should not contain scene 
+annotations.\n\n
 
 Usage examples:\n
   duosubs merge -p en.srt -s es.srt --model LaBSE\n
@@ -105,7 +106,10 @@ def merge(
     # Merge Settings
     mode: MergingMode = typer.Option(
         MergingMode.SYNCED, 
-        help="Merging mode, refer to the top help",
+        help=(
+            "Merging mode, "
+            "refer to the top of this help menu for more information"
+        ),
         case_sensitive=False
     ),
     # deprecated
