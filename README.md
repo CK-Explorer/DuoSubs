@@ -192,7 +192,7 @@ you can run:
 
 - via Web UI
 
-    > In **Configurations → Model & Device → Sentence Transformer Model**, replace `sentence-transformers/LaBSE` with `Qwen/Qwen3-Embedding-0.6B`.
+    In **Configurations → Model & Device → Sentence Transformer Model**, replace `sentence-transformers/LaBSE` with `Qwen/Qwen3-Embedding-0.6B`.
 
 
 > [!WARNING]
@@ -233,7 +233,7 @@ To merge with a specific mode (e.g. ``cuts``), run:
 
 - via Web UI
 
-    > In **Configurations** → **Alignment Behavior** → **Merging Mode**, choose ``Cuts``.
+    In **Configurations** → **Alignment Behavior** → **Merging Mode**, choose ``Cuts``.
 
 
 > [!TIP]
