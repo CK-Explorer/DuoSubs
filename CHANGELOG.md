@@ -1,3 +1,16 @@
+## v1.1.0 (2025-08-19)
+
+### Feat
+
+- add merging mode selection in UI
+- export MergingMode enum in __init__.py
+- add merging mode options and deprecate ignore_non_overlap_filter
+- add `merge_subtitle_extended_cut` for merging subtitles with primary being extended cut version
+
+### Refactor
+
+- merging mode handling in subtitle pipeline
+
 ## v1.0.1 (2025-08-14)
 
 ### Fix
