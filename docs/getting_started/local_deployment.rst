@@ -222,6 +222,17 @@ This tool supports three merging modes:
      - ✗ (primary being longer version)
      - ✗
 
+Here are some of the simple guidelines to choose the appropriate mode:
+
+- If both subtitle files are **timestamp-synced**, use ``synced`` for the cleanest result.
+- If timestamps **drift** or only **partially overlap**, use ``mixed``.
+- If subtitles come from **different editions** of the video, with **primary** subtitles being the **extended** or **longer version**, use ``cuts``.
+
+.. tip::
+
+    For ``mixed`` and ``cuts`` modes, try to use subtitle files **without scene annotations** 
+    if possible, as they may reduce alignment quality.
+
 To merge with a specific mode (e.g. ``cuts``), run:
 
 .. tab:: Command Line
@@ -240,7 +251,7 @@ To merge with a specific mode (e.g. ``cuts``), run:
         args = MergeArgs(
             primary="primary_sub.srt",
             secondary="secondary_sub.srt",
-            merging_mode=MergingMode.CUTS
+            merging_mode=MergingMode.CUTS   # Modes available: MergingMode.SYNCED, MergingMode.MIXED, MergingMode.CUTS
         )
 
         # Load, merge, and save subtitles.
@@ -251,16 +262,3 @@ To merge with a specific mode (e.g. ``cuts``), run:
     .. raw:: html
         
         <div class="code-like">In <code class="docutils literal notranslate"><span class="pre">Configurations</span></code> → <code class="docutils literal notranslate"><span class="pre">Alignment Behavior</span></code> → <code class="docutils literal notranslate"><span class="pre">Merging Mode</span></code>, choose <code class="docutils literal notranslate"><span class="pre">Cuts</span></code>.</div>
-
-.. tip::
-
-    Here are some of the simple guidelines to choose the appropriate mode:
-
-    - If both subtitle files are **timestamp-synced**, use ``synced`` for the cleanest result.
-    - If timestamps **drift** or only **partially overlap**, use ``mixed``.
-    - If subtitles come from **different editions** of the video, with **primary** subtitles being the **extended** or **longer version**, use ``cuts``.
-    
-    .. note::
-
-        For ``mixed`` and ``cuts`` modes, try to use subtitle files **without scene annotations** 
-        if possible, as they may reduce alignment quality.
