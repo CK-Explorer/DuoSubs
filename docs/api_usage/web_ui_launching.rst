@@ -2,7 +2,7 @@ Web UI Launching
 =================
 
 ``DuoSubs`` Web UI is built using `Gradio <https://www.gradio.app/>`_. Since
-:meth:`duosubs.create_duosubs_gr_blocks` is a ``gradio.Blocks`` instance, you can use 
+:func:`duosubs.create_duosubs_gr_blocks` is a ``gradio.Blocks`` instance, you can use 
 any method available in ``gradio.Blocks``, see 
 `Gradio Blocks Docs <https://www.gradio.app/docs/gradio/blocks>`_.
 
@@ -10,7 +10,7 @@ Run the Server over HTTPS
 --------------------------
 
 The following example demonstrates how to create ``webui`` as a ``gradio.Blocks`` instance 
-from :meth:`duosubs.create_duosubs_gr_blocks`, and use its built-in methods,
+from :func:`duosubs.create_duosubs_gr_blocks`, and use its built-in methods,
 like ``queue`` and ``launch`` to start the web server with the SSL-encryption enabled.
 
 .. code-block:: python
@@ -45,7 +45,7 @@ Configuring Cache Deletion Frequency and Age
 
 ``DuoSubs`` Web UI stores uploaded and merged files in its cache directory.
 To automatically clean up old cache files, set the parameters 
-``cache_delete_frequency`` and ``cache_delete_age`` in :meth:`duosubs.create_duosubs_gr_blocks`.
+``cache_delete_frequency`` and ``cache_delete_age`` in :func:`duosubs.create_duosubs_gr_blocks`.
 
 In the example below, ``cache_delete_frequency`` is set to 3600 seconds (1 hour) and 
 ``cache_delete_age`` to 7200 seconds (2 hours). This means the server will scan the 

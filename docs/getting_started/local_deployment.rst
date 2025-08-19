@@ -22,8 +22,9 @@ Installation
 Basic Usage
 ------------
 
-Let's say you have two subtitle files — in any supported format like `SRT`, `VTT`, 
-`MPL2`, `TTML`, `ASS`, `SSA` — for example:
+Let's say you have two subtitle files, from the **same cut** and all their **timestamps overlap** 
+(see :ref:`Merging Modes <merging_mode>` for other subtitle file types) — 
+in any supported format like `SRT`, `VTT`, `MPL2`, `TTML`, `ASS`, `SSA` — for example:
 
   - `primary_sub.srt`
   - `secondary_sub.srt`
@@ -168,7 +169,7 @@ otherwise it falls back to CPU.
 
         .. raw:: html
             
-            <div class="code-like">In <code class="docutils literal notranslate"><span class="pre">Basic Configurations</span></code> → <code class="docutils literal notranslate"><span class="pre">Model & Device</span></code> → <code class="docutils literal notranslate"><span class="pre">Sentence Transformer Model</span></code>, replace <code class="docutils literal notranslate"><span class="pre">sentence-transformers/LaBSE</span></code> with <code class="docutils literal notranslate"><span class="pre">Qwen/Qwen3-Embedding-0.6B</span></code>.</div>
+            <div class="code-like">In <code class="docutils literal notranslate"><span class="pre">Configurations</span></code> → <code class="docutils literal notranslate"><span class="pre">Model & Device</span></code> → <code class="docutils literal notranslate"><span class="pre">Sentence Transformer Model</span></code>, replace <code class="docutils literal notranslate"><span class="pre">sentence-transformers/LaBSE</span></code> with <code class="docutils literal notranslate"><span class="pre">Qwen/Qwen3-Embedding-0.6B</span></code>.</div>
 
     .. warning::
 
@@ -196,3 +197,70 @@ cleaner formatting.
 
 You can **customize** all these options in the configurations section of the Web UI, 
 :doc:`CLI </cli_usage/merge>` or :doc:`Python API </api_references/core_subtitle_merging>`.
+
+.. _merging_mode:
+
+Merging Modes
+^^^^^^^^^^^^^^
+
+This tool supports three merging modes:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 40 40
+
+   * - Mode
+     - Same cut
+     - Timestamps overlap
+   * - ``synced``
+     - ✓
+     - ✓ (all timestamps)
+   * - ``mixed``
+     - ✓
+     - ✗ (some or all may not overlap)
+   * - ``cuts``
+     - ✗ (primary being longer version)
+     - ✗
+
+To merge with a specific mode (e.g. ``cuts``), run:
+
+.. tab:: Command Line
+    
+    .. code-block:: bash
+
+        duosubs merge -p primary_sub.srt -s secondary_sub.srt --mode cuts
+
+.. tab:: Python API
+
+    .. code-block:: python
+
+        from duosubs import MergeArgs, MergingMode, run_merge_pipeline
+
+        # Store all arguments
+        args = MergeArgs(
+            primary="primary_sub.srt",
+            secondary="secondary_sub.srt",
+            merging_mode=MergingMode.CUTS
+        )
+
+        # Load, merge, and save subtitles.
+        run_merge_pipeline(args, print)
+
+.. tab:: Web UI
+
+    .. raw:: html
+        
+        <div class="code-like">In <code class="docutils literal notranslate"><span class="pre">Configurations</span></code> → <code class="docutils literal notranslate"><span class="pre">Alignment Behavior</span></code> → <code class="docutils literal notranslate"><span class="pre">Merging Mode</span></code>, choose <code class="docutils literal notranslate"><span class="pre">Cuts</span></code>.</div>
+
+.. tip::
+
+    Here are some of the simple guidelines to choose the appropriate mode:
+
+    - If both subtitle files are **timestamp-synced**, use ``synced`` for the cleanest result.
+    - If timestamps **drift** or only **partially overlap**, use ``mixed``.
+    - If subtitles come from **different editions** of the video, with **primary** subtitles being the **extended** or **longer version**, use ``cuts``.
+    
+    .. note::
+
+        For ``mixed`` and ``cuts`` modes, try to use subtitle files **without scene annotations** 
+        if possible, as they may reduce alignment quality.

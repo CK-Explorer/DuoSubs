@@ -121,7 +121,19 @@ Model & Inference
 Alignment Behavior
 ^^^^^^^^^^^^^^^^^^^
 
-.. _ignore-non-overlap-filter:
+-   | ``--mode <choice>``
+    | Set the **subtitles merging mode**.
+
+    Choices:
+
+    - ``synced`` — **all** the timestamps of both subtitles **overlap** and they are from the **same cut**.
+    - ``mixed`` — **some** timestamps **not overlap** and both subtitles are from the **same cut**.
+    - ``cuts`` — both subtitles are from **different cuts**, with **primary** being **extended** or **longer version**
+
+    .. tip::
+
+        For **better merging accuracy**, subtitles in ``mixed`` and ``cuts`` modes should 
+        **not contain scene annotation** if possible.
 
 -   | ``--ignore-non-overlap-filter``
     | **Ignore** the step of **extracting** and **filtering non-overlap subtitle**. 
@@ -134,13 +146,11 @@ Alignment Behavior
 
         duosubs merge -p primary_sub.srt -s secondary_sub.srt --ignore-non-overlap-filter
 
-    .. tip::
-        This option is only **applicable** when **some** or **all**  of the matching lines from 
-        both subtitles are **not overlapped**. 
+    .. deprecated:: 1.1.0
 
-        If this is **not** the case, please **do not enable** this option.
-
-        See :ref:`known limitations <known-limitations>` for more details.
+    Use ``--mode <choice>`` instead.
+    If set to ``True``, this is equivalent to ``--mode mixed``; 
+    if ``False``, it is equivalent to ``--mode synced``.
 
 Output Styling
 ^^^^^^^^^^^^^^^
