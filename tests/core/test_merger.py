@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Callable, TypedDict, cast
 from unittest.mock import patch
 
+import numpy as np
 import pytest
 import torch
 from sentence_transformers import SentenceTransformer
@@ -27,8 +28,8 @@ DATA_ALIGN_SUBS_WITH_SEC_TOKENS: Path = DATA_PATH / "align_subs_with_sec_tokens.
 DATA_EXTRACT_FILTER_NON_OVERLAP: Path = DATA_PATH / "extract_filter_non_overlap.yaml"
 DATA_FILTER_TOKEN_SPANS: Path = DATA_PATH / "filter_token_spans.yaml"
 DATA_FILTER_TOKENS_AND_STYLES: Path = DATA_PATH / "filter_tokens_and_styles.yaml"
-DATA_GENERATE_ALL_COMBINATIONS: Path =(
-    DATA_PATH / "generate_all_consecutive_combinations.yaml"
+DATA_REMOVE_EXTENDED_SEGMENTS: Path =(
+    DATA_PATH / "remove_extended_segments.yaml"
 )
 DATA_GET_PROGRESS_PERCENTAGE: Path =  DATA_PATH / "get_progress_percentage.yaml"
 
@@ -150,23 +151,13 @@ class FilterTokensAndStylesTest(TypedDict):
     expected_tokens: list[str]
     expected_styles: list[str]
 
-class GenerateCombinationsTest(TypedDict):
-    """
-    Represents a test case for the _generate_all_consecutive_combinations function.
-
-    Attributes:
-        tokens (list[str]): List of tokens to generate combinations from.
-        start: int: Start index for combinations.
-        end: int: End index for combinations.
-        expected_combos (list[str]): Expected combinations of tokens.
-        expected_indices (list[tuple[int, int]]): Expected start and end indices for 
-            each combination.
-    """
-    tokens: list[str]
-    start: int
-    end: int
-    expected_combos: list[str]
-    expected_indices: list[tuple[int, int]]
+class RemoveExtendedSegments(TypedDict):
+    name: str
+    extended_cut_idx_spans: list[tuple[int,int]]
+    subs: list[SubtitleFieldDict]
+    secondary_tokens: list[str]
+    non_extended_cut_subs: list[SubtitleFieldDict]
+    extended_cut_subs: list[SubtitleFieldDict]
 
 class GetProgressPercentageTest(TypedDict):
     """
@@ -390,26 +381,123 @@ def test_filter_tokens_and_styles(case: FilterTokensAndStylesTest) -> None:
     assert output_styles == case["expected_styles"]
 
 @pytest.mark.parametrize(
-    "case",
-    cast(
-        list[GenerateCombinationsTest],
-        load_test_cases(DATA_GENERATE_ALL_COMBINATIONS)
+        "case",
+        cast(
+            list[RemoveExtendedSegments], 
+            load_test_cases(DATA_REMOVE_EXTENDED_SEGMENTS)
+        )
     )
-)
-def test_generate_all_consecutive_combinations(case: GenerateCombinationsTest) -> None:
+def test_remove_extended_segments(case: RemoveExtendedSegments) -> None:
     """
-    Test the _generate_all_consecutive_combinations function for correct token 
-    combinations and indices.
+    Test the _remove_extended_segments function for correct removal of extended
+    segments from subtitles based on provided indices and secondary tokens.
 
     Args:
-        case (GenerateCombinationsTest): Test case data loaded from YAML.
+        case (RemoveExtendedSegments): Test case data loaded from YAML.
     """
-    combos, indices = Merger._generate_all_consecutive_combinations(
-        case["tokens"], case["start"], case["end"]
+    def _obtain_subtitlefield_lists(
+            data: list[SubtitleFieldDict]
+        ) -> list[SubtitleField]:
+        subs = [SubtitleField(**s) for s in data]
+        for sub in subs:
+            start, end = sub.secondary_token_spans
+            sub.secondary_token_spans = (start, end)
+        return subs
+
+    input_subs = _obtain_subtitlefield_lists(case["subs"])
+    expected_updated_subs = _obtain_subtitlefield_lists(case["non_extended_cut_subs"])
+    expected_extended_cut_subs = _obtain_subtitlefield_lists(case["extended_cut_subs"])
+    
+    updated_subs, extended_cut_subs = Merger._remove_extended_segments(
+        case["extended_cut_idx_spans"],
+        input_subs,
+        case["secondary_tokens"]
     )
-    tuple_indices = [tuple(pair) for pair in case["expected_indices"]]
-    assert combos == case["expected_combos"]
-    assert indices == tuple_indices
+
+    assert updated_subs == expected_updated_subs
+    assert extended_cut_subs == expected_extended_cut_subs
+
+@pytest.mark.parametrize(
+        "input",
+        [
+            [0,1,1,0,1,1,0],
+            [1,0,1,1,1,1,1],
+            [1,1,1,1],
+            [0,0,0],
+            []
+        ]
+    )
+def test_make_secondary_text_presence_mask(input: list[int]) -> None:
+    """
+    Test the _make_secondary_text_presence_mask function for converting a list of
+    SubtitleField objects to a binary list based on secondary text presence.
+
+    Args:
+        input (list[int]): List of expected binary values.
+    """
+    subs = []
+    for state in input:
+        subs.append(
+            SubtitleField(secondary_text="Test" if state == 1 else "")
+        )
+    assert input == Merger._make_secondary_text_presence_mask(subs)
+
+@pytest.mark.parametrize(
+        "input, output",
+        [
+            ([7,8,6,9,5], [(7,8),(7,9),(6,9),(6,10),(5,10)]),
+            ([7], [(7,8)]),
+            ([],[]),
+        ]
+    )
+def test_get_filter_list(input: list[int], output: list[tuple[int,int]]) -> None:
+    """
+    Test the _get_filter_list function for correct generation of filter spans.
+
+    Args:
+        input (list[int]): Input sequence of indices.
+        output (list[tuple[int, int]]): Expected filter spans.
+    """
+    assert output == Merger._get_filter_list(input)
+
+@pytest.mark.parametrize(
+        "start, end, output",
+        [
+            (5, 10, [7,8,6,9,5]),
+            (5, 11, [7,8,6,9,5,10]),
+            (5, 5, []),
+        ]
+    )
+def test_get_sequence_list(start: int, end: int, output: list[int]) -> None:
+    """
+    Test the _get_sequence_list function for correct generation of sequence list.
+
+    Args:
+        start (int): Start index.
+        end (int): End index.
+        output (list[int]): Expected sequence list.
+    """
+    assert output == Merger._get_sequence_list(start, end)
+
+@pytest.mark.parametrize(
+        "input, output",
+        [
+            ([1,1,1,1,1,1,1,1,1,1,1,1,1], []),
+            ([1,1,1,0,0,0,1,1,1,1,0,1,1], [(3,6), (10,11)]),
+            ([0,0,0,0,0,0,0,0,0,0,0,0,0], [(0,13)])
+        ]
+    )
+def test_cluster_binary_states(input: list[int], output: list[tuple[int,int]]) -> None:
+    """
+    Test the _cluster_binary_states function for correct clustering of binary states.
+
+    Args:
+        input (list[int]): Input binary state list.
+        output (list[tuple[int, int]]): Expected clusters of zeros.
+    """
+    np_input = np.array(input)
+    assert output == Merger._cluster_binary_states(np_input)
+    assert output == Merger._cluster_binary_states(input)
 
 # ----------------------------
 # Utility Functions Tests

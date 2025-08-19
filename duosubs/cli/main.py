@@ -17,7 +17,13 @@ from typing import List, NoReturn, Optional
 import typer
 
 from duosubs.common.constants import SUPPORTED_SUB_EXT
-from duosubs.common.enums import DeviceType, ModelPrecision, OmitFile, SubtitleFormat
+from duosubs.common.enums import (
+    DeviceType,
+    MergingMode,
+    ModelPrecision,
+    OmitFile,
+    SubtitleFormat,
+)
 from duosubs.common.exceptions import (
     LoadModelError,
     LoadSubsError,
@@ -45,9 +51,17 @@ Merge two subtitle files by aligning them based on semantic meaning.\n
 Supported format:\n
 {DEFAULT_SUPPORTED_SUBS_STR}\n\n
 
-Usage example:\n
-duosubs merge -p en.srt -s es.srt --model LaBSE\n
-duosubs merge -p en.srt -s es.srt --format-all srt --output-dir output/\n
+Merging Modes (--mode):\n
+  synced - all timestamps overlap (same cut)\n
+  mixed  - some timestamps overlap, some or all don't (same cut)\n
+  cuts   - different cuts (with primary being extended or longer version)\n
+* Note: If possible, subtitles in Mixed and Cuts modes should not contain scene 
+annotations.\n\n
+
+Usage examples:\n
+  duosubs merge -p en.srt -s es.srt --model LaBSE\n
+  duosubs merge -p en.srt -s es.srt --mode cuts\n
+  duosubs merge -p en.srt -s es.srt --format-all srt --output-dir output/\n
 """)
 def merge(
     # Input Subtitles
@@ -90,12 +104,18 @@ def merge(
     ),
 
     # Merge Settings
-    ignore_non_overlap_filter: bool = typer.Option(
-        False,
+    mode: MergingMode = typer.Option(
+        MergingMode.SYNCED, 
         help=(
-            "Use only if both subtitles are semantically identical "
-            "and contain no added scenes or annotations."
-        )
+            "Merging mode, "
+            "refer to the top of this help menu for more information"
+        ),
+        case_sensitive=False
+    ),
+    # deprecated
+    ignore_non_overlap_filter: bool | None = typer.Option(
+        None,
+        hidden=True
     ),
 
     # Subtitle Content Options
@@ -148,6 +168,20 @@ def merge(
         help="Output directory. Defaults to primary subtitle's location. "
     )
 ) -> None:
+    # deprecation warning
+    if ignore_non_overlap_filter is not None:
+        typer.secho(
+            (   
+                "[notice] "
+                "--ignore-non-overlap-filter is deprecated since v1.1.0"
+                "and will be removed in v2.0.0. \n"
+                "[notice] Use --mode instead."
+            ),
+            fg=typer.colors.YELLOW,
+            err=True,
+        )
+        mode = MergingMode.MIXED if ignore_non_overlap_filter else MergingMode.SYNCED
+
     args = MergeArgs(
         primary=primary,
         secondary=secondary,
@@ -155,7 +189,7 @@ def merge(
         device=device,
         batch_size=batch_size,
         model_precision=model_precision,
-        ignore_non_overlap_filter=ignore_non_overlap_filter,
+        merging_mode=mode,
         retain_newline=retain_newline,
         secondary_above=secondary_above,
         omit=omit,
@@ -178,7 +212,7 @@ def merge(
         _fail(str(e4), 4)
 
 @app.command(help="""
-Launch the DuoSubs web server with limited customisable settings.\n
+Launch the DuoSubs web server with customisable settings.\n
 
 Usage example:\n
 duosubs launch-webui\n

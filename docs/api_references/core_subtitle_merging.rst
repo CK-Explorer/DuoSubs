@@ -107,6 +107,9 @@ Enumerations for device selection, model precision, file omission, and supported
 .. autoclass:: duosubs.ModelPrecision
     :members:
 
+.. autoclass:: duosubs.MergingMode
+    :members:
+
 .. autoclass:: duosubs.OmitFile
     :members:
 

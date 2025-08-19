@@ -13,22 +13,26 @@ Behind the Scenes
     |   • **punctuations** as line breaks for **space** separated languages.
     |   • **punctuations** and **whitespaces** as line breaks for **non-space** separated languages.
 
-3.  | **Extract and filter non-overlapping subtitles** *(optional)*
+3.  | **Extract and filter non-overlapping subtitles** (``synced`` *mode only*)
     | Subtitle segments that do not overlap in time are optionally extracted and retained for later combination.
 
 4.  | **Estimate tokenized subtitle pairings using DTW**  
     | For segments with overlapping timestamps, the pairing is estimated using Dynamic Time Warping (DTW), based on semantic similarity between tokenized texts.
 
 5.  | **Refine alignment using a sliding window approach**
-    | The initial alignment is adjusted using local neighborhood context in a sliding window. This step is important because the DTW-based pairing may result in duplicate secondary subtitles.
+    | The initial alignment is adjusted using local neighborhood context in a sliding window with a size of 3. This step is important because the DTW-based pairing may result in duplicate secondary subtitles.
 
-6.  | **Combine aligned and non-overlapping subtitles**
+6.  | **Extract and filter extended subtitles from the primary track** (``cuts`` *mode only*)
+    | Identifies extended subtitle spans with HMM-denoised binary masks, then extract them using progressive similarity filtering.
+
+7.  | **Refine alignment using a sliding window approach**
+    | The alignment is adjusted again in a sliding window with a size of 2 subtitle segments to achieve a better result.
+
+8.  | **Combine aligned and non-overlapping subtitles or extended subtitles**
     | The aligned overlapping segments are merged with the filtered non-overlapping ones to produce a coherent bilingual subtitle track.
 
-7.  | **Eliminate Unnecessary Newline** 
+9.  | **Eliminate Unnecessary Newline** 
     | The unnecessary extra newlines are cleaned in subtitle texts.
-
-.. _known-limitations:
 
 Known Limitations
 ==================
@@ -40,34 +44,5 @@ Known Limitations
     subtitles line due to the :ref:`tokenization algorithm <tokenization>` used.
 -   **Secondary** subtitles might **contain extra whitespace** as a result of token-level 
     merging.
--   The algorithm may **not** work reliably if the **timestamps** of some matching lines 
-    **don't overlap** at all.
-
-    .. tip::
-
-        There are three possible ways to address it:
-
-        1. If **all** subtitle lines are completely **out of sync**, consider using another subtitle syncing tool first to align them, e.g.
-
-            - `smacke/ffsubsync <https://github.com/smacke/ffsubsync>`_
-            - `sc0ty/subsync <https://github.com/sc0ty/subsync>`_
-            - `kaegi/alass <https://github.com/kaegi/alass>`_
-            
-           before using this tool with ``ignore-non-overlap-filter`` **disabled**.
-
-           Alternatively, see points 2 and 3.
-
-        2. If both subtitle files are **known** to be **perfectly semantically aligned**, meaning:
-
-            - **matching dialogue contents**
-            - **no extra lines** like scene annotations or bonus Director's Cut stuff.
-
-           Then, by **enabling** the ``ignore-non-overlap-filter`` option in either case,
-
-            - Web UI: ``Advanced Configurations`` → ``Alignment Behavior`` → ``Ignore Non-Overlap Filter``
-            - CLI: :ref:`ignore-non-overlap-filter <ignore-non-overlap-filter>`
-            - Python API: :meth:`duosubs.MergeArgs`, :meth:`duosubs.Merger.merge_subtitle`
-
-           to skip the overlap check — the merge should go smoothly from there.
-
-        3. If the subtitle **timings** are **off** and the two subtitle files **don't fully match in content**, the algorithm likely **won't** produce great results. Still, you can try merging them with ``ignore-non-overlap-filter`` **enabled**.
+-   In ``mixed`` and ``cuts`` modes, the algorithm may **not work reliably** since matching lines 
+    have **no timestamp overlap**, and either subtitle could contain **extra** or **missing lines**.

@@ -15,7 +15,7 @@ import torch
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
-from duosubs.common.enums import DeviceType, OmitFile, SubtitleFormat
+from duosubs.common.enums import DeviceType, MergingMode, OmitFile, SubtitleFormat
 from duosubs.common.exceptions import (
     LoadModelError,
     LoadSubsError,
@@ -76,7 +76,7 @@ def run_merge_pipeline(
     if logger:
         with tqdm(
             total=100,
-            desc= "Stage 3 → Merging subtitles",
+            desc= f"Stage 3 → Merging subtitles ({args.merging_mode.value} mode)",
             bar_format="{l_bar}{bar}| [{elapsed}<{remaining}, {rate_fmt}{postfix}]"
         ) as pbar:
             callback = make_progress_callback(pbar)
@@ -195,7 +195,7 @@ def merge_subtitles(
 
     Args:
         args (MergeArgs): Arguments for subtitle merging workflow, requires only
-            args.ignore_non_overlap_filter, args.batch_size.
+            args.merging_mode, args.batch_size.
         model (SentenceTransformer): Loaded sentence transformer model.
         primary_subs_data (SubtitleData): Primary subtitles data, containing subtitles, 
             styles, tokens, and styles for each token.
@@ -216,13 +216,30 @@ def merge_subtitles(
         stage_logger()
     try:
         merger = Merger(primary_subs_data, secondary_subs_data)
-        merged_subs = merger.merge_subtitle(
-            model,
-            stop_bit,
-            args.ignore_non_overlap_filter,
-            args.batch_size,
-            progress_callback=progress_callback
-        )
+
+        if args.merging_mode == MergingMode.CUTS:
+            merged_subs = merger.merge_subtitle_extended_cut(
+                model,
+                stop_bit,
+                args.batch_size,
+                progress_callback=progress_callback
+            )
+        elif args.merging_mode == MergingMode.MIXED:
+            merged_subs = merger.merge_subtitle(
+                model,
+                stop_bit,
+                True,
+                args.batch_size,
+                progress_callback=progress_callback
+            )
+        else:
+            merged_subs = merger.merge_subtitle(
+                model,
+                stop_bit,
+                False,
+                args.batch_size,
+                progress_callback=progress_callback
+            )
     except Exception as e:
         raise MergeSubsError("Error in merging subtitles:", e) from e
 

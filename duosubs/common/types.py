@@ -7,11 +7,12 @@ ensures type safety when passing configuration between CLI, loading, merging, an
 saving routines.
 """
 
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Union
 
-from .enums import DeviceType, ModelPrecision, OmitFile, SubtitleFormat
+from .enums import DeviceType, MergingMode, ModelPrecision, OmitFile, SubtitleFormat
 
 
 @dataclass
@@ -30,8 +31,17 @@ class MergeArgs:
         batch_size (int): Batch size for model inference. Defaults to 32.
         model_precision (ModelPrecision): Precision modes for model inference. Defaults 
             to ModelPrecision.FLOAT32.
-        ignore_non_overlap_filter (bool): Whether to ignore non-overlapping subtitles 
-            filter. Defaults to False.
+        merging_mode (MergingMode): Mode for merging subtitles. 
+
+            Options include
+             - MergingMode.SYNCED (all timestamps synced and from the same cut)
+             - MergingMode.MIXED (some timestamps synced and from the same cut) 
+             - MergingMode.CUTS (different cuts with primary being extended version)
+            
+            Defaults to MergingMode.SYNCED.
+
+            Note that for MIXED and CUTS modes, it works best if both subtitles does
+            not have any added scene annotations. 
         retain_newline (bool): Whether to retain '\\N' line breaks in output. Defaults 
             to True.
         secondary_above (bool): Whether to show secondary subtitle above primary. 
@@ -50,6 +60,16 @@ class MergeArgs:
             Defaults to None.
         output_dir (Optional[Path]): Output directory for generated files. Defaults to 
             None.
+        ignore_non_overlap_filter (bool | None):
+            .. deprecated:: 1.1.0
+
+            Whether to ignore non-overlapping filter when merging subtitles.
+
+            If True, equivalent to MergingMode.MIXED.
+            If False, equivalent to MergingMode.SYNCED.
+
+            Deprecated since v1.1.0 and will be removed in v2.0.0. 
+            Use `merging_mode` instead.
     """
 
     primary: Union[Path, str] = ""
@@ -58,7 +78,7 @@ class MergeArgs:
     device: DeviceType = DeviceType.AUTO
     batch_size: int = 32
     model_precision: ModelPrecision = ModelPrecision.FLOAT32
-    ignore_non_overlap_filter: bool = False
+    merging_mode: MergingMode = MergingMode.SYNCED
     retain_newline: bool = False
     secondary_above: bool = False
     omit: List[OmitFile] = field(default_factory=lambda: [OmitFile.EDIT])
@@ -68,3 +88,20 @@ class MergeArgs:
     format_secondary: Optional[SubtitleFormat] = None
     output_name: Optional[str] = None
     output_dir: Optional[Path]= None
+
+    # Deprecated Field
+    ignore_non_overlap_filter: bool | None = None
+
+    def __post_init__(self) -> None:
+        if self.ignore_non_overlap_filter is not None:
+            warnings.warn(
+                "MergeArgs.ignore_non_overlap_filter is deprecated "
+                "and will be removed in v2.0.0. "
+                "Use MergeArgs.merging_mode=<MergingMode> instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            if self.ignore_non_overlap_filter:
+                self.merging_mode = MergingMode.MIXED
+            else:
+                self.merging_mode = MergingMode.SYNCED

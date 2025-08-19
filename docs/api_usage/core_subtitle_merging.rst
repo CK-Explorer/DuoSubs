@@ -11,8 +11,8 @@ Here's the most **simplest** way of merging two subtitles using the merging pipe
 
 .. code-block:: python
 
-    from duosubs import (DeviceType, MergeArgs, ModelPrecision, OmitFile,
-                        SubtitleFormat, run_merge_pipeline)
+    from duosubs import (DeviceType, MergeArgs, MergingMode, ModelPrecision,
+                         OmitFile, SubtitleFormat, run_merge_pipeline)
 
     # Store all arguments
     args = MergeArgs(
@@ -27,7 +27,7 @@ Here's the most **simplest** way of merging two subtitles using the merging pipe
         model_precision=ModelPrecision.FLOAT16, # precision mode for model inference: FLOAT32 (default), FLOAT16, or BFLOAT16
 
         # Alignment Behavior (Optional)
-        ignore_non_overlap_filter=False,    # whether to ignore non-overlapping subtitles filter: True or False (default)
+        merging_mode=MergingMode.CUTS,      #  Mode for merging subtitles: SYNCED (default), MIXED, CUTS
         
         # Output Styling (Optional)
         retain_newline=False,       # whether to retain "\N" line breaks in output: True (default) or False
@@ -55,8 +55,8 @@ Here's the most **simplest** way of merging two subtitles using the merging pipe
     # Load, merge, and save subtitles, all inside the pipeline
     run_merge_pipeline(args, print)
 
-Just create a :meth:`duosubs.MergeArgs` instance, tweak the settings needed, and pass it to 
-:meth:`duosubs.run_merge_pipeline`. It'll generate ``processed_sub.zip`` containing the subtitle 
+Just create a :class:`duosubs.MergeArgs` instance, tweak the settings needed, and pass it to 
+:func:`duosubs.run_merge_pipeline`. It'll generate ``processed_sub.zip`` containing the subtitle 
 files based on the specified omit settings.
 
 Modular Pipeline Usage
@@ -64,13 +64,13 @@ Modular Pipeline Usage
 
 For more **flexibility**, you can use the modular pipeline, i.e.
 
-    - :meth:`duosubs.load_subtitles`
-    - :meth:`duosubs.load_sentence_transformer_model`
-    - :meth:`duosubs.merge_subtitles`
-    - :meth:`duosubs.save_subtitles_in_zip`
+    - :func:`duosubs.load_subtitles`
+    - :func:`duosubs.load_sentence_transformer_model`
+    - :func:`duosubs.merge_subtitles`
+    - :func:`duosubs.save_subtitles_in_zip`
 
 The following code lets you to add extra steps like pre- or post-processing of subtitles between 
-:meth:`duosubs.merge_subtitles`.
+:func:`duosubs.merge_subtitles`.
 
 .. code-block:: python
 
@@ -80,8 +80,8 @@ The following code lets you to add extra steps like pre- or post-processing of s
     from tqdm import tqdm
 
     from duosubs import (LoadModelError, LoadSubsError, MergeArgs, MergeSubsError,
-                        SaveSubsError, load_sentence_transformer_model,
-                        load_subtitles, merge_subtitles, save_subtitles_in_zip)
+                         SaveSubsError, load_sentence_transformer_model,
+                         load_subtitles, merge_subtitles, save_subtitles_in_zip)
 
     # Store all arguments
     args = MergeArgs(
@@ -111,14 +111,14 @@ The following code lets you to add extra steps like pre- or post-processing of s
         # 1. Load both subtitles
         primary_subs_data, secondary_subs_data = load_subtitles(
             args, 
-            lambda: print("Stage 1 -> Loading subtitles") # Status logger
+            lambda: print("Stage 1 → Loading subtitles") # Status logger
         )
 
         # 2. Load the Sentence Transformer model for inference
         model = load_sentence_transformer_model(
             args,
             lambda model_name, device:
-            print(f"Stage 2 -> Loading {model_name} on {device.upper()}") # Status logger
+            print(f"Stage 2 → Loading {model_name} on {device.upper()}") # Status logger
         )
 
         # 3. You can prepocess the subtitles here, like further filtering the subtitles.
@@ -126,7 +126,7 @@ The following code lets you to add extra steps like pre- or post-processing of s
         # 4. Merge the subtitles
         with tqdm(
             total=100,
-            desc= "Stage 3 -> Merging subtitles",
+            desc= "Stage 3 → Merging subtitles",
             bar_format="{l_bar}{bar}| [{elapsed}<{remaining}, {rate_fmt}{postfix}]"
         ) as pbar:
             callback = make_progress_callback(pbar)
@@ -148,10 +148,10 @@ The following code lets you to add extra steps like pre- or post-processing of s
             primary_subs_data.styles,
             secondary_subs_data.styles,
             lambda output_name: 
-            print(f"Stage 4 -> Saving files to {output_name}.zip") # Status logger
+            print(f"Stage 4 → Saving files to {output_name}.zip") # Status logger
         )
 
-        print("Status  -> Subtitles merged and saved successfully.")
+        print("Status  → Subtitles merged and saved successfully.")
 
     except LoadSubsError as e1:
         logging.error(str(e1), exc_info=True)
@@ -166,9 +166,12 @@ Under-the-Hood Merging API
 --------------------------
 
 You can customize the merging process by **using the core algorithm directly** from the class 
-:meth:`duosubs.Merger`. 
+:class:`duosubs.Merger`. 
 
 This allows you to implement your own logic around the merging process.
+
+The following code merges subtitles in :attr:`duosubs.MergingMode.SYNCED` mode, where all 
+the timestamps of both subtitles overlap.
 
 .. code-block:: python
 
@@ -177,8 +180,8 @@ This allows you to implement your own logic around the merging process.
     from tqdm import tqdm
 
     from duosubs import (Merger, MergeArgs, 
-                        load_sentence_transformer_model,
-                        load_subtitles, save_subtitles_in_zip)
+                         load_sentence_transformer_model,
+                         load_subtitles, save_subtitles_in_zip)
 
     args = MergeArgs(
         primary="primary_sub.srt",
@@ -187,13 +190,13 @@ This allows you to implement your own logic around the merging process.
 
     primary_subs_data, secondary_subs_data = load_subtitles(
         args, 
-        lambda: print("Stage 1 -> Loading subtitles")
+        lambda: print("Stage 1 → Loading subtitles")
     )
 
     model = load_sentence_transformer_model(
         args,
         lambda model_name, device:
-        print(f"Stage 2 -> Loading {model_name} on {device.upper()}")
+        print(f"Stage 2 → Loading {model_name} on {device.upper()}")
     )
 
     def make_progress_callback(progress_bar: Any) -> Callable[[float], None]:
@@ -213,7 +216,7 @@ This allows you to implement your own logic around the merging process.
 
     with tqdm(
         total=100,
-        desc= "Stage 3 -> Merging subtitles",
+        desc= "Stage 3 → Merging subtitles",
         bar_format="{l_bar}{bar}| [{elapsed}<{remaining}, {rate_fmt}{postfix}]"
     ) as pbar:
         # If you insert any additional steps between the merging process,
@@ -276,10 +279,143 @@ This allows you to implement your own logic around the merging process.
         primary_subs_data.styles,
         secondary_subs_data.styles,
         lambda output_name: 
-        print(f"Stage 4 -> Saving files to {output_name}.zip")
+        print(f"Stage 4 → Saving files to {output_name}.zip")
     )
 
-    print("Status  -> Subtitles merged and saved successfully.")
+    print("Status  → Subtitles merged and saved successfully.")
+
+The following code illustrates the underlying logic of :attr:`duosubs.MergingMode.CUTS` mode, 
+in which the primary subtitles represent the extended version, 
+while the secondary subtitles provide the shorter version.
+
+.. code-block:: python
+
+    from typing import Any, Callable
+
+    from tqdm import tqdm
+
+    from duosubs import (Merger, MergeArgs, 
+                        load_sentence_transformer_model,
+                        load_subtitles, save_subtitles_in_zip)
+
+    args = MergeArgs(
+        primary="primary_sub.srt",
+        secondary="secondary_sub.srt"
+    )
+
+    primary_subs_data, secondary_subs_data = load_subtitles(
+        args, 
+        lambda: print("Stage 1 → Loading subtitles")
+    )
+
+    model = load_sentence_transformer_model(
+        args,
+        lambda model_name, device:
+        print(f"Stage 2 → Loading {model_name} on {device.upper()}")
+    )
+
+    def make_progress_callback(progress_bar: Any) -> Callable[[float], None]:
+        last_percent: list[float] = [0.0]
+
+        def callback(current_percent: float) -> None:
+            delta = current_percent - last_percent[0]
+            if delta > 0:
+                progress_bar.update(delta)
+                last_percent[0] = current_percent
+
+        return callback
+
+    # Merging the subtitles
+    merger = Merger(primary_subs_data, secondary_subs_data)
+    stop_bit = [False] # You can create a function to stop the following merging process early.
+
+    with tqdm(
+        total=100,
+        desc= "Stage 3 → Merging subtitles",
+        bar_format="{l_bar}{bar}| [{elapsed}<{remaining}, {rate_fmt}{postfix}]"
+    ) as pbar:
+        # If you insert any additional steps between the merging process,
+        # do not use the progress_callback function.
+        progress_callback = make_progress_callback(pbar)
+
+        # Reset the ratio of extract non overlapping subs to 0
+        # since this process does not require to use merger.extract_non_overlapping_subs
+        merger._ratio_extract_non_overlapping_subs = 0
+
+        # 1. Estimate tokenized subtitle pairings using DTW
+        processed_subs = merger.align_subs_with_dtw(
+            model,
+            stop_bit,
+            args.batch_size,
+            progress_callback
+        )
+
+        # 2. Refine alignment using a sliding window approach
+        stage_number = 0
+        processed_subs, stage_number = merger.align_subs_using_neighbours(
+            processed_subs,
+            3,
+            model,
+            stage_number,
+            stop_bit,
+            args.batch_size,
+            progress_callback
+        )
+
+        merger._ratio_filter_and_extract_extended_version = 0.02
+        # 3. Filter and extract the extended segments from the primary subtitle
+        (
+            processed_subs,
+            non_overlap_primary_subs
+        ) = merger.filter_and_extract_extended_version(
+            processed_subs,
+            model,
+            stop_bit,
+            args.batch_size,
+            progress_callback
+        )
+
+        # 4. Further refine alignment using a sliding window approach
+        processed_subs, _ = merger.align_subs_using_neighbours(
+            processed_subs,
+            2,
+            model,
+            stage_number,
+            stop_bit,
+            args.batch_size,
+            progress_callback
+        )
+
+        # 5. Combine aligned and non-overlapping subtitles
+        processed_subs.extend(non_overlap_primary_subs)
+        processed_subs.sort()
+
+        # 6. Clean up unnecessary newlines in subtitle text fields.
+        processed_subs = merger.eliminate_unnecessary_newline(
+            processed_subs,
+            stop_bit,
+            progress_callback
+        )
+
+    # The 6 merging steps above are encapsulated in the following high-level function.
+    # To use the simplified version, comment out the steps above and uncomment the line below:
+    #    processed_subs = merger.merge_subtitle_extended_cut(
+    #        model,
+    #        stop_bit,
+    #        args.batch_size,
+    #        progress_callback
+    #    )
+
+    save_subtitles_in_zip(
+        args,
+        processed_subs,
+        primary_subs_data.styles,
+        secondary_subs_data.styles,
+        lambda output_name: 
+        print(f"Stage 4 → Saving files to {output_name}.zip")
+    )
+
+    print("Status  → Subtitles merged and saved successfully.")
 
 Low-Level Subtitle I/O API
 ---------------------------
@@ -287,12 +423,12 @@ Low-Level Subtitle I/O API
 Subtitle File Loading Utilities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you only need to **load a single subtitle file**, use :meth:`duosubs.load_subs` instead of 
-:meth:`duosubs.load_subtitles`.
+If you only need to **load a single subtitle file**, use :func:`duosubs.load_subs` instead of 
+:func:`duosubs.load_subtitles`.
 
-It returns a :meth:`duosubs.SubtitleData` instance that includes:
+It returns a :class:`duosubs.SubtitleData` instance that includes:
 
-    - list of :meth:`duosubs.SubtitleField`
+    - list of :class:`duosubs.SubtitleField`
     - style information
     - list of tokenized sentences
     - list of style-level tokens
@@ -304,9 +440,9 @@ It returns a :meth:`duosubs.SubtitleData` instance that includes:
     subs_data = load_subs("primary_sub.srt")
 
 To **load an edit file** (with a ``.json.gz`` extension) generated by this tool for 
-**internal use**, use the :meth:`duosubs.load_file_edit` function.
+**internal use**, use the :func:`duosubs.load_file_edit` function.
 
-It returns list of :meth:`duosubs.SubtitleField` along with both primary and secondary style 
+It returns list of :class:`duosubs.SubtitleField` along with both primary and secondary style 
 information.
 
 .. code-block:: python
@@ -325,15 +461,15 @@ There are two ways of saving the subtitle files:
 
   - to **disk**
 
-    - :meth:`duosubs.save_file_combined`
-    - :meth:`duosubs.save_file_separate`
-    - :meth:`duosubs.save_file_edit`
+    - :func:`duosubs.save_file_combined`
+    - :func:`duosubs.save_file_separate`
+    - :func:`duosubs.save_file_edit`
 
   - to **memory** — useful for in-memory processing (e.g. compression or packaging)
 
-    - :meth:`duosubs.save_memory_combined`
-    - :meth:`duosubs.save_memory_separate`
-    - :meth:`duosubs.save_memory_edit`
+    - :func:`duosubs.save_memory_combined`
+    - :func:`duosubs.save_memory_separate`
+    - :func:`duosubs.save_memory_edit`
 
 Below is an example of **saving** subtitles to **disk**. Each function can also be 
 **used independently**:

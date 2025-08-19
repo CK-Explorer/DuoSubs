@@ -190,9 +190,54 @@ you can run:
     run_merge_pipeline(args, print)
     ```
 
+- via Web UI
+
+    In **Configurations → Model & Device → Sentence Transformer Model**, replace `sentence-transformers/LaBSE` with `Qwen/Qwen3-Embedding-0.6B`.
+
+
 > [!WARNING]
 > - Some models may require significant RAM or GPU (VRAM) to run, and might not be compatible with all devices — especially larger models. 
 > - Also, please ensure the selected model supports your desired language for reliable results.
+
+Also, this tool has 3 merging modes, i.e. ``synced``, ``mixed``, and ``cuts`` modes. 
+Here are some of the simple guidelines to choose the appropriate mode:
+
+- If both subtitle files are **timestamp-synced**, use ``synced`` for the cleanest result.
+- If timestamps **drift** or only **partially overlap**, use ``mixed``.
+- If subtitles come from **different editions** of the video, with **primary** subtitles being 
+the **extended** or **longer version**, use ``cuts``.
+
+To merge with a specific mode (e.g. ``cuts``), run:
+
+- via command line
+
+    ```bash
+    duosubs merge -p primary_sub.srt -s secondary_sub.srt --mode cuts
+    ```
+
+- via Python API
+
+    ```python
+    from duosubs import MergeArgs, MergingMode, run_merge_pipeline
+
+    # Store all arguments
+    args = MergeArgs(
+        primary="primary_sub.srt",
+        secondary="secondary_sub.srt",
+        merging_mode=MergingMode.CUTS   # Modes available: MergingMode.SYNCED, MergingMode.MIXED, MergingMode.CUTS
+    )
+
+    # Load, merge, and save subtitles.
+    run_merge_pipeline(args, print)
+    ```
+
+- via Web UI
+
+    In **Configurations** → **Alignment Behavior** → **Merging Mode**, choose ``Cuts``.
+
+
+> [!TIP]
+> For ``mixed`` and ``cuts`` modes, try to use subtitle files **without scene annotations** if possible, as they may reduce alignment quality.
 
 To learn more about merging options, please see the sections of
 [Merge Command](https://duosubs.readthedocs.io/en/latest/cli_usage/merge.html)
@@ -205,11 +250,13 @@ in the [documentation](https://duosubs.readthedocs.io/en/latest/).
 
 1. Parse subtitles and detect language.
 2. Tokenize subtitle lines.
-3. Extract and filter non-overlapping subtitles. *(Optional)*
+3. Extract and filter non-overlapping subtitles (``synced`` *mode only*).
 4. Estimate tokenized subtitle pairings using DTW.
-5. Refine alignment using a sliding window approach.
-6. Combine aligned and non-overlapping subtitles.
-7. Eliminate unnecessary newline within subtitle lines.
+5. Refine alignment using a sliding window approach with size of 3.
+6. Extract and filter extended subtitles from the primary track (``cuts`` *mode only*).
+7. Refine alignment using a sliding window approach with size of 2.
+8. Combine aligned and non-overlapping subtitles or extended subtitles
+9. Eliminate unnecessary newline within subtitle lines.
 
 ---
 
@@ -221,39 +268,7 @@ in the [documentation](https://duosubs.readthedocs.io/en/latest/).
 - Some sentence **fragments** from secondary subtitles may be **misaligned** to the 
 primary subtitles line due to the tokenization algorithm used.
 - **Secondary** subtitles might **contain extra whitespace** as a result of token-level merging.
-- The algorithm may **not** work reliably if the **timestamps** of some matching lines
-**don’t overlap** at all.
-
-> [!TIP]
-> For the final known limitation, there are three possible ways to address it:
-> 1. If **all** subtitle lines are completely **out of sync**, consider using another subtitle syncing tool first to align them, e.g.
->
->    - [smacke/ffsubsync](https://github.com/smacke/ffsubsync)
->    - [sc0ty/subsync](https://github.com/sc0ty/subsync)
->    - [kaegi/alass](https://github.com/kaegi/alass)
->
->    before using this tool with `ignore-non-overlap-filter` **disabled**.
->
->    Alternatively, see points 2 and 3.
->
-> 2. If both subtitle files are **known** to be **perfectly semantically aligned**, meaning:
->
->    - **matching dialogue contents**
->    - **no extra lines** like scene annotations or bonus Director’s Cut stuff.
->
->    Then, just **enable** the `ignore-non-overlap-filter` option in either
->
->    - Web UI :
->       - `Advanced Configurations` → `Alignment Behavior` → `Ignore Non-Overlap Filter`
->    - CLI : 
->       - [`--ignore-non-overlap-filter`](https://duosubs.readthedocs.io/en/latest/cli_usage/merge.html#ignore-non-overlap-filter)
->    - Python API :
->       - [`duosubs.MergeArgs()`](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.MergeArgs)
->       - [`duosubs.Merger.merge_subtitle()`](https://duosubs.readthedocs.io/en/latest/api_references/core_subtitle_merging.html#duosubs.Merger.merge_subtitle)
->
->    to skip the overlap check — the merge should go smoothly from there.
->
-> 3. If the subtitle **timings** are **off** and the two subtitle files **don’t fully match in content**, the algorithm likely **won’t** produce great results. Still, you can try running it with `ignore-non-overlap-filter` **enabled**.
+- In ``mixed`` and ``cuts`` modes, the algorithm may **not work reliably** since matching lines have **no timestamp overlap**, and either subtitle could contain **extra** or **missing lines**.
 
 ---
 
@@ -267,6 +282,7 @@ embedding backbone
 - [Hugging Face](https://huggingface.co/) — for hosting models and making them easy to use
 - [PyTorch](https://pytorch.org/) — for providing the deep learning framework
 - [fastdtw](https://github.com/slaypni/fastdtw) — for aligning the subtitles
+- [hmmlearn](https://github.com/hmmlearn/hmmlearn) — for denoising sequences
 - [lingua-py](https://github.com/pemistahl/lingua-py) — for detecting the subtitles' language codes
 - [pysubs2](https://github.com/tkarabela/pysubs2) — for subtitle file I/O utilities
 - [charset_normalizer](https://github.com/jawah/charset_normalizer) — for identifying the file 

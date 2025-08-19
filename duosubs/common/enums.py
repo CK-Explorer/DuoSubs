@@ -2,9 +2,9 @@
 Enum definitions for subtitle merging CLI options.
 
 This module defines enums for supported subtitle file formats, output file omission 
-options, device types and precision modes used for model inference. These enums are 
-used throughout the CLI and merging logic to ensure type safety and clear option 
-handling.
+options, merging modes, device types and precision modes used for model inference. 
+These enums are used throughout the CLI and merging logic to ensure type safety and 
+clear option handling.
 """
 
 from enum import Enum
@@ -30,6 +30,20 @@ class SubtitleFormat(str, Enum):
     TTML = "ttml"
     ASS = "ass"
     SSA = "ssa"
+
+class MergingMode(str, Enum):
+    """
+    Enum for subtitle merging modes.
+
+    Attributes:
+        SYNCED (str): All timestamps overlap and both subtitles are from same cut.
+        MIXED (str): Some timestamps not overlap and both subtitles are from same cut.
+        CUTS (str): Both subtitles are different cuts, with primary subtitles being 
+            the extended or longer versions.
+    """
+    SYNCED = "synced"
+    MIXED = "mixed"
+    CUTS = "cuts"
 
 class OmitFile(str, Enum):
     """
