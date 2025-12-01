@@ -59,7 +59,7 @@ duosubs = "duosubs.cli.main:app"
 [project.optional-dependencies]
 dev = [
     "ruff>=0.12.4,<1.0",
-    "pytest>=8.4.0,<9.0",
+    "pytest>=8.4.0,<10.0",
     "coverage>=7.9.2,<8.0",
     "playwright>=1.54.0,<2.0",
     "requests>=2.32.4,<3.0",
