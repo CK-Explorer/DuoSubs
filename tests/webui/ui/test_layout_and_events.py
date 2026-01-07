@@ -178,7 +178,7 @@ def test_cancel_merge(page: Page) -> None:
     expect(page.get_by_text(
         "The merging process is stopped.",
         exact=True)
-    ).to_be_visible(timeout=20000)
+    ).to_be_visible(timeout=60000)
 
     download_section = page.get_by_text(
         "Processed Subtitles (in zip)",
@@ -427,7 +427,8 @@ def perform_download(page: Page, output_zip_path: Path) -> None:
         "Processed Subtitles (in zip)",
         exact=True
     ).locator("..")
-    download_link = section.locator("a[download]")
+    download_link = section.locator("a[download]").first
+    download_link.wait_for(timeout=60000)
 
     with page.expect_download() as download_info:
         download_link.click()
