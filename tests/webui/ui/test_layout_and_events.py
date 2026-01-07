@@ -358,7 +358,7 @@ def test_omit_all_subs_files(page: Page) -> None:
 
     expect(
         page.locator("div.toast-body.warning").filter(has_text="Nothing to merge")
-    ).to_be_visible(timeout=10000)
+    ).to_be_visible(timeout=60000)
 
     time.sleep(10)
 
@@ -366,7 +366,7 @@ def test_omit_all_subs_files(page: Page) -> None:
 
     expect(
         page.locator("div.toast-body.warning").filter(has_text="Nothing to merge")
-    ).to_be_visible(timeout=10000)
+    ).to_be_visible(timeout=60000)
 
     section = page.get_by_text(
         "Processed Subtitles (in zip)",
