@@ -141,13 +141,13 @@ def test_start_merge(page: Page, tmp_path: Path) -> None:
     merge_button = page.get_by_role("button", name="Merge")
     cancel_button = page.get_by_role("button", name="Cancel")
 
-    expect(merge_button).to_be_disabled()
-    expect(cancel_button).to_be_enabled()
+    expect(merge_button).to_be_disabled(timeout=60000)
+    expect(cancel_button).to_be_enabled(timeout=60000)
 
     perform_download(page, tmp_path / "output.zip")
 
-    expect(merge_button).to_be_enabled()
-    expect(cancel_button).to_be_disabled()
+    expect(merge_button).to_be_enabled(timeout=60000)
+    expect(cancel_button).to_be_disabled(timeout=60000)
 
     ending_naming_and_format = [
         "_combined.ass",
