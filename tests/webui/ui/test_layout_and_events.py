@@ -321,13 +321,13 @@ def test_format_options(page: Page, tmp_path: Path) -> None:
 
     page.get_by_role("tab", name="File Exports").click()
 
-    page.get_by_role("listbox", name="Combined").click()
+    page.get_by_role("combobox", name="Combined").click()
     page.get_by_role("option", name=random_format[0]).nth(0).click()
 
-    page.get_by_role("listbox", name="Primary").click()
+    page.get_by_role("combobox", name="Primary").click()
     page.get_by_role("option", name=random_format[1]).nth(0).click()
 
-    page.get_by_role("listbox", name="Secondary").click()
+    page.get_by_role("combobox", name="Secondary").click()
     page.get_by_role("option", name=random_format[2]).nth(0).click()
 
     naming_list = [
